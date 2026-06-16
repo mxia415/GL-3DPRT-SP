@@ -1,0 +1,1623 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GL-3DPRT-SP-S运动范围判定 v1.2</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #2b2622;
+      --panel: #383330;
+      --panel-2: #312c28;
+      --ink: #f7f5f0;
+      --muted: #aea69c;
+      --body: #c9c0ad;
+      --line: #3f3a36;
+      --accent: #f7f5f0;
+      --accent-2: #b84d3a;
+      --blue: #7aa4d8;
+      --warn: #d59a45;
+      --bad: #d76961;
+      --shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(360px, 430px) minmax(0, 1fr);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px 14px;
+      border-right: 1px solid var(--line);
+      background: #2b2622;
+      overflow: hidden;
+    }
+
+    main {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(247,245,240,0.035) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(247,245,240,0.035) 1px, transparent 1px),
+        #312c28;
+      background-size: 38px 38px;
+    }
+
+    @media (min-width: 861px) {
+      main {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+      }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.18;
+      font-weight: 760;
+    }
+
+    .subtitle {
+      margin: 1px 0 0;
+      color: var(--body);
+      font-size: 11px;
+      line-height: 1.28;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 7px 10px;
+      background: var(--panel);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 4px;
+      font-size: 13px;
+      font-weight: 760;
+      color: var(--ink);
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 1fr 82px;
+      align-items: center;
+      gap: 7px;
+      margin: 3px 0;
+    }
+
+    label {
+      display: grid;
+      gap: 2px;
+      color: var(--ink);
+      font-size: 11.5px;
+      font-weight: 650;
+    }
+
+    label span {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 520;
+    }
+
+    input[type="number"] {
+      width: 82px;
+      height: 25px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 0 8px;
+      color: var(--ink);
+      background: var(--panel-2);
+      font: inherit;
+      text-align: right;
+    }
+
+    select {
+      width: 100%;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 0 8px;
+      color: var(--ink);
+      background: var(--panel-2);
+      font: inherit;
+    }
+
+    .value-pill {
+      width: 100%;
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 0 8px;
+      background: var(--panel-2);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    input[type="range"] {
+      grid-column: 1 / -1;
+      width: 100%;
+      height: 10px;
+      accent-color: var(--accent);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    button {
+      min-height: 28px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--ink);
+      background: var(--panel-2);
+      font: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.primary {
+      border-color: rgba(26, 127, 112, 0.32);
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    button:hover { filter: brightness(1.08); }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 6px 9px;
+      background: var(--panel-2);
+      color: var(--body);
+      font-size: 11.5px;
+      line-height: 1.25;
+    }
+
+    .dot {
+      flex: 0 0 auto;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .status.invalid .dot { background: var(--bad); }
+    .status.warning .dot { background: var(--warn); }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .metric {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 6px 8px;
+      background: var(--panel-2);
+    }
+
+    .metric b {
+      display: block;
+      font-size: 17px;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    #scene {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .hud {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .chip {
+      border: 1px solid rgba(23,33,31,0.12);
+      border-radius: 4px;
+      padding: 10px 12px;
+      background: rgba(56,51,48,0.88);
+      box-shadow: var(--shadow);
+      color: var(--body);
+      font-size: 12px;
+      line-height: 1.4;
+      backdrop-filter: blur(10px);
+    }
+
+    .view-controls {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(23,33,31,0.1);
+      border-color: var(--line);
+      border-radius: 4px;
+      padding: 6px;
+      background: rgba(56,51,48,0.82);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .view-title {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      padding: 0 2px 0 4px;
+    }
+
+    .view-buttons {
+      display: flex;
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid rgba(23,33,31,0.1);
+      border-color: var(--line);
+      border-radius: 3px;
+      background: rgba(43,38,34,0.72);
+    }
+
+    .view-controls button {
+      min-height: 32px;
+      min-width: 46px;
+      border: 0;
+      border-radius: 0;
+      padding: 0 11px;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink);
+      box-shadow: none;
+    }
+
+    .view-controls button + button {
+      border-left: 1px solid rgba(23,33,31,0.1);
+      border-left-color: var(--line);
+    }
+
+    .view-controls button:hover {
+      background: rgba(247,245,240,0.08);
+    }
+
+    .fit-modes {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    .fit-modes button {
+      min-height: 28px;
+      border-radius: 3px;
+      background: var(--panel-2);
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 900;
+    }
+
+    .fit-modes button.active {
+      border-color: rgba(247,245,240,0.34);
+      background: rgba(247,245,240,0.1);
+      color: var(--ink);
+    }
+
+    .fit-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+
+    .fit-actions button,
+    .fit-modes button {
+      width: 100%;
+      min-height: 28px;
+    }
+
+    .chip strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    @media (max-width: 860px) {
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(560px, 1fr);
+      }
+
+      aside {
+        max-height: 52vh;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      main { min-height: 560px; }
+      .hud { flex-direction: column; }
+    }
+
+    @media (min-width: 861px) and (min-height: 840px) {
+      aside {
+        gap: 8px;
+        padding: 12px 18px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+
+      .subtitle {
+        margin-top: 3px;
+        font-size: 12px;
+        line-height: 1.36;
+      }
+
+      .section {
+        padding: 10px 13px;
+      }
+
+      .section-title {
+        margin-bottom: 7px;
+        font-size: 14px;
+      }
+
+      .field {
+        gap: 10px;
+        margin: 6px 0;
+      }
+
+      label {
+        gap: 3px;
+        font-size: 12.5px;
+      }
+
+      label span {
+        font-size: 11px;
+      }
+
+      input[type="number"] {
+        height: 31px;
+      }
+
+      input[type="range"] {
+        height: 17px;
+      }
+
+      button,
+      .fit-actions button,
+      .fit-modes button {
+        min-height: 34px;
+      }
+
+      .fit-modes,
+      .fit-actions {
+        gap: 6px;
+      }
+
+      .fit-modes {
+        margin-bottom: 6px;
+      }
+
+      .metric {
+        padding: 8px 10px;
+      }
+
+      .metric b {
+        font-size: 22px;
+      }
+
+      .status {
+        min-height: 38px;
+        padding: 7px 11px;
+        font-size: 12.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <header>
+        <h1>GL-3DPRT-SP-S运动范围判定</h1>
+        <p class="subtitle">用实测 XY 平面范围和 R-Z 垂直截面生成 3D 可达空间，并验证内接长方体尺寸。</p>
+        <p class="subtitle">版本：v1.2 ｜ 日期：2026-06-16</p>
+      </header>
+
+      <section class="section" hidden>
+        <div class="section-title">实测范围</div>
+        <div class="field">
+          <label>空间模型 <span>外圆内、偏置内圆外 + R-Z 垂直截面</span></label>
+          <div class="value-pill">实测截面</div>
+        </div>
+        <div class="field">
+          <label>内圆圆心 Y <span>第二个圆心偏移，单位 mm</span></label>
+          <input id="innerCircleY" type="number" value="-777" disabled>
+        </div>
+        <div class="field">
+          <label>外圆半径 <span>圆心 (0,0)</span></label>
+          <input id="outerRadius" type="number" value="7400" disabled>
+        </div>
+        <div class="field">
+          <label>内圆半径 <span>圆心 (0, Y)</span></label>
+          <input id="innerRadius" type="number" value="3383" disabled>
+        </div>
+        <div class="field">
+          <label>回转范围 <span>俯视方向可覆盖角度</span></label>
+          <input id="drawingYaw" type="number" value="360" disabled>
+        </div>
+        <div class="field">
+          <label>地面 Z0 <span>当前按地面为 0</span></label>
+          <input id="baseZ" type="number" value="0" disabled>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">内接长方体</div>
+        <div class="field">
+          <label>X 向位置 <span>固定在 X=0 对称放置</span></label>
+          <input id="boxX" type="number" min="0" max="0" step="10" value="0" disabled>
+          <input data-for="boxX" type="range" min="0" max="0" step="10" value="0" disabled>
+        </div>
+        <div class="field">
+          <label>Y 向内侧边位置 <span>正值向 +Y 展开，负值向 -Y 展开</span></label>
+          <input id="boxY" type="number" min="-10000" max="10000" step="10" value="3600">
+          <input data-for="boxY" type="range" min="-10000" max="10000" step="10" value="3600">
+        </div>
+        <div class="field">
+          <label>底面高度 Z <span>固定为地面 Z=0，向上展开</span></label>
+          <input id="boxZ" type="number" value="0" disabled>
+        </div>
+        <div class="field">
+          <label>长度 L <span>X 方向尺寸</span></label>
+          <input id="boxL" type="number" min="10" max="12000" step="10" value="1200">
+          <input data-for="boxL" type="range" min="10" max="12000" step="10" value="1200">
+        </div>
+        <div class="field">
+          <label>宽度 W <span>Y 方向尺寸</span></label>
+          <input id="boxW" type="number" min="10" max="6000" step="10" value="1200">
+          <input data-for="boxW" type="range" min="10" max="6000" step="10" value="1200">
+        </div>
+        <div class="field">
+          <label>高度 H <span>Z 方向尺寸</span></label>
+          <input id="boxH" type="number" min="10" max="7900" step="10" value="1200">
+          <input data-for="boxH" type="range" min="10" max="7900" step="10" value="1200">
+        </div>
+        <div class="fit-modes" aria-label="最大贴合模式">
+          <button type="button" data-fit-mode="L" class="active">固定L最大贴合</button>
+          <button type="button" data-fit-mode="W">固定W最大贴合</button>
+          <button type="button" data-fit-mode="H">固定H最大贴合</button>
+        </div>
+        <div class="fit-actions">
+          <button id="resetSize">重置尺寸</button>
+          <button id="reset">重置视图</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">尺寸</div>
+        <div class="metrics">
+          <div class="metric"><b id="mL">280</b><span>长度 mm</span></div>
+          <div class="metric"><b id="mW">360</b><span>宽度 mm</span></div>
+          <div class="metric"><b id="mH">260</b><span>高度 mm</span></div>
+        </div>
+      </section>
+
+      <div id="status" class="status">
+        <i class="dot"></i>
+        <span>长方体完全位于可达空间内。</span>
+      </div>
+    </aside>
+
+    <main>
+      <canvas id="scene"></canvas>
+      <div class="view-controls" aria-label="视角控制">
+        <div class="view-title">视图</div>
+        <div class="view-buttons">
+          <button data-view="default">默认</button>
+          <button data-view="front">前</button>
+          <button data-view="top">上</button>
+          <button data-view="right">右</button>
+        </div>
+      </div>
+      <div class="hud">
+        <div class="chip"><strong>拖拽旋转，滚轮缩放</strong>透明体表示机械臂实测截面运动包络。</div>
+        <div class="chip"><strong id="volumeLabel">体积 26.2 L</strong><span id="cornerLabel">8 个角点均在范围内</span></div>
+      </div>
+    </main>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+    const ids = ["innerCircleY", "outerRadius", "innerRadius", "drawingYaw", "baseZ", "boxX", "boxY", "boxZ", "boxL", "boxW", "boxH"];
+    const input = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
+    const canvas = document.getElementById("scene");
+    const status = document.getElementById("status");
+    const statusText = status.querySelector("span");
+    const metrics = { l: document.getElementById("mL"), w: document.getElementById("mW"), h: document.getElementById("mH") };
+    const volumeLabel = document.getElementById("volumeLabel");
+    const cornerLabel = document.getElementById("cornerLabel");
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x312c28);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+
+    const camera = new THREE.PerspectiveCamera(55, 1, 1, 200000);
+    camera.up.set(0, 0, 1);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.target.set(0, 0, 2400);
+    setDefaultView();
+    controls.update();
+
+    const hemi = new THREE.HemisphereLight(0xfffbf2, 0x2b2622, 2.05);
+    scene.add(hemi);
+    const sun = new THREE.DirectionalLight(0xfffbf2, 2.2);
+    sun.position.set(900, -700, 1300);
+    sun.castShadow = true;
+    scene.add(sun);
+
+    const grid = new THREE.GridHelper(18000, 18, 0x8f867b, 0x4b4540);
+    grid.rotation.x = Math.PI / 2;
+    scene.add(grid);
+    scene.add(makeGridLabel("GL-3DPRT-SP-S", new THREE.Vector3(9800, -6500, 8)));
+
+    const axes = new THREE.Group();
+    axes.add(axisArrow(new THREE.Vector3(0, 0, 0), new THREE.Vector3(8200, 0, 0), 0xb84d3a, "X+"));
+    axes.add(axisArrow(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 8200, 0), 0x1a7f70, "Y+"));
+    axes.add(axisArrow(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 8200), 0x316cb3, "Z+"));
+    axes.add(axisTicks());
+    scene.add(axes);
+
+    const workspaceMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x4da397,
+      transparent: true,
+      opacity: 0.2,
+      roughness: 0.55,
+      metalness: 0.02,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x0f6b61, transparent: true, opacity: 0.66 });
+    const boxMaterial = new THREE.MeshStandardMaterial({ color: 0xf0a84f, transparent: true, opacity: 0.58, roughness: 0.45 });
+    const boxBadMaterial = new THREE.MeshStandardMaterial({ color: 0xd95043, transparent: true, opacity: 0.58, roughness: 0.45 });
+    const boxEdgeMaterial = new THREE.LineBasicMaterial({ color: 0x7b3d00 });
+    const dimensionMaterial = new THREE.LineBasicMaterial({ color: 0x1c2a27 });
+
+    let workspaceMesh = null;
+    let workspaceEdges = null;
+    let boxMesh = null;
+    let boxEdges = null;
+    let dimensionGroup = new THREE.Group();
+    let fitMode = "L";
+    scene.add(dimensionGroup);
+
+    const measuredRzProfile = [
+      { r: 1071, z: 0 },
+      { r: 7500, z: 0 },
+      { r: 7500, z: 860 },
+      { r: 7412, z: 1730 },
+      { r: 7217, z: 2570 },
+      { r: 7071, z: 3315 },
+      { r: 6753, z: 4113 },
+      { r: 6523, z: 4573 },
+      { r: 6239, z: 5080 },
+      { r: 5871, z: 5675 },
+      { r: 5479, z: 6249 },
+      { r: 5147, z: 6697 },
+      { r: 4746, z: 7183 },
+      { r: 4368, z: 7574 },
+      { r: 4079, z: 7809 },
+      { r: 3773, z: 7959 },
+      { r: 3664, z: 7974 },
+      { r: 3471, z: 7910 },
+      { r: 3241, z: 7511 },
+      { r: 3040, z: 6507 },
+      { r: 2871, z: 5900 },
+      { r: 2523, z: 5455 },
+      { r: 2071, z: 5290 },
+      { r: 1652, z: 5228 },
+      { r: 1071, z: 5150 }
+    ];
+    const smoothRzProfile = makeSmoothClosedProfile(measuredRzProfile, 12);
+    const measuredMinR = Math.min(...smoothRzProfile.map((p) => p.r));
+    const measuredMaxR = Math.max(...smoothRzProfile.map((p) => p.r));
+    const measuredMinZ = Math.min(...smoothRzProfile.map((p) => p.z));
+    const measuredMaxZ = Math.max(...smoothRzProfile.map((p) => p.z));
+
+    bindInputs();
+    update();
+    animate();
+
+    document.querySelectorAll("[data-fit-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        fitMode = button.dataset.fitMode;
+        document.querySelectorAll("[data-fit-mode]").forEach((el) => el.classList.toggle("active", el === button));
+        fitBox();
+        syncRanges();
+        update();
+      });
+    });
+
+    document.getElementById("resetSize").addEventListener("click", () => {
+      input.boxX.value = 0;
+      input.boxY.value = 3600;
+      input.boxZ.value = 0;
+      input.boxL.value = 1200;
+      input.boxW.value = 1200;
+      input.boxH.value = 1200;
+      syncRanges();
+      update();
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      setDefaultView();
+      controls.target.set(0, 0, 2400);
+      controls.update();
+    });
+
+    document.querySelectorAll("[data-view]").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (button.dataset.view === "default") {
+          setDefaultView();
+        } else {
+          setNamedView(button.dataset.view);
+        }
+        controls.update();
+      });
+    });
+
+    window.addEventListener("resize", resize);
+
+    function setDefaultView() {
+      const distance = 52000;
+      const target = new THREE.Vector3(0, 0, 2400);
+      const angle = THREE.MathUtils.degToRad(30);
+      controls.target.copy(target);
+      camera.position.set(
+        Math.cos(angle) * distance,
+        0,
+        target.z + Math.sin(angle) * distance
+      );
+      camera.up.set(0, 0, 1);
+      camera.lookAt(target);
+    }
+
+    function setNamedView(view) {
+      const distance = 52000;
+      const target = new THREE.Vector3(0, 0, 2400);
+      controls.target.copy(target);
+      if (view === "front") {
+        camera.position.set(0, distance, target.z);
+      } else if (view === "top") {
+        camera.position.set(0, 0, distance);
+        camera.up.set(0, 1, 0);
+        camera.lookAt(0, 0, 0);
+        return;
+      } else {
+        camera.position.set(distance, 0, target.z);
+      }
+      camera.up.set(0, 0, 1);
+      camera.lookAt(target);
+    }
+
+    function bindInputs() {
+      document.querySelectorAll("input[type='number']").forEach((el) => {
+        el.addEventListener("input", () => {
+          const range = document.querySelector(`input[type='range'][data-for='${el.id}']`);
+          if (range) range.value = el.value;
+          update();
+        });
+      });
+
+      document.querySelectorAll("input[type='range']").forEach((el) => {
+        el.addEventListener("input", () => {
+          const target = document.getElementById(el.dataset.for);
+          target.value = el.value;
+          update();
+        });
+      });
+
+    }
+
+    function values() {
+      const v = Object.fromEntries(ids.map((id) => [id, Number(input[id].value)]));
+      v.boxX = 0;
+      return v;
+    }
+
+    function update() {
+      const v = values();
+      drawWorkspace(v);
+      drawBox(v);
+      drawDimensions(v);
+      updateLabels(v);
+      resize();
+    }
+
+    function drawWorkspace(v) {
+      if (workspaceMesh) {
+        workspaceMesh.geometry.dispose();
+        scene.remove(workspaceMesh);
+      }
+      if (workspaceEdges) {
+        workspaceEdges.geometry.dispose();
+        scene.remove(workspaceEdges);
+      }
+
+      const geometry = makeDrawingWorkspaceGeometry(v);
+      workspaceMesh = new THREE.Mesh(geometry, workspaceMaterial);
+      scene.add(workspaceMesh);
+
+      workspaceEdges = null;
+    }
+
+    function makeDrawingWorkspaceGeometry(v) {
+      const yawHalf = THREE.MathUtils.degToRad(v.drawingYaw / 2);
+      const yawSteps = Math.max(96, Math.ceil(v.drawingYaw / 2));
+      const zSteps = 96;
+      const vertices = [];
+      const indices = [];
+      const rows = zSteps + 1;
+
+      for (let i = 0; i <= yawSteps; i++) {
+        const yaw = -yawHalf + (2 * yawHalf * i) / yawSteps;
+        for (let j = 0; j <= zSteps; j++) {
+          const z = THREE.MathUtils.lerp(measuredMinZ, measuredMaxZ, j / zSteps);
+          const range = measuredRadialRangeAtYawAndZ(yaw, z, v);
+          const r = range.max;
+          vertices.push(Math.cos(yaw) * r, Math.sin(yaw) * r, z);
+        }
+      }
+
+      for (let i = 0; i <= yawSteps; i++) {
+        const yaw = -yawHalf + (2 * yawHalf * i) / yawSteps;
+        for (let j = 0; j <= zSteps; j++) {
+          const z = THREE.MathUtils.lerp(measuredMinZ, measuredMaxZ, j / zSteps);
+          const range = measuredRadialRangeAtYawAndZ(yaw, z, v);
+          const r = range.min;
+          vertices.push(Math.cos(yaw) * r, Math.sin(yaw) * r, z);
+        }
+      }
+
+      const innerOffset = (yawSteps + 1) * rows;
+      for (let i = 0; i < yawSteps; i++) {
+        for (let j = 0; j < zSteps; j++) {
+          const a = i * rows + j;
+          const b = (i + 1) * rows + j;
+          const c = (i + 1) * rows + j + 1;
+          const d = i * rows + j + 1;
+          indices.push(a, b, d, b, c, d);
+
+          const ai = innerOffset + a;
+          const bi = innerOffset + b;
+          const ci = innerOffset + c;
+          const di = innerOffset + d;
+          indices.push(ai, di, bi, bi, di, ci);
+        }
+      }
+
+      for (let i = 0; i < yawSteps; i++) {
+        addSideQuad(indices, i * rows + zSteps, innerOffset + i * rows + zSteps, innerOffset + (i + 1) * rows + zSteps, (i + 1) * rows + zSteps);
+      }
+
+      if (v.drawingYaw < 359.9) {
+        for (const i of [0, yawSteps]) {
+          for (let j = 0; j < zSteps; j++) {
+            const a = i * rows + j;
+            const b = i * rows + j + 1;
+            const c = innerOffset + i * rows + j + 1;
+            const d = innerOffset + i * rows + j;
+            addSideQuad(indices, a, b, c, d);
+          }
+        }
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      return geometry;
+    }
+
+    function addSideQuad(indices, a, b, c, d) {
+      indices.push(a, b, d, b, c, d);
+    }
+
+    function measuredRadialRangeAtYaw(yaw, v) {
+      const sin = Math.sin(yaw);
+      const cos = Math.cos(yaw);
+      const cy = v.innerCircleY;
+      const discriminant = v.innerRadius * v.innerRadius - cy * cy * cos * cos;
+      const forbiddenExit = discriminant < 0 ? measuredMinR : cy * sin + Math.sqrt(discriminant);
+      const minR = Math.max(measuredMinR, forbiddenExit);
+      const maxR = Math.min(v.outerRadius, measuredMaxR);
+      return {
+        min: Math.min(minR, maxR),
+        max: Math.max(minR, maxR)
+      };
+    }
+
+    function measuredRadialRangeAtYawAndZ(yaw, z, v) {
+      const xyRange = measuredRadialRangeAtYaw(yaw, v);
+      const rzRange = largestRzIntervalAtZ(z);
+      if (!rzRange) {
+        return { min: 0, max: 0 };
+      }
+      const min = Math.max(xyRange.min, rzRange.min);
+      const max = Math.min(xyRange.max, rzRange.max);
+      const mid = (min + max) / 2;
+      return min <= max ? { min, max } : { min: mid, max: mid };
+    }
+
+    function largestRzIntervalAtZ(z) {
+      const crossings = [];
+      for (let i = 0; i < smoothRzProfile.length; i++) {
+        const a = smoothRzProfile[i];
+        const b = smoothRzProfile[(i + 1) % smoothRzProfile.length];
+        if ((a.z <= z && b.z > z) || (b.z <= z && a.z > z)) {
+          const t = (z - a.z) / (b.z - a.z);
+          crossings.push(THREE.MathUtils.lerp(a.r, b.r, t));
+        }
+      }
+      crossings.sort((a, b) => a - b);
+      const unique = [];
+      for (const r of crossings) {
+        if (!unique.length || Math.abs(r - unique[unique.length - 1]) > 0.5) unique.push(r);
+      }
+      let best = null;
+      for (let i = 0; i < unique.length - 1; i += 2) {
+        const min = unique[i];
+        const max = unique[i + 1];
+        if (!best || max - min > best.max - best.min) best = { min, max };
+      }
+      return best;
+    }
+
+    function makeSmoothClosedProfile(points, samplesPerSegment) {
+      const smooth = [];
+      for (let i = 0; i < points.length; i++) {
+        const a = points[i];
+        const b = points[(i + 1) % points.length];
+        for (let j = 0; j < samplesPerSegment; j++) {
+          const t = j / samplesPerSegment;
+          smooth.push({
+            r: THREE.MathUtils.lerp(a.r, b.r, t),
+            z: THREE.MathUtils.lerp(a.z, b.z, t)
+          });
+        }
+      }
+      return smooth;
+    }
+
+    function drawBox(v) {
+      const geometry = new THREE.BoxGeometry(v.boxL, v.boxW, v.boxH);
+      if (!boxMesh) {
+        boxMesh = new THREE.Mesh(geometry, boxMaterial);
+        boxMesh.castShadow = true;
+        scene.add(boxMesh);
+        boxEdges = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), boxEdgeMaterial);
+        scene.add(boxEdges);
+      } else {
+        boxMesh.geometry.dispose();
+        boxMesh.geometry = geometry;
+        boxEdges.geometry.dispose();
+        boxEdges.geometry = new THREE.EdgesGeometry(geometry);
+      }
+      const yBounds = boxYBounds(v);
+      boxMesh.position.set(v.boxX, (yBounds.min + yBounds.max) / 2, v.baseZ + v.boxH / 2);
+      boxEdges.position.copy(boxMesh.position);
+      boxMesh.material = isBoxInside(v).inside ? boxMaterial : boxBadMaterial;
+    }
+
+    function drawDimensions(v) {
+      dimensionGroup.clear();
+      const x0 = v.boxX - v.boxL / 2;
+      const x1 = v.boxX + v.boxL / 2;
+      const yBounds = boxYBounds(v);
+      const y0 = yBounds.min;
+      const y1 = yBounds.max;
+      const z0 = v.baseZ;
+      const z1 = v.baseZ + v.boxH;
+      const pad = 44;
+
+      addDimensionLine(
+        new THREE.Vector3(x0, y0 - pad, z0),
+        new THREE.Vector3(x1, y0 - pad, z0),
+        `L ${fmt(v.boxL)} mm`,
+        new THREE.Vector3(0, -360, 0)
+      );
+      addDimensionLine(
+        new THREE.Vector3(x1 + pad, y0, z0),
+        new THREE.Vector3(x1 + pad, y1, z0),
+        `W ${fmt(v.boxW)} mm`,
+        new THREE.Vector3(360, 0, 0)
+      );
+      addDimensionLine(
+        new THREE.Vector3(x1 + pad, y1 + pad, z0),
+        new THREE.Vector3(x1 + pad, y1 + pad, z1),
+        `H ${fmt(v.boxH)} mm`,
+        new THREE.Vector3(420, 420, 0)
+      );
+    }
+
+    function addDimensionLine(a, b, text, labelOffset = new THREE.Vector3()) {
+      dimensionGroup.add(cylinderBetween(a, b, 18, new THREE.MeshBasicMaterial({ color: 0xf7f5f0 })));
+
+      const mid = a.clone().add(b).multiplyScalar(0.5).add(labelOffset);
+      const label = makeLabel(text, { scaleX: 3136, scaleY: 882, fontSize: 120, background: 0, sizeAttenuation: true });
+      label.position.copy(mid);
+      dimensionGroup.add(label);
+    }
+
+    function makeLabel(text, options = {}) {
+      const fontSize = options.fontSize || 98;
+      const background = options.background ?? 0.72;
+      const c = document.createElement("canvas");
+      c.width = 1024;
+      c.height = 256;
+      const ctx = c.getContext("2d");
+      if (background > 0) {
+        ctx.fillStyle = `rgba(56,51,48,${background})`;
+        roundRect(ctx, 34, 38, 956, 180, 36);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(247,245,240,0.18)";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+      }
+      ctx.fillStyle = "#f7f5f0";
+      ctx.font = `850 ${fontSize}px system-ui, sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, 512, 128);
+      const texture = new THREE.CanvasTexture(c);
+      texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+      const material = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        depthTest: false,
+        sizeAttenuation: options.sizeAttenuation === true
+      });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(options.scaleX || 0.132, options.scaleY || 0.036, 1);
+      return sprite;
+    }
+
+    function makeGridLabel(text, position) {
+      const c = document.createElement("canvas");
+      c.width = 1024;
+      c.height = 220;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "rgba(56,51,48,0.72)";
+      roundRect(ctx, 24, 34, 976, 152, 28);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(247,245,240,0.18)";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      ctx.fillStyle = "#f7f5f0";
+      ctx.font = "800 92px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, 512, 112);
+
+      const texture = new THREE.CanvasTexture(c);
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(5200, 1120), material);
+      mesh.position.copy(position);
+      mesh.rotation.z = Math.PI / 2;
+      return mesh;
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function updateLabels(v) {
+      const result = isBoxInside(v);
+      status.classList.toggle("invalid", !result.inside);
+      status.classList.remove("warning");
+      if (result.inside) {
+        statusText.textContent = "长方体在范围内。";
+      } else if (result.reason === "forbiddenCylinder") {
+        statusText.textContent = "长方体与内圆不可达区域相交。";
+      } else if (result.invalidSamples > 0) {
+        statusText.textContent = "长方体超出 R-Z 截面或 X-Y 可达区域。";
+      } else {
+        statusText.textContent = `有 ${8 - result.validCorners} 个角点超出可达空间。`;
+      }
+      metrics.l.textContent = fmt(v.boxL);
+      metrics.w.textContent = fmt(v.boxW);
+      metrics.h.textContent = fmt(v.boxH);
+      volumeLabel.textContent = `体积 ${fmt((v.boxL * v.boxW * v.boxH) / 1000000)} L`;
+      cornerLabel.textContent = `${result.validCorners} / 8 个角点在范围内`;
+    }
+
+    function isBoxInside(v) {
+      const corners = boxCorners(v);
+      let validCorners = 0;
+      let invalidSamples = 0;
+      let clearance = Infinity;
+      for (const p of corners) {
+        const check = pointCheck(p, v);
+        if (check.inside) validCorners += 1;
+        clearance = Math.min(clearance, check.clearance);
+      }
+      for (const p of boxSamplePoints(v)) {
+        const check = pointCheck(p, v);
+        if (!check.inside) invalidSamples += 1;
+        clearance = Math.min(clearance, check.clearance);
+      }
+      const cylinder = forbiddenCylinderCheck(v);
+      clearance = Math.min(clearance, cylinder.clearance);
+      return {
+        inside: validCorners === 8 && invalidSamples === 0 && !cylinder.intersects,
+        validCorners,
+        invalidSamples,
+        clearance,
+        reason: cylinder.intersects ? "forbiddenCylinder" : (invalidSamples > 0 ? "samples" : "corners")
+      };
+    }
+
+    function forbiddenCylinderCheck(v) {
+      const xMin = v.boxX - v.boxL / 2;
+      const xMax = v.boxX + v.boxL / 2;
+      const { min: yMin, max: yMax } = boxYBounds(v);
+      const closestX = THREE.MathUtils.clamp(0, xMin, xMax);
+      const closestY = THREE.MathUtils.clamp(v.innerCircleY, yMin, yMax);
+      const distance = Math.hypot(closestX, closestY - v.innerCircleY);
+      return {
+        intersects: distance < v.innerRadius - 0.001,
+        clearance: distance - v.innerRadius
+      };
+    }
+
+    function pointCheck(p, v) {
+      return drawingPointCheck(p, v);
+    }
+
+    function drawingPointCheck(p, v) {
+      const dx = p.x;
+      const dy = p.y;
+      const radius = Math.hypot(dx, dy);
+      const yaw = THREE.MathUtils.radToDeg(Math.atan2(dy, dx));
+      const yawLimit = v.drawingYaw / 2;
+      const outerDistance = Math.hypot(dx, dy);
+      const innerDistance = Math.hypot(dx, dy - v.innerCircleY);
+      const outerClearance = v.outerRadius - outerDistance;
+      const innerClearance = innerDistance - v.innerRadius;
+      const yawClearance = v.drawingYaw >= 359.9 ? Infinity : (yawLimit - Math.abs(yaw)) * Math.max(6, v.outerRadius / 120);
+      const rzCheck = rzPointCheck(radius, p.z);
+      const inside = outerDistance <= v.outerRadius + 0.001
+        && innerDistance >= v.innerRadius - 0.001
+        && Math.abs(yaw) <= yawLimit + 0.001
+        && rzCheck.inside;
+      return { inside, clearance: Math.min(innerClearance, outerClearance, yawClearance, rzCheck.clearance) };
+    }
+
+    function rzPointCheck(r, z) {
+      let inside = false;
+      let minDistance = Infinity;
+      for (let i = 0, j = smoothRzProfile.length - 1; i < smoothRzProfile.length; j = i++) {
+        const a = smoothRzProfile[i];
+        const b = smoothRzProfile[j];
+        if (((a.z > z) !== (b.z > z)) && r < ((b.r - a.r) * (z - a.z)) / (b.z - a.z) + a.r) {
+          inside = !inside;
+        }
+        minDistance = Math.min(minDistance, distancePointToSegment(r, z, a.r, a.z, b.r, b.z));
+      }
+      return { inside, clearance: inside ? minDistance : -minDistance };
+    }
+
+    function distancePointToSegment(px, py, ax, ay, bx, by) {
+      const dx = bx - ax;
+      const dy = by - ay;
+      const len2 = dx * dx + dy * dy;
+      const t = len2 <= 0 ? 0 : THREE.MathUtils.clamp(((px - ax) * dx + (py - ay) * dy) / len2, 0, 1);
+      return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+    }
+
+    function boxCorners(v) {
+      const xs = [v.boxX - v.boxL / 2, v.boxX + v.boxL / 2];
+      const yBounds = boxYBounds(v);
+      const ys = [yBounds.min, yBounds.max];
+      const zs = [v.baseZ, v.baseZ + v.boxH];
+      const corners = [];
+      for (const x of xs) for (const y of ys) for (const z of zs) corners.push(new THREE.Vector3(x, y, z));
+      return corners;
+    }
+
+    function boxSamplePoints(v) {
+      const xs = sampleRange(v.boxX - v.boxL / 2, v.boxX + v.boxL / 2, 9);
+      const yBounds = boxYBounds(v);
+      const ys = sampleRange(yBounds.min, yBounds.max, 9);
+      const zs = sampleRange(v.baseZ, v.baseZ + v.boxH, 9);
+      const points = [];
+      for (const x of xs) for (const y of ys) {
+        points.push(new THREE.Vector3(x, y, v.baseZ));
+        points.push(new THREE.Vector3(x, y, v.baseZ + v.boxH));
+      }
+      for (const z of zs) {
+        for (const x of xs) {
+          points.push(new THREE.Vector3(x, yBounds.min, z));
+          points.push(new THREE.Vector3(x, yBounds.max, z));
+        }
+        for (const y of ys) {
+          points.push(new THREE.Vector3(v.boxX - v.boxL / 2, y, z));
+          points.push(new THREE.Vector3(v.boxX + v.boxL / 2, y, z));
+        }
+      }
+      return points;
+    }
+
+    function boxYBounds(v) {
+      if (v.boxY < 0) {
+        return { min: v.boxY - v.boxW, max: v.boxY };
+      }
+      return { min: v.boxY, max: v.boxY + v.boxW };
+    }
+
+    function sampleRange(min, max, count) {
+      if (count <= 1) return [(min + max) / 2];
+      return Array.from({ length: count }, (_, i) => THREE.MathUtils.lerp(min, max, i / (count - 1)));
+    }
+
+    function fitBox() {
+      const v = values();
+      fitDrawingBox(v, fitMode);
+    }
+
+    function shrinkBoxUntilInside() {
+      let guard = 0;
+      while (!isBoxInside(values()).inside && guard < 40) {
+        input.boxL.value = Math.max(10, Math.floor(Number(input.boxL.value) * 0.94 / 10) * 10);
+        input.boxW.value = Math.max(10, Math.floor(Number(input.boxW.value) * 0.94 / 10) * 10);
+        input.boxH.value = Math.max(10, Math.floor(Number(input.boxH.value) * 0.94 / 10) * 10);
+        guard += 1;
+      }
+    }
+
+    function fitDrawingBox(v, mode) {
+      input.boxZ.value = 0;
+      const config = fitConfigForMode(mode);
+      const boundaryY = mode === "L" || mode === "W"
+        ? (v.boxY < 0 ? -4160 : 2660)
+        : (v.boxY < 0 ? -4160 : Math.ceil(v.innerCircleY + v.innerRadius));
+      if (mode === "H") {
+        fitHeightBySearchingY(v, config, boundaryY);
+        return;
+      }
+      if (mode === "L" || mode === "W") {
+        fitPrimaryThenSecondary(v, config, boundaryY);
+        return;
+      }
+      const searchYMax = v.boxY < 0 ? boundaryY : v.outerRadius - 10;
+      let best = null;
+      const ratio = fitFreeRatio(v, config);
+      const minScale = 10 / Math.min(ratio.a, ratio.b);
+      const maxScale = Math.min(config.aMax / ratio.a, config.bMax / ratio.b);
+
+      best = searchFitPairScale(v, config, ratio, boundaryY, searchYMax, 100, minScale, maxScale);
+      if (best) {
+        best = searchFitPairScale(
+          v,
+          config,
+          ratio,
+          Math.max(boundaryY, best.y - 140),
+          Math.min(searchYMax, best.y + 140),
+          20,
+          Math.max(minScale, best.scale - 260),
+          Math.min(maxScale, best.scale + 260)
+        ) || best;
+      }
+
+      if (!best) {
+        input.boxY.value = boundaryY;
+        applyFitPairScale(v, config, ratio, minScale);
+        return;
+      }
+
+      input.boxY.value = best.y;
+      applyFitPairScale(v, config, ratio, Math.max(minScale, Math.floor(best.scale / 10) * 10));
+      shrinkFitPairUntilInside(config);
+    }
+
+    function fitPrimaryThenSecondary(base, config, boundaryY) {
+      input.boxY.value = boundaryY;
+      applyFitPairValues(base, config, config.aMin, config.bMin);
+      if (!isBoxInside(values()).inside) return;
+
+      const primary = maximizeFitValue(base, config, config.a, config.aMin, config.aMax, config.b, config.bMin);
+      const fixedPrimary = Math.max(config.aMin, Math.floor(primary / 10) * 10);
+      const secondary = maximizeFitValue(base, config, config.b, config.bMin, config.bMax, config.a, fixedPrimary);
+      applyFitPairValues(base, config, fixedPrimary, Math.max(config.bMin, Math.floor(secondary / 10) * 10));
+      shrinkSecondaryUntilInside(config);
+    }
+
+    function fitHeightBySearchingY(base, config, boundaryY) {
+      const zTop = base.baseZ + base.boxH;
+      const rzRange = largestRzIntervalAtZ(zTop);
+      const yMin = base.boxY < 0
+        ? boundaryY
+        : Math.max(boundaryY, Math.floor(((rzRange && rzRange.min) || boundaryY) / 10) * 10);
+      const yMax = base.boxY < 0
+        ? boundaryY
+        : Math.min(base.outerRadius - 10, Math.ceil(((rzRange && rzRange.max) || (base.outerRadius - 10)) / 10) * 10);
+
+      let best = searchFixedHeightFootprint(base, config, yMin, yMax, 160, 160);
+      if (best) {
+        best = searchFixedHeightFootprint(
+          base,
+          config,
+          Math.max(yMin, best.y - 220),
+          Math.min(yMax, best.y + 220),
+          20,
+          20,
+          Math.max(config.bMin, best.secondary - 320),
+          Math.min(config.bMax, best.secondary + 320)
+        ) || best;
+      }
+
+      if (!best) {
+        input.boxY.value = boundaryY;
+        applyFitPairValues(base, config, config.aMin, config.bMin);
+        return;
+      }
+
+      input.boxY.value = best.y;
+      applyFitPairValues(base, config, best.primary, best.secondary);
+      shrinkSecondaryUntilInside(config);
+    }
+
+    function searchFixedHeightFootprint(base, config, yMin, yMax, yStep, secondaryStep, secondaryMin = config.bMin, secondaryMax = config.bMax) {
+      const radialLimits = radialLimitsForHeight(base.baseZ, base.baseZ + base.boxH);
+      if (!radialLimits) return null;
+      const radialMin = radialLimits.min;
+      const radialMax = Math.min(radialLimits.max, base.outerRadius);
+      let best = null;
+      const searchYMin = base.boxY < 0 ? yMin : Math.max(yMin, radialMin);
+      const searchYMax = base.boxY < 0 ? yMax : Math.min(yMax, radialMax - config.bMin);
+
+      for (const y of steppedValues(searchYMin, searchYMax, yStep)) {
+        const closestRadius = y < 0 ? Math.abs(y) : y;
+        if (closestRadius < radialMin - 0.001) continue;
+
+        const maxSecondaryAtY = y < 0
+          ? Math.min(secondaryMax, radialMax + y)
+          : Math.min(secondaryMax, radialMax - y);
+        if (maxSecondaryAtY < config.bMin) continue;
+
+        input.boxY.value = y;
+        for (const secondaryCandidate of steppedValues(secondaryMin, maxSecondaryAtY, secondaryStep)) {
+          const fixedSecondary = Math.max(config.bMin, Math.min(config.bMax, Math.floor(secondaryCandidate / 10) * 10));
+          const farY = y < 0 ? y - fixedSecondary : y + fixedSecondary;
+          const farYAbs = Math.abs(farY);
+          if (farYAbs > radialMax) continue;
+
+          const maxHalfLength = Math.sqrt(Math.max(0, radialMax * radialMax - farYAbs * farYAbs));
+          const fixedPrimary = Math.max(config.aMin, Math.min(config.aMax, Math.floor((maxHalfLength * 2) / 10) * 10));
+          applyFitPairValues(base, config, fixedPrimary, fixedSecondary);
+          if (!isBoxInside(values()).inside) continue;
+
+          const area = fixedPrimary * fixedSecondary;
+          if (
+            !best
+            || area > best.area
+            || (area === best.area && fixedPrimary > best.primary)
+            || (area === best.area && fixedPrimary === best.primary && fixedSecondary > best.secondary)
+          ) {
+            best = { y, primary: fixedPrimary, secondary: fixedSecondary, area };
+          }
+        }
+      }
+      return best;
+    }
+
+    function radialLimitsForHeight(zMin, zMax) {
+      const zValues = [zMin, zMax];
+      for (const p of smoothRzProfile) {
+        if (p.z > zMin && p.z < zMax) zValues.push(p.z);
+      }
+      let min = -Infinity;
+      let max = Infinity;
+      for (const z of zValues) {
+        const interval = largestRzIntervalAtZ(z);
+        if (!interval) return null;
+        min = Math.max(min, interval.min);
+        max = Math.min(max, interval.max);
+      }
+      return min <= max ? { min, max } : null;
+    }
+
+    function steppedValues(min, max, step) {
+      const values = [];
+      const start = Math.ceil(min / 10) * 10;
+      const end = Math.floor(max / 10) * 10;
+      for (let value = start; value <= end; value += step) values.push(value);
+      if (!values.includes(end)) values.push(end);
+      return values;
+    }
+
+    function searchPrimarySecondaryY(base, config, yMin, yMax, yStep) {
+      let best = null;
+      for (let y = yMin; y <= yMax; y += yStep) {
+        input.boxY.value = y;
+        applyFitPairValues(base, config, config.aMin, config.bMin);
+        if (!isBoxInside(values()).inside) continue;
+
+        const primary = maximizeFitValue(base, config, config.a, config.aMin, config.aMax, config.b, config.bMin);
+        const fixedPrimary = Math.max(config.aMin, Math.floor(primary / 10) * 10);
+        const secondary = maximizeFitValue(base, config, config.b, config.bMin, config.bMax, config.a, fixedPrimary);
+        const fixedSecondary = Math.max(config.bMin, Math.floor(secondary / 10) * 10);
+        if (!best || fixedPrimary > best.primary || (fixedPrimary === best.primary && fixedSecondary > best.secondary)) {
+          best = { y, primary: fixedPrimary, secondary: fixedSecondary };
+        }
+      }
+      return best;
+    }
+
+    function maximizeFitValue(base, config, targetId, minValue, maxValue, otherId, otherValue) {
+      let lo = minValue;
+      let hi = maxValue;
+      applyTwoValueCandidate(base, targetId, hi, otherId, otherValue);
+      if (isBoxInside(values()).inside) return hi;
+      for (let i = 0; i < 24; i++) {
+        const mid = (lo + hi) / 2;
+        applyTwoValueCandidate(base, targetId, mid, otherId, otherValue);
+        if (isBoxInside(values()).inside) lo = mid;
+        else hi = mid;
+      }
+      return lo;
+    }
+
+    function applyTwoValueCandidate(base, targetId, targetValue, otherId, otherValue) {
+      input.boxL.value = base.boxL;
+      input.boxW.value = base.boxW;
+      input.boxH.value = base.boxH;
+      input[targetId].value = targetValue;
+      input[otherId].value = otherValue;
+    }
+
+    function applyFitPairValues(base, config, aValue, bValue) {
+      input.boxL.value = base.boxL;
+      input.boxW.value = base.boxW;
+      input.boxH.value = base.boxH;
+      input[config.a].value = aValue;
+      input[config.b].value = bValue;
+    }
+
+    function fitConfigForMode(mode) {
+      const fixed = mode === "W" ? "boxW" : mode === "H" ? "boxH" : "boxL";
+      const variables = ["boxL", "boxW", "boxH"].filter((id) => id !== fixed);
+      return {
+        fixed,
+        a: variables[0],
+        b: variables[1],
+        aMin: Number(input[variables[0]].min),
+        aMax: Number(input[variables[0]].max),
+        bMin: Number(input[variables[1]].min),
+        bMax: Number(input[variables[1]].max)
+      };
+    }
+
+    function fitFreeRatio(base, config) {
+      const maxFree = Math.max(1, base[config.a], base[config.b]);
+      return {
+        a: Math.max(0.001, base[config.a] / maxFree),
+        b: Math.max(0.001, base[config.b] / maxFree)
+      };
+    }
+
+    function searchFitPairScale(base, config, ratio, yMin, yMax, yStep, minScale, maxScale) {
+      let best = null;
+      for (let y = yMin; y <= yMax; y += yStep) {
+        input.boxY.value = y;
+        applyFitPairScale(base, config, ratio, minScale);
+        if (!isBoxInside(values()).inside) continue;
+
+        let lo = minScale;
+        let hi = maxScale;
+        applyFitPairScale(base, config, ratio, hi);
+        if (isBoxInside(values()).inside) lo = hi;
+
+        for (let i = 0; i < 20; i++) {
+          const mid = (lo + hi) / 2;
+          applyFitPairScale(base, config, ratio, mid);
+          if (isBoxInside(values()).inside) lo = mid;
+          else hi = mid;
+        }
+
+        const score = (lo * ratio.a) * (lo * ratio.b);
+        if (!best || score > best.score) {
+          best = { y, scale: lo, score };
+        }
+      }
+      return best;
+    }
+
+    function applyFitPairScale(base, config, ratio, scale) {
+      input.boxL.value = base.boxL;
+      input.boxW.value = base.boxW;
+      input.boxH.value = base.boxH;
+      input[config.a].value = scale * ratio.a;
+      input[config.b].value = scale * ratio.b;
+    }
+
+    function shrinkFitPairUntilInside(config) {
+      let guard = 0;
+      while (!isBoxInside(values()).inside && guard < 60) {
+        input[config.a].value = Math.max(Number(input[config.a].min), Math.floor(Number(input[config.a].value) * 0.98 / 10) * 10);
+        input[config.b].value = Math.max(Number(input[config.b].min), Math.floor(Number(input[config.b].value) * 0.98 / 10) * 10);
+        guard += 1;
+      }
+    }
+
+    function shrinkSecondaryUntilInside(config) {
+      let guard = 0;
+      while (!isBoxInside(values()).inside && guard < 60) {
+        input[config.b].value = Math.max(Number(input[config.b].min), Math.floor(Number(input[config.b].value) * 0.98 / 10) * 10);
+        guard += 1;
+      }
+    }
+
+    function measuredPeakHeight() {
+      return smoothRzProfile.reduce((max, p) => Math.max(max, p.z), 0);
+    }
+
+    function syncRanges() {
+      document.querySelectorAll("input[type='range']").forEach((range) => {
+        range.value = document.getElementById(range.dataset.for).value;
+      });
+    }
+
+    function axisArrow(start, end, color, label) {
+      const group = new THREE.Group();
+      const dir = end.clone().sub(start);
+      const material = new THREE.MeshBasicMaterial({ color });
+      group.add(cylinderBetween(start, end, 34, material));
+      const cone = new THREE.ConeGeometry(145, 390, 28);
+      const coneMesh = new THREE.Mesh(cone, material);
+      coneMesh.position.copy(end);
+      coneMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+      group.add(coneMesh);
+      const sprite = makeLabel(label, { scaleX: 0.14, scaleY: 0.04, fontSize: 126, background: 0 });
+      sprite.position.copy(end.clone().multiplyScalar(1.06));
+      group.add(sprite);
+      return group;
+    }
+
+    function axisTicks() {
+      const group = new THREE.Group();
+      const matX = new THREE.MeshBasicMaterial({ color: 0xb84d3a });
+      const matY = new THREE.MeshBasicMaterial({ color: 0x1a7f70 });
+      const matZ = new THREE.MeshBasicMaterial({ color: 0x316cb3 });
+      addCylinderLine(group, new THREE.Vector3(-8200, 0, 0), new THREE.Vector3(0, 0, 0), matX, 22);
+      addCylinderLine(group, new THREE.Vector3(0, -8200, 0), new THREE.Vector3(0, 0, 0), matY, 22);
+      addCylinderLine(group, new THREE.Vector3(0, 0, -400), new THREE.Vector3(0, 0, 0), matZ, 22);
+
+      for (let v = -8000; v <= 8000; v += 4000) {
+        if (v === 0) continue;
+        addCylinderLine(group, new THREE.Vector3(v, -160, 0), new THREE.Vector3(v, 160, 0), matX, 16);
+        addCylinderLine(group, new THREE.Vector3(-160, v, 0), new THREE.Vector3(160, v, 0), matY, 16);
+      }
+
+      for (let z = 4000; z <= 8000; z += 4000) {
+        addCylinderLine(group, new THREE.Vector3(-170, 0, z), new THREE.Vector3(170, 0, z), matZ, 16);
+      }
+      return group;
+    }
+
+    function addCylinderLine(group, start, end, material, radius) {
+      group.add(cylinderBetween(start, end, radius, material));
+    }
+
+    function cylinderBetween(start, end, radius, material) {
+      const dir = end.clone().sub(start);
+      const geometry = new THREE.CylinderGeometry(radius, radius, dir.length(), 18);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.copy(start).add(end).multiplyScalar(0.5);
+      mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+      return mesh;
+    }
+
+    function fmt(n) {
+      return Number(n).toLocaleString("zh-CN", { maximumFractionDigits: n < 20 ? 1 : 0 });
+    }
+
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      renderer.setSize(rect.width, rect.height, false);
+      camera.aspect = rect.width / rect.height;
+      camera.updateProjectionMatrix();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+  </script>
+</body>
+</html>
