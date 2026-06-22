@@ -1,8 +1,8 @@
 # GL-3DPRT-SP-S 运动范围判定说明
 
-版本：v1.8
+版本：v1.7
 
-日期：2026-06-22
+日期：2026-06-17
 
 ## 这个工具是做什么的
 
@@ -213,9 +213,11 @@ X 方向已经固定在 `0`，也就是长方体左右居中放置。
 
 ## 文件说明
 
-当前网页主文件是 `outputs/index.html`。
+设备选择页是 `outputs/index.html`。
 
-如果要分享给别人，优先分享这个 HTML 文件；说明文档是 `outputs/GL-3DPRT-SP-S说明.md`。
+当前 SP-S 网页主文件是 `outputs/GL-3DPRT-SP-S.html`。
+
+如果要分享单个设备页面，优先分享 `outputs/GL-3DPRT-SP-S.html`；如果要同时提供 SP-M 和 SP-S 两个入口，分享 `outputs/index.html`。说明文档是 `outputs/GL-3DPRT-SP-S说明.md`。
 
 ## 版本和日期怎么维护
 
