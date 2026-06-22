@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GL-3DPRT-SP-S运动范围判定 v1.7</title>
+  <title>GL-3DPRT-SP-S运动范围判定 v1.8</title>
   <style>
     :root {
       color-scheme: dark;
@@ -524,7 +524,7 @@
       <header>
         <h1>GL-3DPRT-SP-S运动范围判定</h1>
         <p class="subtitle">用实测 XY 平面范围和 R-Z 垂直截面生成 3D 可达空间，并验证内接长方体尺寸。</p>
-        <p class="subtitle">版本：v1.7 ｜ 日期：2026-06-17</p>
+        <p class="subtitle">版本：v1.8 ｜ 日期：2026-06-22</p>
       </header>
 
       <section class="section" hidden>
@@ -592,7 +592,7 @@
         <div class="fit-actions">
           <button id="resetSize">重置尺寸</button>
           <button id="reset">重置视图</button>
-          <button id="toggleModel">隐藏设备模型</button>
+          <button id="toggleModel">显示设备模型</button>
         </div>
       </section>
 
@@ -640,8 +640,6 @@
   <script type="module">
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-    import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
-    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
     const ids = ["innerCircleY", "outerRadius", "innerRadius", "drawingYaw", "baseZ", "boxX", "boxY", "boxZ", "boxL", "boxW", "boxH"];
     const input = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
@@ -716,7 +714,8 @@
     let boxMesh = null;
     let boxEdges = null;
     let referenceModelMesh = null;
-    let referenceModelVisible = true;
+    let referenceModelVisible = false;
+    let referenceModelLoading = false;
     let dimensionGroup = new THREE.Group();
     let fitMode = "L";
     scene.add(dimensionGroup);
@@ -791,7 +790,6 @@
 
     bindInputs();
     update();
-    loadReferenceModel();
     animate();
 
     document.querySelectorAll("[data-fit-mode]").forEach((button) => {
@@ -825,7 +823,11 @@
     document.getElementById("toggleModel").addEventListener("click", () => {
       referenceModelVisible = !referenceModelVisible;
       document.getElementById("toggleModel").textContent = referenceModelVisible ? "隐藏设备模型" : "显示设备模型";
-      if (referenceModelMesh) referenceModelMesh.visible = referenceModelVisible;
+      if (referenceModelMesh) {
+        referenceModelMesh.visible = referenceModelVisible;
+      } else if (referenceModelVisible) {
+        loadReferenceModel();
+      }
     });
 
     document.querySelectorAll("[data-view]").forEach((button) => {
@@ -841,8 +843,22 @@
 
     window.addEventListener("resize", resize);
 
-    function loadReferenceModel() {
+    async function loadReferenceModel() {
       if (!embeddedReferenceModelGlb || embeddedReferenceModelGlb.startsWith("__")) return;
+      if (referenceModelMesh || referenceModelLoading) return;
+      referenceModelLoading = true;
+      let GLTFLoader;
+      let DRACOLoader;
+      try {
+        [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
+          import("three/addons/loaders/GLTFLoader.js"),
+          import("three/addons/loaders/DRACOLoader.js")
+        ]);
+      } catch (error) {
+        referenceModelLoading = false;
+        console.error("GLB 加载器载入失败", error);
+        return;
+      }
       const loader = new GLTFLoader();
       const dracoLoader = new DRACOLoader();
       dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/libs/draco/");
@@ -873,8 +889,10 @@
             child.receiveShadow = true;
           });
           scene.add(referenceModelMesh);
+          referenceModelLoading = false;
         },
         (error) => {
+          referenceModelLoading = false;
           console.error("GLB 模型加载失败", error);
         }
       );
