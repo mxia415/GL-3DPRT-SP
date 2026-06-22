@@ -1,3 +1,5 @@
 .DS_Store
 outputs/*.stl
 *.glb
+!outputs/assets/
+!outputs/assets/*.glb
