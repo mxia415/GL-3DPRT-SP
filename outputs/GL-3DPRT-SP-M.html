@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GL-3DPRT-SP-M运动范围判定 v1.8</title>
+  <title>GL-3DPRT-SP-M运动范围判定 v1.9</title>
   <style>
     :root {
       color-scheme: dark;
@@ -524,7 +524,7 @@
       <header>
         <h1>GL-3DPRT-SP-M运动范围判定</h1>
         <p class="subtitle">用实测 XY 平面范围和 R-Z 垂直截面生成 3D 可达空间，并验证内接长方体尺寸。</p>
-        <p class="subtitle">版本：v1.8 ｜ 日期：2026-06-22</p>
+        <p class="subtitle">版本：v1.9 ｜ 日期：2026-06-22</p>
       </header>
 
       <section class="section" hidden>
@@ -709,6 +709,7 @@
       depthWrite: false
     });
     const referenceModelGlbUrl = new URL("assets/GL-3DPRT-SP-M.glb", window.location.href).href;
+    const modelLoadTimeoutMs = 120000;
     let workspaceMesh = null;
     let workspaceEdges = null;
     let boxMesh = null;
@@ -820,14 +821,14 @@
         const [{ GLTFLoader }, { DRACOLoader }] = await withTimeout(Promise.all([
           import("three/addons/loaders/GLTFLoader.js"),
           import("three/addons/loaders/DRACOLoader.js")
-        ]), 20000, "GLB 加载器载入超时");
+        ]), modelLoadTimeoutMs, "GLB 加载器载入超时");
         const loader = new GLTFLoader();
         const dracoLoader = new DRACOLoader();
         dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/libs/draco/");
         loader.setDRACOLoader(dracoLoader);
-        const response = await withTimeout(fetch(referenceModelGlbUrl), 20000, "GLB 下载超时");
+        const response = await withTimeout(fetch(referenceModelGlbUrl), modelLoadTimeoutMs, "GLB 下载超时");
         if (!response.ok) throw new Error(`GLB 请求失败：${response.status}`);
-        const modelBuffer = await withTimeout(response.arrayBuffer(), 20000, "GLB 读取超时");
+        const modelBuffer = await withTimeout(response.arrayBuffer(), modelLoadTimeoutMs, "GLB 读取超时");
         await withTimeout(new Promise((resolve, reject) => {
           loader.parse(
             modelBuffer,
@@ -860,7 +861,7 @@
             },
             reject
           );
-        }), 20000, "GLB 解析超时");
+        }), modelLoadTimeoutMs, "GLB 解析超时");
         return true;
       } catch (error) {
         referenceModelVisible = false;
