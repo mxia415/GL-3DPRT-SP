@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GL-3DPRT-SP-S运动范围判定 v1.7</title>
+  <title>GL-3DPRT-SP-S运动范围判定 v1.8</title>
   <style>
     :root {
       color-scheme: dark;
@@ -524,7 +524,7 @@
       <header>
         <h1>GL-3DPRT-SP-S运动范围判定</h1>
         <p class="subtitle">用实测 XY 平面范围和 R-Z 垂直截面生成 3D 可达空间，并验证内接长方体尺寸。</p>
-        <p class="subtitle">版本：v1.7 ｜ 日期：2026-06-17</p>
+        <p class="subtitle">版本：v1.8 ｜ 日期：2026-06-22</p>
       </header>
 
       <section class="section" hidden>
@@ -708,7 +708,7 @@
       side: THREE.DoubleSide,
       depthWrite: false
     });
-    const referenceModelGlbUrl = "assets/GL-3DPRT-SP-S.glb";
+    const referenceModelGlbUrl = new URL("assets/GL-3DPRT-SP-S.glb", window.location.href).href;
     let workspaceMesh = null;
     let workspaceEdges = null;
     let boxMesh = null;
@@ -820,13 +820,21 @@
       controls.update();
     });
 
-    document.getElementById("toggleModel").addEventListener("click", () => {
+    document.getElementById("toggleModel").addEventListener("click", async () => {
+      const button = document.getElementById("toggleModel");
       referenceModelVisible = !referenceModelVisible;
-      document.getElementById("toggleModel").textContent = referenceModelVisible ? "隐藏设备模型" : "显示设备模型";
+      button.textContent = referenceModelVisible ? "隐藏设备模型" : "显示设备模型";
       if (referenceModelMesh) {
         referenceModelMesh.visible = referenceModelVisible;
       } else if (referenceModelVisible) {
-        loadReferenceModel();
+        button.textContent = "设备模型加载中...";
+        const loaded = await loadReferenceModel();
+        button.textContent = loaded ? "隐藏设备模型" : "显示设备模型";
+        if (!loaded) {
+          referenceModelVisible = false;
+          status.classList.add("invalid");
+          statusText.textContent = "设备模型加载失败，请稍后重试。";
+        }
       }
     });
 
@@ -850,14 +858,14 @@
       let GLTFLoader;
       let DRACOLoader;
       try {
-        [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
+        [{ GLTFLoader }, { DRACOLoader }] = await withTimeout(Promise.all([
           import("three/addons/loaders/GLTFLoader.js"),
           import("three/addons/loaders/DRACOLoader.js")
-        ]);
+        ]), 20000, "GLB 加载器载入超时");
       } catch (error) {
         referenceModelLoading = false;
         console.error("GLB 加载器载入失败", error);
-        return;
+        return false;
       }
       const loader = new GLTFLoader();
       const dracoLoader = new DRACOLoader();
@@ -865,18 +873,20 @@
       loader.setDRACOLoader(dracoLoader);
       let modelBuffer;
       try {
-        const response = await fetch(referenceModelGlbUrl);
+        const response = await withTimeout(fetch(referenceModelGlbUrl), 20000, "GLB 下载超时");
         if (!response.ok) throw new Error(`GLB 请求失败：${response.status}`);
-        modelBuffer = await response.arrayBuffer();
+        modelBuffer = await withTimeout(response.arrayBuffer(), 20000, "GLB 读取超时");
       } catch (error) {
         referenceModelLoading = false;
         console.error("GLB 模型下载失败", error);
-        return;
+        return false;
       }
-      loader.parse(
-        modelBuffer,
-        "",
-        (gltf) => {
+      try {
+        await withTimeout(new Promise((resolve, reject) => {
+          loader.parse(
+            modelBuffer,
+            "",
+            (gltf) => {
           referenceModelMesh = gltf.scene;
           referenceModelMesh.name = "sp-s-reference-model";
           referenceModelMesh.scale.setScalar(1000);
@@ -899,13 +909,26 @@
             child.receiveShadow = true;
           });
           scene.add(referenceModelMesh);
-          referenceModelLoading = false;
-        },
-        (error) => {
-          referenceModelLoading = false;
-          console.error("GLB 模型加载失败", error);
-        }
-      );
+              resolve();
+            },
+            reject
+          );
+        }), 20000, "GLB 解析超时");
+        return true;
+      } catch (error) {
+        console.error("GLB 模型加载失败", error);
+        return false;
+      } finally {
+        referenceModelLoading = false;
+      }
+    }
+
+    function withTimeout(promise, timeoutMs, message) {
+      let timer = null;
+      const timeout = new Promise((_, reject) => {
+        timer = window.setTimeout(() => reject(new Error(message)), timeoutMs);
+      });
+      return Promise.race([promise, timeout]).finally(() => window.clearTimeout(timer));
     }
 
     function setDefaultView() {

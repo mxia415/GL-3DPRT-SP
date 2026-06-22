@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GL-3DPRT-SP-M运动范围判定 v1.7</title>
+  <title>GL-3DPRT-SP-M运动范围判定 v1.8</title>
   <style>
     :root {
       color-scheme: dark;
@@ -524,7 +524,7 @@
       <header>
         <h1>GL-3DPRT-SP-M运动范围判定</h1>
         <p class="subtitle">用实测 XY 平面范围和 R-Z 垂直截面生成 3D 可达空间，并验证内接长方体尺寸。</p>
-        <p class="subtitle">版本：v1.7 ｜ 日期：2026-06-17</p>
+        <p class="subtitle">版本：v1.8 ｜ 日期：2026-06-22</p>
       </header>
 
       <section class="section" hidden>
@@ -708,7 +708,7 @@
       side: THREE.DoubleSide,
       depthWrite: false
     });
-    const referenceModelGlbUrl = "assets/GL-3DPRT-SP-M.glb";
+    const referenceModelGlbUrl = new URL("assets/GL-3DPRT-SP-M.glb", window.location.href).href;
     let workspaceMesh = null;
     let workspaceEdges = null;
     let boxMesh = null;
@@ -786,8 +786,12 @@
       if (!referenceModelMesh && !referenceModelLoading) {
         referenceModelVisible = true;
         button.textContent = "设备模型加载中...";
-        await loadReferenceModel();
-        button.textContent = referenceModelMesh ? "隐藏设备模型" : "显示设备模型";
+        const loaded = await loadReferenceModel();
+        button.textContent = loaded ? "隐藏设备模型" : "显示设备模型";
+        if (!loaded) {
+          status.classList.add("invalid");
+          statusText.textContent = "设备模型加载失败，请稍后重试。";
+        }
         return;
       }
       if (referenceModelLoading) return;
@@ -812,19 +816,19 @@
     async function loadReferenceModel() {
       if (!referenceModelGlbUrl || referenceModelMesh) return;
       referenceModelLoading = true;
-      const [{ GLTFLoader }, { DRACOLoader }] = await Promise.all([
-        import("three/addons/loaders/GLTFLoader.js"),
-        import("three/addons/loaders/DRACOLoader.js")
-      ]);
-      const loader = new GLTFLoader();
-      const dracoLoader = new DRACOLoader();
-      dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/libs/draco/");
-      loader.setDRACOLoader(dracoLoader);
       try {
-        const response = await fetch(referenceModelGlbUrl);
+        const [{ GLTFLoader }, { DRACOLoader }] = await withTimeout(Promise.all([
+          import("three/addons/loaders/GLTFLoader.js"),
+          import("three/addons/loaders/DRACOLoader.js")
+        ]), 20000, "GLB 加载器载入超时");
+        const loader = new GLTFLoader();
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/libs/draco/");
+        loader.setDRACOLoader(dracoLoader);
+        const response = await withTimeout(fetch(referenceModelGlbUrl), 20000, "GLB 下载超时");
         if (!response.ok) throw new Error(`GLB 请求失败：${response.status}`);
-        const modelBuffer = await response.arrayBuffer();
-        await new Promise((resolve, reject) => {
+        const modelBuffer = await withTimeout(response.arrayBuffer(), 20000, "GLB 读取超时");
+        await withTimeout(new Promise((resolve, reject) => {
           loader.parse(
             modelBuffer,
             "",
@@ -856,13 +860,23 @@
             },
             reject
           );
-        });
+        }), 20000, "GLB 解析超时");
+        return true;
       } catch (error) {
         referenceModelVisible = false;
         console.error("GLB 模型加载失败", error);
+        return false;
       } finally {
         referenceModelLoading = false;
       }
+    }
+
+    function withTimeout(promise, timeoutMs, message) {
+      let timer = null;
+      const timeout = new Promise((_, reject) => {
+        timer = window.setTimeout(() => reject(new Error(message)), timeoutMs);
+      });
+      return Promise.race([promise, timeout]).finally(() => window.clearTimeout(timer));
     }
 
     function setDefaultView() {
