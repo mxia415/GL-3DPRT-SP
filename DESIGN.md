@@ -1,399 +1,253 @@
 ---
 version: alpha
-name: Warp-design-analysis
-description: An inspired interpretation of Warp's design language — an agentic terminal-and-development-environment brand whose surface is a warm near-charcoal canvas (a tint warmer than pure black), broken only by clean Inter typography, the occasional Instrument Serif italic moment, and dense terminal-mockup imagery; CTAs are unusually understated, with shape geometry running tighter than most marketing sites.
+name: Spacex-Inspired-design-analysis
+description: An inspired interpretation of Spasex's design language — a mission-oriented aerospace brand built on pure black canvas, full-bleed photographic and video heroes of rockets and Mars landscapes, and uppercase D-DIN display type set in tight vertical leading. UI chrome is intentionally minimal a single ghost outlined pill button per band, all-caps eyebrow microtext, and a fixed top nav over photography. The system is unapologetically austere — black, white, and the imagery itself.
 
 colors:
-  primary: "#f7f5f0"
-  on-primary: "#2b2622"
-  ink: "#f7f5f0"
-  body: "#c9c0ad"
-  body-strong: "#dad2c1"
-  mute: "#aea69c"
-  canvas: "#2b2622"
-  canvas-soft: "#383330"
-  hairline: "#3f3a36"
+  primary: "#000000"
+  ink: "#000000"
+  on-primary: "#ffffff"
+  on-primary-mute: "#f0f0fa"
+  canvas-night: "#000000"
+  canvas-night-soft: "#0a0a0a"
+  canvas-light: "#ffffff"
+  canvas-cool: "#f0f0fa"
+  hairline-on-dark: "#3a3a3f"
+  hairline-on-light: "#e0e0e8"
+  link-on-dark: "#ffffff"
+  link-blue-fallback: "#0000ee"
+  ink-mute: "#5a5a5f"
 
 typography:
+  display-xxl:
+    fontFamily: "D-DIN-Bold, Arial Narrow, Arial, Verdana, sans-serif"
+    fontSize: 80px
+    fontWeight: 700
+    lineHeight: 0.95
+    letterSpacing: 1.6px
   display-xl:
-    fontFamily: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif
-    fontSize: 64px
-    fontWeight: 400
-    lineHeight: 70.4px
-    letterSpacing: -1.6px
+    fontFamily: "D-DIN-Bold, Arial Narrow, Arial, Verdana, sans-serif"
+    fontSize: 60px
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: 1.2px
   display-lg:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
+    fontFamily: "D-DIN-Bold, Arial Narrow, Arial, Verdana, sans-serif"
     fontSize: 48px
-    fontWeight: 400
-    lineHeight: 52.8px
-    letterSpacing: -1.2px
-  display-md:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 32px
-    fontWeight: 500
-    lineHeight: 40px
-    letterSpacing: -0.8px
-  display-sm:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 24px
-    fontWeight: 500
-    lineHeight: 32px
-    letterSpacing: -0.4px
-  display-serif:
-    fontFamily: Instrument Serif, Georgia, "Times New Roman", serif
-    fontSize: 48px
-    fontWeight: 400
-    lineHeight: 52px
-    letterSpacing: -0.5px
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: 0.96px
   body-lg:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 18px
+    fontFamily: "D-DIN, Arial, Verdana, sans-serif"
+    fontSize: 16px
     fontWeight: 400
-    lineHeight: 28px
+    lineHeight: 1.7
+    letterSpacing: 0.32px
   body-md:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
+    fontFamily: "D-DIN, Arial, Verdana, sans-serif"
     fontSize: 16px
     fontWeight: 400
-    lineHeight: 24px
-  body-md-strong:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 16px
-    fontWeight: 500
-    lineHeight: 24px
-  body-sm:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 20px
-  body-sm-strong:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 14px
-    fontWeight: 500
-    lineHeight: 20px
-  caption:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
+    lineHeight: 1.5
+    letterSpacing: 0.32px
+  button-cap:
+    fontFamily: "D-DIN, Arial, Verdana, sans-serif"
+    fontSize: 13.008px
+    fontWeight: 700
+    lineHeight: 0.94
+    letterSpacing: 1.17px
+  micro-cap:
+    fontFamily: "D-DIN, Arial, Verdana, sans-serif"
     fontSize: 12px
     fontWeight: 400
-    lineHeight: 16px
-  code:
-    fontFamily: DM Mono, ui-monospace, SFMono-Regular, Menlo, monospace
-    fontSize: 13px
+    lineHeight: 2.0
+    letterSpacing: 0.96px
+  caption:
+    fontFamily: "D-DIN, Arial, Verdana, sans-serif"
+    fontSize: 13.008px
     fontWeight: 400
-    lineHeight: 18px
-  code-md:
-    fontFamily: DM Mono, ui-monospace, SFMono-Regular, Menlo, monospace
-    fontSize: 14px
-    fontWeight: 400
-    lineHeight: 20px
-  button-md:
-    fontFamily: Inter, system-ui, -apple-system, sans-serif
-    fontSize: 14px
-    fontWeight: 500
-    lineHeight: 20px
+    lineHeight: 1.5
+    letterSpacing: 0
 
 rounded:
-  none: 0px
-  xxs: 1px
-  xs: 2px
-  sm: 3px
-  md: 4px
-  lg: 6px
-  pill: 9999px
+  xs: 4px
+  sm: 8px
+  md: 16px
+  pill: 32px
   full: 9999px
 
 spacing:
-  xxs: 2px
-  xs: 4px
-  sm: 8px
-  md: 10px
-  lg: 16px
+  xxs: 4px
+  xs: 8px
+  sm: 12px
+  md: 16px
+  lg: 18px
   xl: 24px
-  2xl: 32px
-  3xl: 48px
-  4xl: 64px
-  5xl: 96px
+  xxl: 32px
+  huge: 48px
 
 components:
-  nav-bar:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-sm-strong}"
-    padding: "{spacing.md} {spacing.xl}"
-  nav-link:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-sm-strong}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.xs} {spacing.md}"
-  button-primary:
-    backgroundColor: "{colors.primary}"
+  button-ghost-on-dark:
+    backgroundColor: "{colors.canvas-night}"
     textColor: "{colors.on-primary}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.sm} {spacing.lg}"
-  button-secondary-ghost:
-    backgroundColor: "{colors.canvas}"
+    typography: "{typography.button-cap}"
+    rounded: "{rounded.pill}"
+    padding: 18px 24px
+  button-ghost-on-light:
+    backgroundColor: "{colors.canvas-light}"
     textColor: "{colors.ink}"
-    typography: "{typography.button-md}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.sm} {spacing.lg}"
-  button-icon-circular:
-    backgroundColor: "{colors.canvas}"
+    typography: "{typography.button-cap}"
+    rounded: "{rounded.pill}"
+    padding: 18px 24px
+  button-filled-cool:
+    backgroundColor: "{colors.canvas-cool}"
     textColor: "{colors.ink}"
-    rounded: "{rounded.full}"
-    padding: "{spacing.xs}"
+    typography: "{typography.button-cap}"
+    rounded: "{rounded.pill}"
+    padding: 18px 24px
   text-input:
-    backgroundColor: "{colors.canvas-soft}"
+    backgroundColor: "{colors.canvas-light}"
     textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-sm}"
-    rounded: "{rounded.sm}"
-    padding: "{spacing.sm} {spacing.md}"
-  card-content:
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
     typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.xl}"
-  card-mockup:
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.code}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.lg}"
-  download-tile:
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-md-strong}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.xl}"
-  press-row:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.body}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-md}"
-    padding: "{spacing.lg} 0"
-  job-row:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-md-strong}"
-    padding: "{spacing.lg} 0"
-  hero-band:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-xl}"
-    padding: "{spacing.5xl} {spacing.xl}"
-  content-band:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display-md}"
-    padding: "{spacing.5xl} {spacing.xl}"
-  partner-logo-tile:
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-md-strong}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.lg}"
-  testimonial-card:
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.xl}"
-  footer:
-    backgroundColor: "{colors.canvas}"
-    textColor: "{colors.body}"
-    typography: "{typography.body-sm}"
-    padding: "{spacing.3xl} {spacing.xl}"
-
-  # ─── Examples (illustrative) — auto-derived; resolve any TO_FILL markers below ───
-  ex-pricing-tier:
-    description: "Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface."
-    backgroundColor: "{colors.canvas-soft}"
-    textColor: "{colors.ink}"
-    borderColor: "{colors.hairline}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-pricing-tier-featured:
-    description: "Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode)."
-    backgroundColor: "{colors.ink}"
+    rounded: "{rounded.xs}"
+    padding: 12px 16px
+  card-photo-band:
+    backgroundColor: "{colors.canvas-night}"
     textColor: "{colors.on-primary}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-product-selector:
-    description: "What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery)."
-    backgroundColor: "{colors.canvas-soft}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-cart-drawer:
-    description: "Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart)."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-    item-divider: "{colors.hairline}"
-  ex-app-shell-row:
-    description: "Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator."
-    backgroundColor: "{colors.canvas}"
-    activeIndicator: "{colors.primary}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.xs}"
+    padding: 0px
+  card-shop-product:
+    backgroundColor: "{colors.canvas-light}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
     rounded: "{rounded.sm}"
-    padding: "{spacing.sm} {spacing.md}"
-  ex-data-table-cell:
-    description: "Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm."
-    headerBackground: "{colors.canvas-soft}"
-    headerTypography: "{typography.caption}"
-    bodyTypography: "{typography.body-sm}"
-    cellPadding: "{spacing.sm} {spacing.md}"
-    rowBorder: "{colors.hairline}"
-  ex-auth-form-card:
-    description: "Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside."
-    backgroundColor: "{colors.canvas-soft}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-modal-card:
-    description: "Modal dialog surface — same chrome as feature-card with elevated shadow."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.xl}"
-  ex-empty-state-card:
-    description: "Empty-state illustration frame."
-    backgroundColor: "{colors.canvas-soft}"
-    rounded: "{rounded.lg}"
-    padding: "{spacing.2xl}"
-    captionTypography: "{typography.body-md}"
-  ex-toast:
-    description: "Toast notification surface — feature-card shape + medium shadow."
-    backgroundColor: "{colors.canvas}"
-    rounded: "{rounded.md}"
-    padding: "{spacing.sm} {spacing.md}"
-    typography: "{typography.body-sm}"
-
+    padding: 16px
+  nav-bar-overlay:
+    backgroundColor: "{colors.canvas-night}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.button-cap}"
+    rounded: "{rounded.xs}"
+    padding: 24px 32px
+  link-on-dark:
+    backgroundColor: "{colors.canvas-night}"
+    textColor: "{colors.link-on-dark}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.xs}"
+    padding: 0px
+  link-on-light:
+    backgroundColor: "{colors.canvas-light}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.xs}"
+    padding: 0px
+  footer-dark:
+    backgroundColor: "{colors.canvas-night}"
+    textColor: "{colors.on-primary}"
+    typography: "{typography.caption}"
+    rounded: "{rounded.xs}"
+    padding: 32px 24px
 ---
-
 
 ## Overview
 
-Warp is an "agentic development environment" — a terminal application that wraps an AI agent — and its marketing site mirrors the product's posture: a single dark band running the entire page, warmer than pure black (`{colors.canvas}` `#2b2622` carries a hint of brown-beige from the brand's oklch-defined warmth value), with copy set almost entirely in Inter. The page reads more like a developer's reading-mode editor than a marketing surface.
+Spasex's design language is an exercise in negation: pure black canvas, white display type set in tight vertical leading and uppercase, full-bleed photography or autoplaying rocket-launch video as the only chrome. There is no brand color beyond black-and-white; there are no decorative shapes; there are no card grids or pricing tables on the marketing pages. Every band is a single full-viewport photograph or video paired with one all-caps headline at `{typography.display-xxl}` (80px D-DIN-Bold) and one ghost-outlined pill CTA. The composition is closer to a film title card than a SaaS landing page.
 
-The decoration is restrained. Two terminal screenshots open the hero (split between the two main product modes — agent + terminal). A partner-logo strip (Anthropic / OpenAI / Google / Stanford) sits below the hero on a slightly warmer tile surface. A single testimonial card with a portrait photograph. A press-coverage list. Then the page closes with download tiles for Mac / Linux / Windows. There is no gradient, no atmospheric backdrop, no illustration system.
+The brand's depth is photographic. Mars landscapes, rocket exhaust plumes, the F9 booster on a launchpad at sunset — these are the design system. Type sits over them at high opacity with no scrim, no gradient overlay; the photographs are graded so the type lands cleanly. When type does need a background, it sits on `{colors.canvas-night-soft}` (a barely-lifted near-black) with a 1px hairline in `{colors.hairline-on-dark}`.
 
-Type is the second decisive voice. Hero display sits at 64 px Inter weight 400 with `-1.6px` tracking — restrained for a hero, deliberately quiet. The brand carries DM Mono as its monospace face for code blocks, and Instrument Serif italics occasionally appear for editorial moments. Body text is 16 px Inter at line-height 1.5, very readable.
+Typography splits between **D-DIN-Bold** for display tiers (uppercase, tight tracking, condensed feel) and **D-DIN** regular for body and button labels. There is no third family — even pricing on the shop site uses the same two cuts. The display sizes are unusually tight in vertical leading (0.95–1.25) and unusually loose in horizontal tracking (1.6px positive at 80px) — the brand feels engineered rather than designed.
 
 **Key Characteristics:**
-- A single primary "color" — really an off-white `{colors.primary}` (`#f7f5f0`) — that doubles as text on canvas and as the button-primary fill. There is no chromatic brand accent.
-- Warm dark canvas (`{colors.canvas}` `#2b2622`) is the only page surface. The brand's defining tone is the brown-warmth, not pure black.
-- Extremely tight button radii — 3 / 4 px (1 / 2× the brand's `{rounded.md}` 4 px base) — the brand never uses generous pill shapes for CTAs. Only icon containers use `{rounded.full}`.
-- Inter sans + DM Mono mono is the canonical pairing. Instrument Serif appears as a third editorial face for occasional italics.
-- Terminal-mockup imagery is the brand's only consistent decorative system — no gradients, no atmospheric overlays.
-- A subtle warm tint runs through every neutral; even body text and dividers carry a hint of warmth rather than neutral gray.
+- Single canvas: pure `{colors.canvas-night}` (`#000000`) for marketing; `{colors.canvas-light}` only on the shop site.
+- Display tier in uppercase D-DIN-Bold with positive horizontal tracking (1.6px at 80px) — the brand's typographic signature.
+- Full-bleed photography or autoplaying video as the dominant decorative element; type sits directly on imagery with no scrim.
+- Single ghost-outlined pill CTA per band, at `{rounded.pill}` 32px radius — never filled, never accent-colored.
+- All-caps eyebrow microtext (`{typography.micro-cap}` and `{typography.button-cap}`) with positive 0.96–1.17px tracking — every chrome element shouts in caps.
+- Fixed top nav overlaid on photography — no opaque background, just white-on-image.
+- Tight 0.95 line-height on the 80px display — vertical compression is the engineering aesthetic.
 
 ## Colors
 
+> **Source pages:** home (`/`), `/shop`, `/vehicles/starship`, `/humanspaceflight/overview`, `/mission`.
+
 ### Brand & Accent
-- **Off White Primary** (`{colors.primary}` — `#f7f5f0`): The brand's "primary" is a warm off-white. Used as button-primary fill, as default text on canvas, as the wordmark color. There is no chromatic brand accent — the off-white IS the brand's distinguishing tone.
+The brand has no accent colors. Black and white do all the chromatic work; photography supplies every other hue.
 
 ### Surface
-- **Canvas** (`{colors.canvas}` — `#2b2622`): The warm dark page background. Resolved from `oklch(22.0% 0.004 84.6)`. Slightly browner than pure black, slightly warmer than a neutral gray — the warmth IS the brand's identity.
-- **Canvas Soft** (`{colors.canvas-soft}` — `#383330`): A lighter warm-dark fill used for cards, mockup chrome, and partner-logo tiles.
-- **Hairline** (`{colors.hairline}` — `#3f3a36`): 1 px solid divider on dark surfaces.
+- **Canvas Night** (`{colors.canvas-night}` — `#000000`): Default marketing canvas. Pure black, no tint.
+- **Canvas Night Soft** (`{colors.canvas-night-soft}` — `#0a0a0a`): Barely-lifted near-black for content sections that need a subtle separation from the pure-black hero.
+- **Canvas Light** (`{colors.canvas-light}` — `#ffffff`): The shop site's product surface.
+- **Canvas Cool** (`{colors.canvas-cool}` — `#f0f0fa`): A pale cool-blue-white used as the secondary surface on the shop site and as the hover-canvas of certain ghost buttons.
+- **Hairline on Dark** (`{colors.hairline-on-dark}` — `#3a3a3f`): 1px borders on dark surface chrome.
+- **Hairline on Light** (`{colors.hairline-on-light}` — `#e0e0e8`): Borders on shop-site cards.
 
 ### Text
-- **Ink** (`{colors.ink}` — `#f7f5f0`): Default text on canvas — same off-white as the primary, intentionally unified.
-- **Body Strong** (`{colors.body-strong}` — `#dad2c1`): Mid-emphasis body text.
-- **Body** (`{colors.body}` — `#c9c0ad`): Secondary body text — captions, supporting copy, press-coverage rows.
-- **Mute** (`{colors.mute}` — `#aea69c`): Lowest-priority text — timestamps, fine print, footer secondary lines. Resolved from `oklch(71.5% 0.008 84.6)`.
+- **On Primary** (`{colors.on-primary}` — `#ffffff`): Default text on dark canvas; the dominant text color across the marketing site.
+- **On Primary Mute** (`{colors.on-primary-mute}` — `#f0f0fa`): Slightly cooled-white used for secondary text on dark surfaces — barely distinguishable from `{colors.on-primary}` but enough to suggest a hierarchy.
+- **Ink** (`{colors.ink}` — `#000000`): Default text on light surfaces (shop site).
+- **Ink Mute** (`{colors.ink-mute}` — `#5a5a5f`): Secondary text on light surfaces.
 
-### Semantic
-The brand doesn't surface a separate error / warning / success palette in its marketing pages. Validation cues come from the unified off-white system; in-product semantic colors live in the terminal application proper.
+### Link
+- **Link on Dark** (`{colors.link-on-dark}` — `#ffffff`): Underlined inline link on dark canvas.
+- **Link Blue Fallback** (`{colors.link-blue-fallback}` — `#0000ee`): The browser default that appears in unstyled fallback contexts — documented for completeness, not used as a brand color.
 
 ## Typography
 
 ### Font Family
-Three faces ladder the system:
-1. **Inter** for every display, body, button, link, and label role. Weights 400 / 500 are the working pair. Used with the brand's "Inter Fallback" custom face as the metric-compatible system fallback.
-2. **DM Mono** for terminal mockups, command snippets, and code blocks. Weight 400 only. Loaded as `--font-dm-mono`.
-3. **Instrument Serif** for occasional editorial italic moments — rare on the marketing surface, but documented as a third face for emphasised tagline-style phrases. **Abel** is also loaded as a fourth fallback for headline emphasis.
+
+The display tier is **D-DIN-Bold** — a condensed industrial sans inspired by the German DIN 1451 standard (used on autobahn road signage and engineering blueprints). When unavailable, fall back to **Arial Narrow**, then Arial, then Verdana — the fallback chain prioritizes width compression over ornament.
+
+The UI tier is **D-DIN** (regular weight) — the same family at standard width — used for body, button labels, and captions.
+
+D-DIN is freely available from the **DIN Type Foundry** (and a free version under the same name is widely distributed). For maximum brand fidelity, use D-DIN directly; as a substitute, **Inter** at heavy weights (700+) with letter-spacing of 1.6px positive tracking approximates the rhythm. Avoid serif or humanist sans alternatives.
 
 ### Hierarchy
 
 | Token | Size | Weight | Line Height | Letter Spacing | Use |
 |---|---|---|---|---|---|
-| `{typography.display-xl}` | 64px | 400 | 70.4px | -1.6px | Hero headline ("Warp is the agentic development environment"). |
-| `{typography.display-lg}` | 48px | 400 | 52.8px | -1.2px | Section headlines. |
-| `{typography.display-md}` | 32px | 500 | 40px | -0.8px | Sub-section displays. |
-| `{typography.display-sm}` | 24px | 500 | 32px | -0.4px | Card titles and lead emphasis. |
-| `{typography.display-serif}` | 48px | 400 | 52px | -0.5px | Instrument Serif italic editorial moments. |
-| `{typography.body-lg}` | 18px | 400 | 28px | 0 | Lead paragraphs. |
-| `{typography.body-md}` | 16px | 400 | 24px | 0 | Default body. |
-| `{typography.body-md-strong}` | 16px | 500 | 24px | 0 | Bold inline body. |
-| `{typography.body-sm}` | 14px | 400 | 20px | 0 | Secondary body. |
-| `{typography.body-sm-strong}` | 14px | 500 | 20px | 0 | Nav link / button labels. |
-| `{typography.caption}` | 12px | 400 | 16px | 0 | Captions, fine print. |
-| `{typography.code}` | 13px | 400 | 18px | 0 | Terminal mockup body. |
-| `{typography.code-md}` | 14px | 400 | 20px | 0 | Inline command snippets. |
-| `{typography.button-md}` | 14px | 500 | 20px | 0 | Button labels. |
+| `{typography.display-xxl}` | 80px | 700 | 0.95 | 1.6px | Hero headline (uppercase) |
+| `{typography.display-xl}` | 60px | 700 | 1.2 | 1.2px | Section opener (uppercase) |
+| `{typography.display-lg}` | 48px | 700 | 1.25 | 0.96px | Sub-section heading (uppercase) |
+| `{typography.body-lg}` | 16px | 400 | 1.7 | 0.32px | Marketing body lead |
+| `{typography.body-md}` | 16px | 400 | 1.5 | 0.32px | Default UI body |
+| `{typography.button-cap}` | 13.008px | 700 | 0.94 | 1.17px | All-caps button label |
+| `{typography.micro-cap}` | 12px | 400 | 2.0 | 0.96px | All-caps eyebrow / nav item |
+| `{typography.caption}` | 13.008px | 400 | 1.5 | 0 | Helper / footer text |
 
 ### Principles
-- **Hero display at weight 400** — the brand reads as quietly confident, not as a billboard.
-- **Negative tracking is part of the voice.** `-1.6 px` at 64 px hero, scaling down through display levels.
-- **Inter for narrative, DM Mono for technical.** Strict role separation.
+- **Uppercase across display.** Every display tier renders in uppercase. The brand never uses sentence-case display headlines.
+- **Tight vertical leading on display.** 0.95 at 80px and 1.2 at 60px — the type stacks engineer-tight.
+- **Wide horizontal tracking.** Positive 0.96–1.6px tracking on display sizes; positive 0.96–1.17px on caps eyebrows. The wide tracking is the brand's signature optical air.
+- **No mono.** Code blocks are not part of the brand's typographic system.
 
 ### Note on Font Substitutes
-All three faces are open or freely-loadable:
-- **Inter** — load directly from Google Fonts or Vercel-hosted CDN.
-- **DM Mono** — open-source on Google Fonts.
-- **Instrument Serif** — open-source on Google Fonts.
+**D-DIN** is freely available (the original DIN-style face under that name is widely distributed). When unavailable, use **Inter** at 700 weight with `letter-spacing: 1.6px`, `text-transform: uppercase`, and `line-height: 0.95` for display sizes — this matches the rhythm. Avoid Helvetica or Arial at default weights — the brand needs the condensed industrial cut. Avoid serif fallbacks entirely.
 
 ## Layout
 
 ### Spacing System
-- **Base unit**: 4 px (with occasional 10 px and 6 px values for button padding).
-- **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 10 px · `{spacing.lg}` 16 px · `{spacing.xl}` 24 px · `{spacing.2xl}` 32 px · `{spacing.3xl}` 48 px · `{spacing.4xl}` 64 px · `{spacing.5xl}` 96 px.
-- **Section padding**: hero / content bands use `{spacing.5xl}` 96 px on desktop.
-- **Card interior**: cards sit at `{spacing.xl}` 24 px.
+- **Base unit**: 8px (with denser sub-units 4 / 12 / 16 / 18 / 24).
+- **Tokens**: `{spacing.xxs}` 4px · `{spacing.xs}` 8px · `{spacing.sm}` 12px · `{spacing.md}` 16px · `{spacing.lg}` 18px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.huge}` 48px.
+- **Section padding**: full-viewport bands on marketing — no internal padding above/below; the photograph IS the section. On the shop site, sections use 48–64px vertical padding.
 
 ### Grid & Container
-- Marketing content centres at roughly 1200 px width.
-- Hero: 2-column at desktop (split between two terminal screenshots), stacks at mobile.
-- Partner logos: 5-up wrapping flex row.
-- Download tiles: 3-up at desktop (Mac / Linux / Windows), 1-up at mobile.
+- Marketing pages have no container — every band is full-viewport-width, full-viewport-height (or close to it) with photography filling the entire frame.
+- Shop product grid: 4-up at desktop, 2-up at tablet, 1-up at mobile.
+- Type sits inside an inner ~1200px reading column centered horizontally over the full-bleed photograph.
 
-### Responsive Strategy
-
-#### Breakpoints
-
-| Name | Width | Key Changes |
-|---|---|---|
-| Mobile | < 768px | Hero stacks; 1-up grids; nav hamburger. |
-| Tablet | 768–1023px | 2-up grids. |
-| Desktop | ≥ 1024px | Full hero split; 3-up download tiles. |
-
-#### Touch Targets
-Buttons render at ~36 px tall (8 px vertical padding + 20 px line-height). Mobile inflates touch area through additional padding to meet WCAG 44 × 44 px floor.
-
-#### Collapsing Strategy
-- Nav: full link row + Sign in / Download right cluster at desktop. Hamburger at mobile.
-- Hero terminal-mockup split: stacks vertically at mobile.
-- Press / job rows: full-width single column; stay legible at all widths.
-
-#### Image Behavior
-- **Terminal mockups**: rendered as dark cards with the actual terminal UI inside (warm canvas + colored syntax). Aspect ratio ~3:2.
-- **Partner logos**: monochrome SVGs on dark tile cards.
-- **Testimonial portraits**: 1:1 square crop inside `{rounded.md}` card chrome.
+### Whitespace Philosophy
+The marketing pages have minimal traditional whitespace — the photograph occupies all space. "Whitespace" here means the dark sky in a rocket photograph or the empty stretch of Martian terrain. Negative space is photographic, not a UI choice. On the shop site whitespace returns to standard 32px grid gutters.
 
 ## Elevation & Depth
 
 | Level | Treatment | Use |
 |---|---|---|
-| Level 0 — Flat | No shadow, no border. | Default for hero band. |
-| Level 1 — Hairline | 1 px solid `{colors.hairline}` border on `{colors.canvas-soft}`. | Default card chrome. |
-| Level 2 — Inset Card | Canvas-soft fill against canvas background with 1 px hairline. | Mockup cards, download tiles, testimonial cards. |
+| 0 | Flat | Default — and the only level on marketing surfaces |
+| 1 | Photographic — full-bleed image or video | The primary depth medium; photographs do all the lifting |
 
-The brand uses surface-contrast and hairline borders for elevation; soft drop-shadows do not appear in the marketing surface.
+The brand does not use drop shadows, blurs, glows, or gradient overlays. Depth is photographic: a rocket launching at twilight has natural atmospheric depth that no CSS shadow could simulate. When type needs separation from imagery, the image is graded darker rather than scrimmed.
+
+### Decorative Depth
+Photography and autoplaying rocket-launch video are the only decorative depth. There are no illustrations, no icons beyond a few minimal SVG arrow chevrons in nav and CTA hover states.
 
 ## Shapes
 
@@ -401,126 +255,109 @@ The brand uses surface-contrast and hairline borders for elevation; soft drop-sh
 
 | Token | Value | Use |
 |---|---|---|
-| `{rounded.none}` | 0px | Full-bleed bands. |
-| `{rounded.xxs}` | 1px | Tightest in-text indicator. |
-| `{rounded.xs}` | 2px | Inline very-small chips. |
-| `{rounded.sm}` | 3px | Default button radius — extremely tight. |
-| `{rounded.md}` | 4px | Card chrome (the brand's `--radius` base). |
-| `{rounded.lg}` | 6px | Slightly larger cards. |
-| `{rounded.pill}` | 9999px | Icon containers, status pills. |
+| `{rounded.xs}` | 4px | Form inputs (shop site) |
+| `{rounded.sm}` | 8px | Shop product card chrome, video frames |
+| `{rounded.md}` | 16px | Larger surface chrome |
+| `{rounded.pill}` | 32px | Ghost outlined pill CTAs (the brand's signature button shape) |
+| `{rounded.full}` | 9999px | Circular play-button overlays on video frames |
 
 ### Photography Geometry
-- Terminal mockups: ~3:2 inside `{rounded.md}` card chrome.
-- Partner logos: monochrome SVGs at consistent 24 px height inside tile cards.
-- Testimonial portraits: 1:1 square inside `{rounded.md}`.
+Every photograph is full-viewport-bleed, edge-to-edge, never inset in a card on the marketing site. On the shop site, product photography sits inside `{rounded.sm}` 8px containers with no shadow. Aspect ratios on marketing photography vary with the source image — there is no enforced ratio; the photograph leads.
 
 ## Components
 
 ### Buttons
 
-**`button-primary`** — the off-white CTA on dark canvas.
-- Background `{colors.primary}` (off-white), text `{colors.on-primary}` (warm dark), label `{typography.button-md}`, padding `{spacing.sm} {spacing.lg}`, shape `{rounded.sm}` 3 px. Tight.
+**`button-ghost-on-dark`** — the universal CTA on marketing surfaces.
+- Background `{colors.canvas-night}` (transparent against the photographed canvas), 1px solid `{colors.on-primary}` border, text `{colors.on-primary}`, type `{typography.button-cap}` (uppercase, 13px / 700 / 1.17px tracking), padding `{spacing.lg} {spacing.xl}` (18px 24px), rounded `{rounded.pill}` 32px.
 
-**`button-secondary-ghost`** — the ghost-style secondary used for nav and tertiary actions.
-- Background `{colors.canvas}`, text `{colors.ink}`, no border, same typography / shape.
+**`button-ghost-on-light`** — the same button on shop / light pages.
+- Background `{colors.canvas-light}` (transparent against light canvas), 1px solid `{colors.ink}` border, text `{colors.ink}`, otherwise identical.
 
-**`button-icon-circular`** — the circular icon container.
-- Background `{colors.canvas}`, ink icon, shape `{rounded.full}`. Used for nav controls (search, theme).
+**`button-filled-cool`** — fill variant on shop product cards.
+- Background `{colors.canvas-cool}`, text `{colors.ink}`, same pill geometry. Used as "Add to cart" or similar product CTAs.
 
 ### Cards & Containers
 
-**`card-content`** — the default content card on canvas-soft.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, 1 px solid `{colors.hairline}`, padding `{spacing.xl}`, shape `{rounded.md}`.
+**`card-photo-band`** — full-bleed photographic band on marketing pages.
+- Background `{colors.canvas-night}`, padding 0, rounded `{rounded.xs}`. The photograph fills the entire band; type and CTA sit overlaid.
 
-**`card-mockup`** — the terminal-screenshot mockup card.
-- Same chrome as `card-content` but body in `{typography.code}` (DM Mono) when text appears inside.
-
-**`download-tile`** — the Mac / Linux / Windows download tile.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, hairline border, padding `{spacing.xl}`, shape `{rounded.md}`. Hosts a platform icon + label + download CTA.
-
-**`partner-logo-tile`** — the canvas-soft tile hosting a partner logo.
-- Background `{colors.canvas-soft}`, monochrome logo SVG inside, padding `{spacing.lg}`, shape `{rounded.md}`.
-
-**`testimonial-card`** — the single quote-style card with a portrait.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, padding `{spacing.xl}`, shape `{rounded.md}`. Portrait 1:1 + body in `{typography.body-md}`.
-
-**`press-row`** — the press-coverage list item.
-- Background `{colors.canvas}` (no fill — sits on the canvas band), 1 px solid bottom border `{colors.hairline}`, body in `{typography.body-md}`, padding `{spacing.lg}` 0.
-
-**`job-row`** — the "Join our team" list item (single row per open role).
-- Background `{colors.canvas}`, 1 px solid bottom border, body in `{typography.body-md-strong}`, padding `{spacing.lg}` 0.
+**`card-shop-product`** — product card on the shop site.
+- Background `{colors.canvas-light}`, padding `{spacing.md}` 16px, rounded `{rounded.sm}` 8px, 1px `{colors.hairline-on-light}` border. Product photo on top, name in `{typography.body-md}`, price in `{typography.body-md}` 700 weight, "Add to cart" button at the bottom.
 
 ### Inputs & Forms
 
-**`text-input`** — the dark-canvas text input.
-- Background `{colors.canvas-soft}`, text `{colors.ink}`, 1 px solid `{colors.hairline}`, body in `{typography.body-sm}`, padding `{spacing.sm} {spacing.md}`, shape `{rounded.sm}`.
+**`text-input`** — form input on the shop site.
+- Background `{colors.canvas-light}`, text `{colors.ink}`, type `{typography.body-md}`, padding `{spacing.sm} {spacing.md}` (12px 16px), rounded `{rounded.xs}` 4px, 1px `{colors.hairline-on-light}` border.
 
 ### Navigation
 
-**`nav-bar`** — the sticky top nav.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.md} {spacing.xl}`.
-
-**`nav-link`** — link items in nav.
-- Background `{colors.canvas}`, text `{colors.ink}`, body in `{typography.body-sm-strong}`, padding `{spacing.xs} {spacing.md}`, shape `{rounded.sm}`.
-
-**`footer`** — the footer band.
-- Background `{colors.canvas}`, text `{colors.body}`, padding `{spacing.3xl} {spacing.xl}`. Body in `{typography.body-sm}`.
+**`nav-bar-overlay`** — top nav across the marketing site.
+- Background `{colors.canvas-night}` (transparent over the hero photo), text `{colors.on-primary}`, type `{typography.button-cap}` (uppercase). Logo wordmark on the left at ~147×19px, nav items horizontal in caps, padding `{spacing.xl} {spacing.xxl}` (24px 32px). The nav is fixed/sticky on scroll, retaining the overlay treatment.
 
 ### Signature Components
 
-**`hero-band`** — the dark hero band hosting the 64-px Inter headline.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.5xl} {spacing.xl}`. Headline `{typography.display-xl}` (64 px / 400 / `-1.6 px`). Below: a 2-column terminal-mockup split.
+**Full-Bleed Photo / Video Hero** — every marketing band is a full-viewport photograph or autoplaying rocket-launch video. Type and CTA sit overlaid on the photograph at high opacity with no scrim. The photograph is graded so type lands cleanly without an overlay layer.
 
-**`content-band`** — the standard content band.
-- Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.5xl} {spacing.xl}`. Section headline `{typography.display-md}`.
+**Uppercase Display Headline** — the 80px D-DIN-Bold uppercase headline with 1.6px positive tracking is the brand's most recognizable typographic moment. Always uppercase, always bold-weight, always positively tracked.
 
-### Examples (illustrative)
+**`link-on-dark`** — inline links on dark canvas.
+- Text `{colors.link-on-dark}` (white) with persistent underline.
 
-> Auto-derived kit-mirror demonstration surfaces (`scripts/derive-examples-block.mjs`). Each `ex-*` entry references brand-native primitives so downstream consumers (`/preview-design`, `/generate-kit`) re-skin the same 10 surfaces consistently. `TO_FILL` markers indicate missing primitives — resolve in the LLM judgment pass.
+**`link-on-light`** — inline links on light canvas.
+- Text `{colors.ink}` with persistent underline.
 
-**`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
-- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
-
-**`ex-pricing-tier-featured`** — Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
-- Properties: `backgroundColor`, `textColor`, `rounded`, `padding`
-
-**`ex-product-selector`** — What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-cart-drawer`** — Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart).
-- Properties: `backgroundColor`, `rounded`, `padding`, `item-divider`
-
-**`ex-app-shell-row`** — Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
-- Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
-
-**`ex-data-table-cell`** — Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
-- Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
-
-**`ex-auth-form-card`** — Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-modal-card`** — Modal dialog surface — same chrome as feature-card with elevated shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`
-
-**`ex-empty-state-card`** — Empty-state illustration frame.
-- Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
-
-**`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
-- Properties: `backgroundColor`, `rounded`, `padding`, `typography`
-
+**`footer-dark`** — site-wide footer.
+- Background `{colors.canvas-night}`, text `{colors.on-primary}`, type `{typography.caption}`, padding `{spacing.xxl} {spacing.xl}` (32px 24px). Holds nav columns in `{typography.micro-cap}` (uppercase), and a small legal/copyright row at the bottom.
 
 ## Do's and Don'ts
 
 ### Do
-- Reserve `{colors.primary}` off-white for primary CTA pills and default text. There is no chromatic accent.
-- Use tight `{rounded.sm}` 3 px or `{rounded.md}` 4 px button radii. The brand never uses generous pills for CTAs.
-- Set hero headlines in Inter weight 400 with `-1.6 px` tracking. The brand reads as quietly confident.
-- Pair Inter (sentence-case) with DM Mono (code blocks, terminal mockups).
-- Keep the warm-dark canvas tone — pure black breaks the brand's identity.
+- Use full-bleed photography or autoplaying video as the dominant decorative element on every marketing band.
+- Render display tiers in uppercase D-DIN-Bold with positive 0.96–1.6px letter-spacing — the wide tracking is the signature.
+- Use a single `{button-ghost-on-dark}` per band — the brand does NOT show two CTAs side by side on marketing surfaces.
+- Pair every photograph with type that respects the imagery — no scrims, no gradients, no overlays. Grade the photo, not the canvas.
+- Keep nav overlay-style (transparent, white-on-image) on marketing pages.
 
 ### Don't
-- Don't introduce a chromatic brand accent. The off-white-on-warm-dark IS the brand's voice.
-- Don't render the hero headline in heavy weight (700+). The brand's display is intentionally light.
-- Don't use generous pill CTAs. The brand's button radius is 3-4 px, almost rectangular.
-- Don't replace the warm dark canvas with neutral gray or pure black. The warmth IS the brand.
-- Don't drop a soft drop-shadow on cards. Hairlines + surface contrast carry elevation.
+- Don't introduce brand accent colors — black, white, and photography are the entire palette.
+- Don't use drop shadows or gradient overlays on dark canvas — they fight the photography.
+- Don't render display tiers in sentence-case or title-case — uppercase is the brand.
+- Don't put filled buttons on marketing surfaces — the ghost outlined pill is the only marketing CTA.
+- Don't use serif or humanist sans alternatives — the condensed industrial DIN cut is non-negotiable.
+
+## Responsive Behavior
+
+### Breakpoints
+
+| Name | Width | Key Changes |
+|---|---|---|
+| Wide | ≥ 1500px | Full hero photograph; max-content type column at 1200px |
+| Desktop | 1280–1499px | Default desktop layout |
+| Laptop | 961–1279px | Type column tightens; photo crops adjust |
+| Tablet | 768–960px | Display drops 80 → 60px; nav compresses |
+| Mobile | 600–767px | Display drops to 48px; ghost button retains pill shape |
+| Small Mobile | < 600px | Display drops to 40px; nav becomes hamburger |
+
+### Touch Targets
+- Ghost pill buttons hit ≥ 50×50px due to the 18px vertical padding × 13px line-height. WCAG AAA compliant.
+- Form fields stay at the 44px minimum height.
+
+### Collapsing Strategy
+- Display sizes stair-step 80 → 60 → 48 → 40px through the breakpoints.
+- Photography re-crops to focal subject on smaller widths (rocket centered, Mars landscape centered).
+- Top nav collapses to hamburger below 768px; menu retains the dark overlay treatment.
+- Shop product grid stair-steps 4-up → 2-up → 1-up.
+
+### Image Behavior
+Marketing photography uses `srcset` for desktop / tablet / mobile with art-direction crops at major breakpoints. Mobile crops favor the central focal subject; wide crops favor environmental context (full launch pad, full Martian horizon).
+
+## Iteration Guide
+
+1. Focus on ONE component at a time.
+2. Reference component names and tokens directly (`{colors.canvas-night}`, `{button-ghost-on-dark}`, `{rounded.pill}`).
+3. Run `npx @google/design.md lint DESIGN.md` after edits.
+4. Add new variants as separate entries.
+5. Default body to `{typography.body-md}`; reserve `{typography.body-lg}` for marketing leads.
+6. The black-and-white-only rule is load-bearing — adding a brand accent color breaks the system.
+7. Ghost pill is the only marketing CTA; filled buttons live exclusively on the shop site.

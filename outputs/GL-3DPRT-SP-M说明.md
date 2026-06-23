@@ -1,8 +1,8 @@
 # GL-3DPRT-SP-M 运动范围判定说明
 
-版本：v1.9
+版本：v1.10
 
-日期：2026-06-22
+日期：2026-06-23
 
 ## 这个工具是做什么的
 
@@ -32,9 +32,11 @@
 - 滚轮：放大或缩小
 - 右上角“视图”：快速切换默认、前、上、右视图
 
-当前版本使用独立压缩后的设备模型文件。网页打开时不会下载、加载或解码模型，只显示运动范围、长方体和 UI。
+当前版本使用按需加载的设备模型文件。网页打开时不会下载、加载或解码模型，只显示运动范围、长方体和 UI。
 
 需要查看设备外形时，点击左侧的“显示设备模型”。模型加载完成后，按钮会变成“隐藏设备模型”。这个设备模型只是参考外形，不参与可达范围判定，也不会影响最大贴合结果。
+
+如果通过 GitHub Pages 或本地 HTTP 服务访问网页，按钮会加载 `outputs/assets/GL-3DPRT-SP-M.glb`。如果直接双击 HTML 文件、本地以 `file://` 方式打开，浏览器不能直接读取 GLB 文件，网页会改为加载 `outputs/assets/GL-3DPRT-SP-M-model.js` 备用模型包。
 
 设备模型显示姿态：`rotation.x = -Math.PI / 2`，`rotation.y = -Math.PI / 2`，`rotation.z = Math.PI`。模型位置按包围盒居中，Y 方向基准为 `2500`，底部对齐到 `Z=0`。
 
@@ -164,7 +166,12 @@ outputs/index.html
 outputs/GL-3DPRT-SP-M说明.md
 ```
 
-分享给别人时，如果需要显示设备模型，请同时提供 SP-M 的 HTML 文件和 `outputs/assets/GL-3DPRT-SP-M.glb`。如果要同时提供 SP-M 和 SP-S 两个入口，分享 `outputs/index.html` 以及 `outputs/assets` 文件夹。
+分享给别人时，如果需要显示设备模型，请同时提供 SP-M 的 HTML 文件和 `outputs/assets` 文件夹。至少要包含：
+
+- `outputs/assets/GL-3DPRT-SP-M.glb`：用于 GitHub Pages 或本地 HTTP 服务访问。
+- `outputs/assets/GL-3DPRT-SP-M-model.js`：用于直接双击 HTML、以 `file://` 方式打开。
+
+如果要同时提供 SP-M 和 SP-S 两个入口，分享 `outputs/index.html`、两个设备 HTML 文件以及完整的 `outputs/assets` 文件夹。
 
 ## 版本和日期怎么维护
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GL-3DPRT-SP-S运动范围判定 v1.9</title>
+  <title>GL-3DPRT-SP-S运动范围判定 v1.10</title>
   <style>
     :root {
       color-scheme: dark;
@@ -516,6 +516,411 @@
         font-size: 12.5px;
       }
     }
+    /* SpaceX-inspired final preview layer from the latest DESIGN.md */
+    :root {
+      --bg: #000000;
+      --panel: #0a0a0a;
+      --panel-2: #000000;
+      --panel-3: #000000;
+      --ink: #ffffff;
+      --muted: #f0f0fa;
+      --body: #f0f0fa;
+      --body-strong: #ffffff;
+      --line: #3a3a3f;
+      --accent: #ffffff;
+      --accent-2: #ffffff;
+      --blue: #ffffff;
+      --warn: #ffffff;
+      --bad: #ffffff;
+      --shadow: none;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: "D-DIN", "Arial Narrow", Arial, Verdana, sans-serif;
+      letter-spacing: 0.32px;
+    }
+
+    .app {
+      grid-template-columns: minmax(390px, 448px) minmax(0, 1fr);
+      background: #000;
+    }
+
+    aside {
+      gap: 8px;
+      padding: 18px 18px 14px;
+      border-right: 1px solid var(--line);
+      background: #000;
+    }
+
+    header {
+      padding: 2px 0 4px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      max-width: none;
+      color: #fff;
+      font-family: "D-DIN-Bold", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: 23px;
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 0.32px;
+    }
+
+    .subtitle + .subtitle {
+      margin-top: 4px;
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.96px;
+      text-transform: uppercase;
+    }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 12px 14px;
+      background: #0a0a0a;
+      box-shadow: none;
+    }
+
+    .section-title {
+      margin-bottom: 10px;
+      color: #fff;
+      font-family: "D-DIN-Bold", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .field {
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: 7px 12px;
+      margin: 6px 0 8px;
+    }
+
+    .field.fit-field {
+      grid-template-columns: minmax(0, 1fr) 132px;
+      row-gap: 8px;
+      margin: 15px 0 16px;
+    }
+
+    label {
+      gap: 3px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: 0.88px;
+      text-transform: uppercase;
+    }
+
+    label span {
+      color: var(--muted);
+      font-size: 11.5px;
+      font-weight: 400;
+      line-height: 1.35;
+      letter-spacing: 0.32px;
+      text-transform: none;
+    }
+
+    input[type="number"],
+    select,
+    .value-pill {
+      width: 96px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #000;
+      color: #fff;
+      font-family: "D-DIN", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      box-shadow: none;
+    }
+
+    .field.fit-field input[type="number"] {
+      width: 132px;
+      font-size: 17px;
+    }
+
+    input[type="number"]:disabled,
+    input[type="range"]:disabled {
+      opacity: 0.58;
+    }
+
+    input[type="range"] {
+      height: 14px;
+      accent-color: #fff;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 2px;
+      border-radius: 0;
+      background: #3a3a3f;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      width: 17px;
+      height: 17px;
+      margin-top: -7.5px;
+      border: 1px solid #fff;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: none;
+    }
+
+    button {
+      min-height: 36px;
+      border: 1px solid #fff;
+      border-radius: 32px;
+      background: #000;
+      color: #fff;
+      font-family: "D-DIN", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 0.94;
+      letter-spacing: 1.17px;
+      text-transform: uppercase;
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+
+    button:hover {
+      filter: none;
+      background: #fff;
+      color: #000;
+      transform: none;
+    }
+
+    .inline-fit {
+      min-height: 38px;
+      border-radius: 32px;
+      padding: 0 12px;
+      background: #000;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .inline-fit.active {
+      border-color: #fff;
+      background: #fff;
+      color: #000;
+    }
+
+    .fit-actions {
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .fit-actions button {
+      min-height: 38px;
+    }
+
+    .fit-actions #toggleModel {
+      background: #fff;
+      color: #000;
+    }
+
+    .fit-actions #toggleModel:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .metrics {
+      gap: 8px;
+    }
+
+    .metric {
+      border-radius: 4px;
+      padding: 9px 10px;
+      background: #000;
+    }
+
+    .metric b {
+      color: #fff;
+      font-family: "D-DIN-Bold", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: 1px;
+    }
+
+    .metric span {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.32px;
+      text-transform: uppercase;
+    }
+
+    .status {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 10px 12px;
+      background: #0a0a0a;
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.4;
+      letter-spacing: 0.32px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+    }
+
+    main {
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.045) 1px, transparent 1px),
+        #000;
+      background-size: 42px 42px;
+    }
+
+    .view-controls {
+      top: 20px;
+      right: 20px;
+      gap: 14px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 8px;
+      background: rgba(0,0,0,0.82);
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .view-title {
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.96px;
+      text-transform: uppercase;
+    }
+
+    .view-buttons {
+      border-color: var(--line);
+      border-radius: 32px;
+      background: #000;
+    }
+
+    .view-controls button {
+      min-height: 36px;
+      min-width: 54px;
+      border-radius: 0;
+      padding: 0 15px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .view-controls button:first-child {
+      border-radius: 32px 0 0 32px;
+    }
+
+    .view-controls button:last-child {
+      border-radius: 0 32px 32px 0;
+    }
+
+    .hud {
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+    }
+
+    .chip {
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 12px 14px;
+      background: rgba(0,0,0,0.84);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .chip strong {
+      margin-bottom: 3px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+    }
+
+    .scene-copyright {
+      position: absolute;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      z-index: 3;
+      color: rgba(240,240,250,0.72);
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 0.6px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1060px) {
+      .app {
+        grid-template-columns: minmax(360px, 420px) minmax(0, 1fr);
+      }
+
+      aside {
+        padding: 14px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(560px, 1fr);
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+      }
+
+      aside {
+        max-height: none;
+        overflow: visible;
+      }
+
+      .field,
+      .field.fit-field {
+        grid-template-columns: 1fr 112px;
+      }
+
+      .hud {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -523,8 +928,8 @@
     <aside>
       <header>
         <h1>GL-3DPRT-SP-S运动范围判定</h1>
-        <p class="subtitle">用实测 XY 平面范围和 R-Z 垂直截面生成 3D 可达空间，并验证内接长方体尺寸。</p>
-        <p class="subtitle">版本：v1.9 ｜ 日期：2026-06-22</p>
+        <p class="subtitle">用实测X-Y平面范围和R-Z垂直截面生成3D可达空间</p>
+        <p class="subtitle">版本：v1.10 ｜ 日期：2026-06-23</p>
       </header>
 
       <section class="section" hidden>
@@ -626,6 +1031,7 @@
         <div class="chip"><strong>拖拽旋转，滚轮缩放</strong>透明体表示机械臂实测截面运动包络。</div>
         <div class="chip"><strong id="volumeLabel">体积 26.2 L</strong><span id="cornerLabel">8 个角点均在范围内</span></div>
       </div>
+      <div class="scene-copyright">©杭州冠力智能科技</div>
     </main>
   </div>
 
@@ -651,7 +1057,7 @@
     const cornerLabel = document.getElementById("cornerLabel");
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x312c28);
+    scene.background = new THREE.Color(0x000000);
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, logarithmicDepthBuffer: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -666,7 +1072,7 @@
     setDefaultView();
     controls.update();
 
-    const hemi = new THREE.HemisphereLight(0xfffbf2, 0x2b2622, 2.05);
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x000000, 2.05);
     scene.add(hemi);
     const sun = new THREE.DirectionalLight(0xfffbf2, 2.2);
     sun.position.set(900, -700, 1300);
@@ -708,7 +1114,9 @@
       side: THREE.DoubleSide,
       depthWrite: false
     });
+    const referenceModelKey = "GL-3DPRT-SP-S";
     const referenceModelGlbUrl = new URL("assets/GL-3DPRT-SP-S.glb", window.location.href).href;
+    const referenceModelFallbackScriptUrl = new URL("assets/GL-3DPRT-SP-S-model.js", window.location.href).href;
     const modelLoadTimeoutMs = 120000;
     let workspaceMesh = null;
     let workspaceEdges = null;
@@ -874,9 +1282,7 @@
       loader.setDRACOLoader(dracoLoader);
       let modelBuffer;
       try {
-        const response = await withTimeout(fetch(referenceModelGlbUrl), modelLoadTimeoutMs, "GLB 下载超时");
-        if (!response.ok) throw new Error(`GLB 请求失败：${response.status}`);
-        modelBuffer = await withTimeout(response.arrayBuffer(), modelLoadTimeoutMs, "GLB 读取超时");
+        modelBuffer = await loadReferenceModelBuffer();
       } catch (error) {
         referenceModelLoading = false;
         console.error("GLB 模型下载失败", error);
@@ -924,6 +1330,36 @@
       }
     }
 
+    async function loadReferenceModelBuffer() {
+      if (window.location.protocol === "file:") {
+        await withTimeout(loadClassicScript(referenceModelFallbackScriptUrl), modelLoadTimeoutMs, "本地模型包载入超时");
+        const base64 = window.__GL3DPRT_MODELS__?.[referenceModelKey];
+        if (!base64) throw new Error("本地模型包缺失");
+        return base64ToArrayBuffer(base64);
+      }
+      const response = await withTimeout(fetch(referenceModelGlbUrl), modelLoadTimeoutMs, "GLB 下载超时");
+      if (!response.ok) throw new Error(`GLB 请求失败：${response.status}`);
+      return withTimeout(response.arrayBuffer(), modelLoadTimeoutMs, "GLB 读取超时");
+    }
+
+    function loadClassicScript(url) {
+      if (window.__GL3DPRT_MODELS__?.[referenceModelKey]) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = url;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error("本地模型包加载失败"));
+        document.head.appendChild(script);
+      });
+    }
+
+    function base64ToArrayBuffer(base64) {
+      const binary = window.atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+      return bytes.buffer;
+    }
+
     function withTimeout(promise, timeoutMs, message) {
       let timer = null;
       const timeout = new Promise((_, reject) => {
@@ -933,7 +1369,7 @@
     }
 
     function setDefaultView() {
-      const distance = 52000;
+      const distance = 26000;
       const target = new THREE.Vector3(0, 0, 2400);
       const angle = THREE.MathUtils.degToRad(30);
       controls.target.copy(target);
@@ -947,7 +1383,7 @@
     }
 
     function setNamedView(view) {
-      const distance = 52000;
+      const distance = 26000;
       const target = new THREE.Vector3(0, 0, 2400);
       controls.target.copy(target);
       if (view === "front") {

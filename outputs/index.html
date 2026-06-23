@@ -7,14 +7,11 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg: #2b2622;
-      --panel: #383330;
-      --panel-2: #312c28;
-      --ink: #f7f5f0;
-      --body: #c9c0ad;
-      --muted: #aea69c;
-      --line: #3f3a36;
-      --shadow: 0 18px 46px rgba(0, 0, 0, 0.28);
+      --black: #000;
+      --white: #fff;
+      --soft: #f0f0fa;
+      --line: #3a3a3f;
+      --muted: #a9a9b2;
     }
 
     * { box-sizing: border-box; }
@@ -24,106 +21,156 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
-      background:
-        linear-gradient(90deg, rgba(247,245,240,0.035) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(247,245,240,0.035) 1px, transparent 1px),
-        var(--bg);
-      background-size: 38px 38px;
-      color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      letter-spacing: 0;
+      background: var(--black);
+      color: var(--white);
+      font-family: "D-DIN", "Arial Narrow", Arial, Verdana, sans-serif;
+      letter-spacing: 0.32px;
     }
 
     main {
-      width: min(820px, calc(100vw - 32px));
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 34px;
-      background: rgba(56, 51, 48, 0.92);
-      box-shadow: var(--shadow);
+      width: min(1220px, calc(100vw - 72px));
+      min-height: calc(100vh - 72px);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: 1px solid rgba(58, 58, 63, 0.42);
+      border-radius: 28px;
+      padding: clamp(42px, 7vw, 84px);
+      background: #000;
     }
 
-    header {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 24px;
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 2;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
     }
 
     h1 {
+      max-width: 980px;
       margin: 0;
-      font-size: clamp(28px, 4vw, 42px);
-      line-height: 1.1;
-      font-weight: 760;
+      color: var(--soft);
+      font-family: "D-DIN-Bold", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: clamp(48px, 7.2vw, 96px);
+      font-weight: 700;
+      line-height: 0.98;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
     }
 
     p {
-      margin: 0;
-      color: var(--body);
-      font-size: 15px;
-      line-height: 1.6;
+      max-width: 870px;
+      margin: 42px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2.2vw, 30px);
+      font-weight: 400;
+      line-height: 1.72;
+      letter-spacing: 1px;
     }
 
-    .device-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+    .device-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-top: 70px;
     }
 
     a {
-      min-height: 148px;
-      display: grid;
-      align-content: space-between;
-      gap: 18px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      padding: 20px;
-      color: var(--ink);
-      background: var(--panel-2);
+      min-width: 258px;
+      min-height: 96px;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: 1px solid rgba(240, 240, 250, 0.48);
+      border-radius: 999px;
+      padding: 18px 34px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
       text-decoration: none;
-      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
     }
 
     a:hover {
-      transform: translateY(-2px);
-      border-color: rgba(247, 245, 240, 0.32);
-      background: rgba(247, 245, 240, 0.08);
+      border-color: var(--white);
+      background: var(--white);
+      color: var(--black);
     }
 
     strong {
-      display: block;
-      font-size: 24px;
-      line-height: 1.15;
-      font-weight: 780;
+      font-family: "D-DIN-Bold", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
     }
 
     span {
-      color: var(--muted);
       font-size: 13px;
-      line-height: 1.45;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     footer {
-      margin-top: 22px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: clamp(28px, 5vw, 56px);
+      margin: 0;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.5;
+      letter-spacing: 0.6px;
+      text-align: center;
     }
 
-    @media (max-width: 680px) {
-      main { padding: 24px; }
-      .device-grid { grid-template-columns: 1fr; }
-      a { min-height: 128px; }
+    @media (max-width: 760px) {
+      body { place-items: stretch; }
+
+      main {
+        width: 100%;
+        min-height: 100vh;
+        border: 0;
+        border-radius: 0;
+        padding: 32px 24px;
+      }
+
+      p {
+        margin-top: 30px;
+      }
+
+      .device-actions {
+        margin-top: 44px;
+        gap: 14px;
+      }
+
+      a {
+        width: 100%;
+        min-height: 84px;
+      }
+
+      footer {
+        position: static;
+        margin-top: 44px;
+      }
     }
   </style>
 </head>
 <body>
   <main>
-    <header>
-      <h1>蜘蛛式建筑3D打印机运动范围判定工具</h1>
-      <p>选择设备型号，进入对应的3D可达空间和内接长方体判定工具。</p>
-    </header>
+    <div class="eyebrow">Motion Range Workspace</div>
+    <h1>蜘蛛式建筑3D打印机运动范围判定工具</h1>
+    <p>选择设备型号，进入对应的判定工具。</p>
 
-    <section class="device-grid" aria-label="设备选择">
+    <nav class="device-actions" aria-label="设备选择">
       <a href="GL-3DPRT-SP-M.html">
         <strong>SP-M</strong>
         <span>GL-3DPRT-SP-M</span>
@@ -132,9 +179,9 @@
         <strong>SP-S</strong>
         <span>GL-3DPRT-SP-S</span>
       </a>
-    </section>
+    </nav>
 
-    <footer>两个页面使用相同判定方法：XY 平面可达区域与 R-Z 垂直截面的交集。</footer>
+    <footer>©杭州冠力智能科技</footer>
   </main>
 </body>
 </html>

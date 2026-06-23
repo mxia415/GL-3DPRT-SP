@@ -1,8 +1,8 @@
 # GL-3DPRT-SP-S 运动范围判定说明
 
-版本：v1.9
+版本：v1.10
 
-日期：2026-06-22
+日期：2026-06-23
 
 ## 这个工具是做什么的
 
@@ -34,7 +34,9 @@
 
 网页默认先不加载设备模型，这样 GitHub Pages 打开速度更快。需要查看设备外形时，点击左侧的“显示设备模型”；加载完成后按钮会变成“隐藏设备模型”，再点一次可以隐藏。
 
-当前网页使用独立压缩后的设备模型文件，并且改为按需加载。设备模型仅作为半透明参考显示，位置为 `X=0, Y=2000, Z=0`，透明度为 `0.15`。
+当前网页使用按需加载的设备模型文件。设备模型仅作为半透明参考显示，位置为 `X=0, Y=2000, Z=0`，透明度为 `0.15`。
+
+如果通过 GitHub Pages 或本地 HTTP 服务访问网页，按钮会加载 `outputs/assets/GL-3DPRT-SP-S.glb`。如果直接双击 HTML 文件、本地以 `file://` 方式打开，浏览器不能直接读取 GLB 文件，网页会改为加载 `outputs/assets/GL-3DPRT-SP-S-model.js` 备用模型包。
 
 ## 左侧参数怎么填
 
@@ -196,7 +198,9 @@ X 方向已经固定在 `0`，也就是长方体左右居中放置。
 
 这个设备模型只是参考外形，方便确认方向和相对位置；它不会参与可达范围判定，也不会影响最大贴合结果。
 
-当前网页使用独立压缩后的设备模型文件。页面打开时不会下载或解析模型；点击“显示设备模型”后才会加载。
+当前网页使用按需加载的设备模型文件。页面打开时不会下载或解析模型；点击“显示设备模型”后才会加载。
+
+通过 GitHub Pages 或本地 HTTP 服务访问时，网页加载 `.glb` 模型文件。直接双击 HTML、以 `file://` 打开时，网页加载 `*-model.js` 备用模型包，用来避开浏览器对本地 `fetch(file://...)` 的限制。
 
 ## 结果怎么看
 
@@ -217,7 +221,12 @@ X 方向已经固定在 `0`，也就是长方体左右居中放置。
 
 当前 SP-S 网页主文件是 `outputs/GL-3DPRT-SP-S.html`。
 
-如果要分享单个设备页面，优先分享 `outputs/GL-3DPRT-SP-S.html`；如果需要显示设备模型，请同时提供 `outputs/assets/GL-3DPRT-SP-S.glb`。如果要同时提供 SP-M 和 SP-S 两个入口，分享 `outputs/index.html` 以及 `outputs/assets` 文件夹。说明文档是 `outputs/GL-3DPRT-SP-S说明.md`。
+如果要分享单个设备页面，优先分享 `outputs/GL-3DPRT-SP-S.html`；如果需要显示设备模型，请同时提供 `outputs/assets` 文件夹。至少要包含：
+
+- `outputs/assets/GL-3DPRT-SP-S.glb`：用于 GitHub Pages 或本地 HTTP 服务访问。
+- `outputs/assets/GL-3DPRT-SP-S-model.js`：用于直接双击 HTML、以 `file://` 方式打开。
+
+如果要同时提供 SP-M 和 SP-S 两个入口，分享 `outputs/index.html`、两个设备 HTML 文件以及完整的 `outputs/assets` 文件夹。说明文档是 `outputs/GL-3DPRT-SP-S说明.md`。
 
 ## 版本和日期怎么维护
 
