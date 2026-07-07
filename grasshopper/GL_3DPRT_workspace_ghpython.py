@@ -190,12 +190,27 @@ def resolve_mesh(value):
     if mesh is not None:
         return mesh, raw_type
     try:
+        import rhinoscriptsyntax as rs
+        coerced_mesh = rs.coercemesh(raw)
+        if coerced_mesh is not None:
+            return coerced_mesh, "{0}->rs.coercemesh".format(raw_type)
+        coerced_brep = rs.coercebrep(raw)
+        mesh = mesh_from_geometry(coerced_brep)
+        if mesh is not None:
+            return mesh, "{0}->rs.coercebrep".format(raw_type)
+    except Exception:
+        pass
+    try:
         import System
         import Rhino
         if isinstance(raw, System.Guid) and Rhino.RhinoDoc.ActiveDoc is not None:
             obj = Rhino.RhinoDoc.ActiveDoc.Objects.FindId(raw)
+            if obj is None:
+                obj = Rhino.RhinoDoc.ActiveDoc.Objects.Find(raw)
             if obj is not None:
-                return mesh_from_geometry(obj.Geometry), "Guid->{0}".format(type_name(obj.Geometry))
+                mesh = mesh_from_geometry(obj.Geometry)
+                if mesh is not None:
+                    return mesh, "Guid->{0}".format(type_name(obj.Geometry))
     except Exception:
         pass
     try:
