@@ -39,6 +39,8 @@ def ensure_ghpython_ports():
     def names(params):
         return [str(p.NickName) for p in params]
 
+    optional_inputs = set(["X", "Z", "yaw", "makeWorkspace", "stlMesh", "showIntersection"])
+
     input_descriptions = {
         "device": "SP-M or SP-S",
         "L": "Box length in X, mm",
@@ -68,6 +70,9 @@ def ensure_ghpython_ports():
             p.NickName = "yaw"
             p.Description = input_descriptions["yaw"]
             changed = True
+        if str(p.NickName) in optional_inputs and not p.Optional:
+            p.Optional = True
+            changed = True
 
     existing_inputs = names(comp.Params.Input)
     for name in ["device", "L", "W", "H", "Y", "X", "Z", "yaw", "makeWorkspace", "stlMesh", "showIntersection"]:
@@ -78,6 +83,7 @@ def ensure_ghpython_ports():
         param.NickName = name
         param.Description = input_descriptions[name]
         param.Access = ghk.GH_ParamAccess.item
+        param.Optional = name in optional_inputs
         comp.Params.RegisterInputParam(param)
         existing_inputs.append(name)
         changed = True

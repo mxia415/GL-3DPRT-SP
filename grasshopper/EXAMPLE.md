@@ -22,6 +22,8 @@ showIntersection  不接，或 Boolean Toggle: False
 stlMesh           不接
 ```
 
+`makeWorkspace`、`stlMesh`、`showIntersection` 是可选输入。新版脚本会把它们标记为 Optional，所以不接线时不应该出现 “failed to collect data” 警告。
+
 建议先把这三个输出接到 `Panel`：
 
 ```text
