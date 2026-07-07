@@ -1,0 +1,90 @@
+# GL-3DPRT 运动范围判定工具
+
+版本：v1.14
+
+日期：2026-07-07
+
+这是一个用于 GL-3DPRT 蜘蛛式建筑 3D 打印机的浏览器端运动范围判定项目。工具根据实测的 X-Y 平面范围和 R-Z 垂直截面，生成三维可达空间，并判断输入的长方体是否完整落在设备运动范围内。
+
+## 当前包含的设备
+
+- `GL-3DPRT-SP-M`
+- `GL-3DPRT-SP-S`
+
+项目入口是：
+
+```text
+outputs/index.html
+```
+
+打开入口页后选择设备型号，进入对应的判定工具。
+
+两个设备页面都支持临时导入本地 STL 参考模型。STL 文件只在浏览器本地读取，不会上传；导入后可以调整 X/Y/Z 位置、X/Y/Z 旋转、缩放和透明度。导入的 STL 只用于观察对照，不参与运动范围判定。
+
+设备页面还支持隐藏/显示中间的内接长方体和尺寸标注；隐藏后参数和判定结果仍会保留。
+
+导入 STL 后可以显示或隐藏 STL 与运动范围边界的近似交线。交线通过模型三角面边上的范围内外变化点生成，只作为视觉辅助。
+
+## 文件结构
+
+```text
+outputs/index.html                    设备选择入口
+outputs/GL-3DPRT-SP-M.html            SP-M 运动范围判定工具
+outputs/GL-3DPRT-SP-S.html            SP-S 运动范围判定工具
+outputs/GL-3DPRT-SP-M说明.md          SP-M 使用说明
+outputs/GL-3DPRT-SP-S说明.md          SP-S 使用说明
+outputs/assets/GL-3DPRT-SP-M.glb      SP-M 设备模型，供 HTTP / GitHub Pages 使用
+outputs/assets/GL-3DPRT-SP-S.glb      SP-S 设备模型，供 HTTP / GitHub Pages 使用
+outputs/assets/*-model.js             本地 file:// 打开时使用的备用模型包
+outputs/glb-compressor.html           维护用 GLB 压缩工具
+outputs/preview.html                  维护用界面预览文件
+```
+
+根目录下的 `spm model.glb` 和 `sps model.glb` 是原始模型文件；正式页面使用 `outputs/assets` 里的压缩模型和备用模型包。
+
+## 使用方式
+
+推荐从项目目录启动本地 HTTP 服务：
+
+```bash
+python3 -m http.server 4174
+```
+
+然后在浏览器打开：
+
+```text
+http://localhost:4174/outputs/index.html
+```
+
+也可以直接双击 `outputs/index.html` 或设备 HTML 文件打开。直接以 `file://` 打开时，设备模型会使用 `outputs/assets/*-model.js` 备用模型包。
+
+## 判定方法
+
+一个点必须同时满足两类条件，才算在设备可达范围内：
+
+- 位于 X-Y 平面的可达区域内。
+- 位于 R-Z 垂直截面的可达区域内。
+
+长方体需要整体位于这两个范围的交集空间内。工具会检查角点和表面采样点，避免只看角点导致误判。
+
+设备模型只用于视觉参考，不参与运动范围判定，也不影响最大贴合结果。
+
+## 发布和分享
+
+如果发布到 GitHub Pages 或用本地 HTTP 服务访问，请保留完整的 `outputs` 文件夹，特别是：
+
+- `outputs/index.html`
+- `outputs/GL-3DPRT-SP-M.html`
+- `outputs/GL-3DPRT-SP-S.html`
+- `outputs/assets`
+
+如果只分享单个设备页面，也要同时提供该设备对应的 `.glb` 和 `*-model.js` 文件，否则设备模型按钮无法在所有访问方式下正常工作。
+
+## 维护说明
+
+只要网页功能、设备数据、模型、显示效果或说明文档发生变化，发布前需要同步更新：
+
+- 设备 HTML 的 `<title>` 版本号。
+- 设备 HTML 左侧信息栏里的版本号和日期。
+- 对应说明文档顶部的版本号和日期。
+- 本 README 的版本号和日期。

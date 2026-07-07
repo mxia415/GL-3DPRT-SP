@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GLB 模型压缩工具</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #2b2622;
+      --panel: #383330;
+      --panel-2: #312c28;
+      --ink: #f7f5f0;
+      --muted: #aea69c;
+      --line: #4a433e;
+      --accent: #b84d3a;
+      --good: #73b18e;
+      --warn: #d59a45;
+      --bad: #d76961;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    main {
+      width: min(1080px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 42px 0;
+    }
+
+    header {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.15;
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
+    }
+
+    .drop {
+      display: grid;
+      place-items: center;
+      min-height: 190px;
+      border: 1px dashed rgba(247,245,240,0.28);
+      border-radius: 8px;
+      background: var(--panel-2);
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .drop:hover,
+    .drop.dragging {
+      border-color: rgba(247,245,240,0.72);
+      background: #37312d;
+    }
+
+    .drop strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 22px;
+    }
+
+    .drop span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    input[type="file"] { display: none; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 94px;
+    }
+
+    .card span {
+      color: var(--muted);
+      font-size: 13px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .card b {
+      font-size: 24px;
+      word-break: break-word;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 170px;
+      gap: 18px;
+      align-items: end;
+      margin-top: 18px;
+    }
+
+    label {
+      display: grid;
+      gap: 10px;
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    label span {
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 13px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button,
+    a.button {
+      appearance: none;
+      border: 1px solid rgba(247,245,240,0.22);
+      background: #473f39;
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 13px 18px;
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+      text-decoration: none;
+      min-width: 160px;
+      text-align: center;
+    }
+
+    button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    button:disabled,
+    a.button[aria-disabled="true"] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .log {
+      margin-top: 20px;
+      background: #211d1a;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      color: #d9d1c6;
+      min-height: 160px;
+      max-height: 280px;
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+    }
+
+    .status {
+      margin-top: 16px;
+      padding: 13px 14px;
+      border-radius: 8px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .status.good { color: var(--good); }
+    .status.warn { color: var(--warn); }
+    .status.bad { color: var(--bad); }
+
+    @media (max-width: 760px) {
+      main { width: min(100vw - 24px, 1080px); padding: 24px 0; }
+      .grid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr; }
+      button, a.button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>GLB 模型压缩工具</h1>
+      <p class="sub">上传一个 GLB 文件，工具会保留原始文件下载为 <strong>文件名-raw.glb</strong>，并用 glTF Transform 流程导出一个压缩后的 GLB。压缩流程包括合并、焊接、简化、清理、稀疏化和 Meshopt 压缩。建议上传未压缩或原始 GLB；已经 Draco 压缩过的旧模型可能无法在纯浏览器里读取。</p>
+    </header>
+
+    <section class="panel">
+      <label class="drop" id="drop">
+        <input id="file" type="file" accept=".glb,model/gltf-binary" />
+        <span>
+          <strong>选择或拖入 GLB 文件</strong>
+          <span>压缩在浏览器本地完成，文件不会上传到服务器。</span>
+        </span>
+      </label>
+
+      <div class="grid">
+        <div class="card"><span>文件名</span><b id="fileName">-</b></div>
+        <div class="card"><span>原始大小</span><b id="rawSize">-</b></div>
+        <div class="card"><span>压缩后大小</span><b id="compressedSize">-</b></div>
+      </div>
+
+      <div class="controls">
+        <label>
+          简化比例 <span id="ratioText">保留 20% 顶点。数值越低，文件越小，细节也越少。</span>
+          <input id="ratio" type="range" min="0.1" max="1" step="0.05" value="0.2" />
+        </label>
+        <button id="compress" class="primary" disabled>生成压缩 GLB</button>
+      </div>
+
+      <div class="actions">
+        <a id="rawDownload" class="button" aria-disabled="true">下载 raw GLB</a>
+        <a id="compressedDownload" class="button" aria-disabled="true">下载压缩 GLB</a>
+      </div>
+
+      <div id="status" class="status">等待选择 GLB 文件。</div>
+      <div id="log" class="log"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    const el = {
+      drop: document.getElementById("drop"),
+      file: document.getElementById("file"),
+      fileName: document.getElementById("fileName"),
+      rawSize: document.getElementById("rawSize"),
+      compressedSize: document.getElementById("compressedSize"),
+      ratio: document.getElementById("ratio"),
+      ratioText: document.getElementById("ratioText"),
+      compress: document.getElementById("compress"),
+      rawDownload: document.getElementById("rawDownload"),
+      compressedDownload: document.getElementById("compressedDownload"),
+      status: document.getElementById("status"),
+      log: document.getElementById("log")
+    };
+
+    let selectedFile = null;
+    let rawUrl = null;
+    let compressedUrl = null;
+    let gltfModules = null;
+
+    window.__glbCompressorSelfTest = async () => {
+      const io = await createIO();
+      return {
+        ok: !!io,
+        meshopt: true
+      };
+    };
+    document.documentElement.dataset.compressorReady = "true";
+    window.addEventListener("__glbCompressorSelfTest", async () => {
+      try {
+        await window.__glbCompressorSelfTest();
+        document.documentElement.dataset.compressorSelfTest = "ok";
+      } catch (error) {
+        document.documentElement.dataset.compressorSelfTest = `failed: ${error.message || error}`;
+      }
+    });
+    if (new URLSearchParams(location.search).has("selftest")) {
+      window.__glbCompressorSelfTest()
+        .then(() => {
+          document.documentElement.dataset.compressorSelfTest = "ok";
+        })
+        .catch((error) => {
+          document.documentElement.dataset.compressorSelfTest = `failed: ${error.message || error}`;
+        });
+    }
+
+    el.drop.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      el.drop.classList.add("dragging");
+    });
+
+    el.drop.addEventListener("dragleave", () => {
+      el.drop.classList.remove("dragging");
+    });
+
+    el.drop.addEventListener("drop", (event) => {
+      event.preventDefault();
+      el.drop.classList.remove("dragging");
+      const file = event.dataTransfer.files[0];
+      if (file) useFile(file);
+    });
+
+    el.file.addEventListener("change", () => {
+      const file = el.file.files[0];
+      if (file) useFile(file);
+    });
+
+    el.ratio.addEventListener("input", () => {
+      el.ratioText.textContent = `保留 ${Math.round(Number(el.ratio.value) * 100)}% 顶点。数值越低，文件越小，细节也越少。`;
+    });
+
+    el.compress.addEventListener("click", compressFile);
+
+    function useFile(file) {
+      if (!file.name.toLowerCase().endsWith(".glb")) {
+        setStatus("bad", "请选择 .glb 文件。");
+        return;
+      }
+
+      selectedFile = file;
+      revokeUrl("raw");
+      revokeUrl("compressed");
+      rawUrl = URL.createObjectURL(file);
+      el.rawDownload.href = rawUrl;
+      el.rawDownload.download = `${baseName(file.name)}-raw.glb`;
+      el.rawDownload.removeAttribute("aria-disabled");
+      el.compressedDownload.setAttribute("aria-disabled", "true");
+      el.compressedDownload.removeAttribute("href");
+      el.compressedSize.textContent = "-";
+      el.fileName.textContent = file.name;
+      el.rawSize.textContent = formatBytes(file.size);
+      el.compress.disabled = false;
+      el.log.textContent = "";
+      setStatus("", "已选择文件，可以开始压缩。");
+      log(`原始文件：${file.name}`);
+      log(`raw 输出：${baseName(file.name)}-raw.glb`);
+    }
+
+    async function compressFile() {
+      if (!selectedFile) return;
+      el.compress.disabled = true;
+      el.compressedDownload.setAttribute("aria-disabled", "true");
+      setStatus("", "正在准备压缩工具...");
+      log("载入 glTF/Meshopt 压缩模块...");
+
+      try {
+        const modules = await loadGltfModules();
+        const io = await createIO();
+        const inputBytes = new Uint8Array(await selectedFile.arrayBuffer());
+
+        setStatus("", "正在读取 GLB...");
+        log("读取 GLB 文档...");
+        const document = await io.readBinary(inputBytes);
+        const ratio = Number(el.ratio.value);
+
+        setStatus("", "正在压缩，较大的模型可能需要等待一段时间...");
+        log(`执行压缩流程：dedup → instance → palette → flatten → join → weld → simplify(${ratio}) → resample → prune → sparse → meshopt`);
+        await document.transform(
+          modules.dedup(),
+          modules.instance({ min: 5 }),
+          modules.palette(),
+          modules.flatten(),
+          modules.join(),
+          modules.weld(),
+          modules.simplify({
+            simplifier: modules.MeshoptSimplifier,
+            ratio,
+            error: 0.0005
+          }),
+          modules.resample(),
+          modules.prune(),
+          modules.sparse(),
+          modules.meshopt({
+            encoder: modules.MeshoptEncoder,
+            level: "high"
+          })
+        );
+
+        setStatus("", "正在生成压缩 GLB...");
+        const outputBytes = await io.writeBinary(document);
+        const blob = new Blob([outputBytes], { type: "model/gltf-binary" });
+        revokeUrl("compressed");
+        compressedUrl = URL.createObjectURL(blob);
+        el.compressedDownload.href = compressedUrl;
+        el.compressedDownload.download = `${baseName(selectedFile.name)}.glb`;
+        el.compressedDownload.removeAttribute("aria-disabled");
+        el.compressedSize.textContent = formatBytes(blob.size);
+
+        const saved = selectedFile.size > 0 ? (1 - blob.size / selectedFile.size) * 100 : 0;
+        log(`压缩后文件：${baseName(selectedFile.name)}.glb`);
+        log(`压缩后大小：${formatBytes(blob.size)}，减少 ${Math.max(0, saved).toFixed(1)}%`);
+        setStatus("good", "压缩完成。请分别下载 raw 文件和压缩 GLB。");
+      } catch (error) {
+        console.error(error);
+        log(`错误：${error.message || error}`);
+        setStatus("bad", "压缩失败。请确认文件是有效 GLB，或降低模型复杂度后重试。");
+      } finally {
+        el.compress.disabled = false;
+      }
+    }
+
+    async function createIO() {
+      const modules = await loadGltfModules();
+      const io = new modules.WebIO()
+        .registerExtensions(modules.ALL_EXTENSIONS)
+        .registerDependencies({
+          "meshopt.encoder": modules.MeshoptEncoder,
+          "meshopt.decoder": modules.MeshoptDecoder
+        });
+      if (modules.DracoDecoder) {
+        io.registerDependencies({
+          "draco3d.decoder": modules.DracoDecoder
+        });
+      }
+      return io;
+    }
+
+    async function loadGltfModules() {
+      if (gltfModules) return gltfModules;
+      log("载入 glTF Transform 模块...");
+      const [core, extensions, functions, meshoptimizer] = await Promise.all([
+        import("https://esm.sh/@gltf-transform/core@4.4.0"),
+        import("https://esm.sh/@gltf-transform/extensions@4.4.0"),
+        import("https://esm.sh/@gltf-transform/functions@4.4.0"),
+        import("https://esm.sh/meshoptimizer@0.22.0")
+      ]);
+      await Promise.all([
+        meshoptimizer.MeshoptEncoder.ready,
+        meshoptimizer.MeshoptDecoder.ready,
+        meshoptimizer.MeshoptSimplifier.ready
+      ]);
+      const DracoDecoder = await loadOptionalDracoDecoder();
+      gltfModules = {
+        WebIO: core.WebIO,
+        ALL_EXTENSIONS: extensions.ALL_EXTENSIONS,
+        DracoDecoder,
+        MeshoptEncoder: meshoptimizer.MeshoptEncoder,
+        MeshoptDecoder: meshoptimizer.MeshoptDecoder,
+        MeshoptSimplifier: meshoptimizer.MeshoptSimplifier,
+        dedup: functions.dedup,
+        flatten: functions.flatten,
+        instance: functions.instance,
+        join: functions.join,
+        meshopt: functions.meshopt,
+        palette: functions.palette,
+        prune: functions.prune,
+        resample: functions.resample,
+        simplify: functions.simplify,
+        sparse: functions.sparse,
+        weld: functions.weld
+      };
+      return gltfModules;
+    }
+
+    async function loadOptionalDracoDecoder() {
+      try {
+        const dracoModule = await import("https://esm.sh/draco3dgltf@1.5.7");
+        return await dracoModule.default.createDecoderModule({
+          locateFile: (file) => `https://esm.sh/draco3dgltf@1.5.7/es2022/${file}`
+        });
+      } catch (error) {
+        log(`提示：Draco 解码器未启用，已跳过旧 Draco 模型兼容。${error.message || error}`);
+        return null;
+      }
+    }
+
+    function baseName(name) {
+      return name.replace(/\.[^.]+$/, "");
+    }
+
+    function formatBytes(bytes) {
+      if (!Number.isFinite(bytes)) return "-";
+      const units = ["B", "KB", "MB", "GB"];
+      let value = bytes;
+      let index = 0;
+      while (value >= 1024 && index < units.length - 1) {
+        value /= 1024;
+        index += 1;
+      }
+      return `${value.toFixed(index === 0 ? 0 : 2)} ${units[index]}`;
+    }
+
+    function setStatus(kind, message) {
+      el.status.className = `status ${kind}`.trim();
+      el.status.textContent = message;
+    }
+
+    function log(message) {
+      const time = new Date().toLocaleTimeString();
+      el.log.textContent += `[${time}] ${message}\n`;
+      el.log.scrollTop = el.log.scrollHeight;
+    }
+
+    function revokeUrl(type) {
+      if (type === "raw" && rawUrl) {
+        URL.revokeObjectURL(rawUrl);
+        rawUrl = null;
+      }
+      if (type === "compressed" && compressedUrl) {
+        URL.revokeObjectURL(compressedUrl);
+        compressedUrl = null;
+      }
+    }
+  </script>
+</body>
+</html>

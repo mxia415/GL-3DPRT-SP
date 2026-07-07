@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GL-3DPRT-SP-S运动范围判定 v1.10</title>
+  <title>GL-3DPRT-SP-S运动范围判定 v1.14</title>
   <style>
     :root {
       color-scheme: dark;
@@ -47,7 +47,8 @@
       padding: 8px 14px;
       border-right: 1px solid var(--line);
       background: #2b2622;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     main {
@@ -229,6 +230,69 @@
     }
 
     button:hover { filter: brightness(1.08); }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .file-button {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      padding: 0 10px;
+      color: var(--ink);
+      background: var(--panel-2);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .stl-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .stl-actions .file-button {
+      grid-column: 1 / -1;
+    }
+
+    .stl-actions #toggleStlIntersection {
+      grid-column: 1 / -1;
+    }
+
+    .stl-name {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .stl-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px 8px;
+      margin-top: 9px;
+    }
+
+    .stl-control {
+      display: grid;
+      gap: 4px;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .stl-control input[type="number"] {
+      width: 100%;
+      height: 28px;
+      font-size: 13px;
+    }
 
     .status {
       display: flex;
@@ -735,14 +799,53 @@
       min-height: 38px;
     }
 
-    .fit-actions #toggleModel {
+    .fit-actions #toggleModel,
+    .fit-actions #toggleBox {
       background: #fff;
       color: #000;
     }
 
-    .fit-actions #toggleModel:hover {
+    .fit-actions #toggleModel:hover,
+    .fit-actions #toggleBox:hover {
       background: #000;
       color: #fff;
+    }
+
+    .file-button {
+      min-height: 36px;
+      border-color: #fff;
+      border-radius: 32px;
+      background: #000;
+      color: #fff;
+      font-family: "D-DIN", "Arial Narrow", Arial, Verdana, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.17px;
+      text-transform: uppercase;
+    }
+
+    .file-button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .stl-name {
+      color: var(--muted);
+      font-size: 11.5px;
+      letter-spacing: 0.32px;
+    }
+
+    .stl-control {
+      color: #fff;
+      font-size: 11.5px;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+    }
+
+    .stl-control input[type="number"] {
+      width: 100%;
+      height: 30px;
+      font-size: 13px;
     }
 
     .metrics {
@@ -929,7 +1032,7 @@
       <header>
         <h1>GL-3DPRT-SP-S运动范围判定</h1>
         <p class="subtitle">用实测X-Y平面范围和R-Z垂直截面生成3D可达空间</p>
-        <p class="subtitle">版本：v1.10 ｜ 日期：2026-06-23</p>
+        <p class="subtitle">版本：v1.14 ｜ 日期：2026-07-07</p>
       </header>
 
       <section class="section" hidden>
@@ -957,6 +1060,28 @@
         <div class="field">
           <label>地面 Z0 <span>当前按地面为 0</span></label>
           <input id="baseZ" type="number" value="0" disabled>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">STL参考模型</div>
+        <div class="stl-actions">
+          <label class="file-button" for="stlFile">导入 STL 模型</label>
+          <input id="stlFile" type="file" accept=".stl,model/stl">
+          <button id="resetStl" type="button" disabled>重置参数</button>
+          <button id="clearStl" type="button" disabled>清除 STL</button>
+          <button id="toggleStlIntersection" type="button" disabled>显示交线</button>
+        </div>
+        <div id="stlName" class="stl-name">未导入 STL。仅作为参考显示，不参与判定。</div>
+        <div id="stlControls" class="stl-controls" hidden>
+          <label class="stl-control">X位置<input data-stl="positionX" type="number" step="10" value="0"></label>
+          <label class="stl-control">Y位置<input data-stl="positionY" type="number" step="10" value="0"></label>
+          <label class="stl-control">Z位置<input data-stl="positionZ" type="number" step="10" value="0"></label>
+          <label class="stl-control">缩放<input data-stl="scale" type="number" min="0.001" step="0.1" value="1"></label>
+          <label class="stl-control">旋转X<input data-stl="rotationX" type="number" step="1" value="0"></label>
+          <label class="stl-control">旋转Y<input data-stl="rotationY" type="number" step="1" value="0"></label>
+          <label class="stl-control">旋转Z<input data-stl="rotationZ" type="number" step="1" value="0"></label>
+          <label class="stl-control">透明度<input data-stl="opacity" type="number" min="0.05" max="1" step="0.05" value="0.35"></label>
         </div>
       </section>
 
@@ -997,6 +1122,7 @@
         <div class="fit-actions">
           <button id="resetSize">重置尺寸</button>
           <button id="reset">重置视图</button>
+          <button id="toggleBox">隐藏长方体</button>
           <button id="toggleModel">显示设备模型</button>
         </div>
       </section>
@@ -1046,6 +1172,7 @@
   <script type="module">
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { STLLoader } from "three/addons/loaders/STLLoader.js";
 
     const ids = ["innerCircleY", "outerRadius", "innerRadius", "drawingYaw", "baseZ", "boxX", "boxY", "boxZ", "boxL", "boxW", "boxH"];
     const input = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
@@ -1055,6 +1182,13 @@
     const metrics = { l: document.getElementById("mL"), w: document.getElementById("mW"), h: document.getElementById("mH") };
     const volumeLabel = document.getElementById("volumeLabel");
     const cornerLabel = document.getElementById("cornerLabel");
+    const stlFileInput = document.getElementById("stlFile");
+    const stlName = document.getElementById("stlName");
+    const stlControls = document.getElementById("stlControls");
+    const resetStlButton = document.getElementById("resetStl");
+    const clearStlButton = document.getElementById("clearStl");
+    const toggleStlIntersectionButton = document.getElementById("toggleStlIntersection");
+    const stlInputs = Object.fromEntries([...document.querySelectorAll("[data-stl]")].map((el) => [el.dataset.stl, el]));
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -1114,6 +1248,20 @@
       side: THREE.DoubleSide,
       depthWrite: false
     });
+    const importedStlDefaults = {
+      positionX: 0,
+      positionY: 0,
+      positionZ: 0,
+      rotationX: 0,
+      rotationY: 0,
+      rotationZ: 0,
+      scale: 1,
+      opacity: 0.35
+    };
+    let importedStlMesh = null;
+    let stlIntersectionLines = null;
+    let stlIntersectionVisible = false;
+    const stlIntersectionMaterial = new THREE.LineBasicMaterial({ color: 0xff3b30, transparent: true, opacity: 0.98, depthTest: false });
     const referenceModelKey = "GL-3DPRT-SP-S";
     const referenceModelGlbUrl = new URL("assets/GL-3DPRT-SP-S.glb", window.location.href).href;
     const referenceModelFallbackScriptUrl = new URL("assets/GL-3DPRT-SP-S-model.js", window.location.href).href;
@@ -1125,6 +1273,7 @@
     let referenceModelMesh = null;
     let referenceModelVisible = false;
     let referenceModelLoading = false;
+    let boxVisible = true;
     let dimensionGroup = new THREE.Group();
     let fitMode = "L";
     scene.add(dimensionGroup);
@@ -1247,6 +1396,35 @@
       }
     });
 
+    document.getElementById("toggleBox").addEventListener("click", () => {
+      boxVisible = !boxVisible;
+      document.getElementById("toggleBox").textContent = boxVisible ? "隐藏长方体" : "显示长方体";
+      applyBoxVisibility();
+    });
+
+    stlFileInput.addEventListener("change", async () => {
+      const file = stlFileInput.files?.[0];
+      if (file) await loadStlModel(file);
+      stlFileInput.value = "";
+    });
+
+    Object.values(stlInputs).forEach((el) => {
+      el.addEventListener("input", applyStlTransform);
+    });
+
+    resetStlButton.addEventListener("click", () => {
+      resetStlInputs();
+      applyStlTransform();
+    });
+
+    clearStlButton.addEventListener("click", clearStlModel);
+
+    toggleStlIntersectionButton.addEventListener("click", () => {
+      stlIntersectionVisible = !stlIntersectionVisible;
+      toggleStlIntersectionButton.textContent = stlIntersectionVisible ? "隐藏交线" : "显示交线";
+      updateStlIntersection();
+    });
+
     document.querySelectorAll("[data-view]").forEach((button) => {
       button.addEventListener("click", () => {
         if (button.dataset.view === "default") {
@@ -1358,6 +1536,164 @@
       const bytes = new Uint8Array(binary.length);
       for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
       return bytes.buffer;
+    }
+
+    async function loadStlModel(file) {
+      if (!file.name.toLowerCase().endsWith(".stl")) {
+        stlName.textContent = "请选择 .stl 文件。";
+        return;
+      }
+      try {
+        const buffer = await file.arrayBuffer();
+        const geometry = new STLLoader().parse(buffer);
+        geometry.computeVertexNormals();
+        geometry.computeBoundingBox();
+        clearStlModel();
+        const material = new THREE.MeshStandardMaterial({
+          color: 0x8fc7ff,
+          transparent: true,
+          opacity: importedStlDefaults.opacity,
+          roughness: 0.52,
+          metalness: 0.02,
+          side: THREE.DoubleSide,
+          depthWrite: false
+        });
+        importedStlMesh = new THREE.Mesh(geometry, material);
+        importedStlMesh.name = "imported-stl-reference-model";
+        importedStlMesh.renderOrder = 9;
+        importedStlMesh.frustumCulled = false;
+        scene.add(importedStlMesh);
+        resetStlInputs();
+        applyStlTransform();
+        setStlControlsEnabled(true);
+        stlName.textContent = `${file.name} 已导入。仅作为参考显示，不参与判定。`;
+      } catch (error) {
+        console.error("STL 模型导入失败", error);
+        stlName.textContent = "STL 模型导入失败，请检查文件格式。";
+      }
+    }
+
+    function resetStlInputs() {
+      Object.entries(importedStlDefaults).forEach(([key, value]) => {
+        stlInputs[key].value = value;
+      });
+    }
+
+    function applyStlTransform() {
+      if (!importedStlMesh) return;
+      importedStlMesh.position.set(
+        numberValue(stlInputs.positionX, importedStlDefaults.positionX),
+        numberValue(stlInputs.positionY, importedStlDefaults.positionY),
+        numberValue(stlInputs.positionZ, importedStlDefaults.positionZ)
+      );
+      importedStlMesh.rotation.set(
+        THREE.MathUtils.degToRad(numberValue(stlInputs.rotationX, importedStlDefaults.rotationX)),
+        THREE.MathUtils.degToRad(numberValue(stlInputs.rotationY, importedStlDefaults.rotationY)),
+        THREE.MathUtils.degToRad(numberValue(stlInputs.rotationZ, importedStlDefaults.rotationZ))
+      );
+      importedStlMesh.scale.setScalar(Math.max(0.001, numberValue(stlInputs.scale, importedStlDefaults.scale)));
+      importedStlMesh.material.opacity = THREE.MathUtils.clamp(numberValue(stlInputs.opacity, importedStlDefaults.opacity), 0.05, 1);
+      importedStlMesh.material.needsUpdate = true;
+      if (stlIntersectionVisible) updateStlIntersection();
+    }
+
+    function clearStlModel() {
+      if (importedStlMesh) {
+        scene.remove(importedStlMesh);
+        importedStlMesh.geometry.dispose();
+        importedStlMesh.material.dispose();
+        importedStlMesh = null;
+      }
+      clearStlIntersection();
+      stlIntersectionVisible = false;
+      toggleStlIntersectionButton.textContent = "显示交线";
+      setStlControlsEnabled(false);
+      resetStlInputs();
+      stlName.textContent = "未导入 STL。仅作为参考显示，不参与判定。";
+    }
+
+    function setStlControlsEnabled(enabled) {
+      stlControls.hidden = !enabled;
+      resetStlButton.disabled = !enabled;
+      clearStlButton.disabled = !enabled;
+      toggleStlIntersectionButton.disabled = !enabled;
+    }
+
+    function numberValue(el, fallback) {
+      const value = Number(el.value);
+      return Number.isFinite(value) ? value : fallback;
+    }
+
+    function updateStlIntersection() {
+      clearStlIntersection();
+      if (!stlIntersectionVisible || !importedStlMesh) return;
+      const geometry = makeStlIntersectionGeometry();
+      const count = geometry.getAttribute("position").count;
+      if (count < 2) {
+        geometry.dispose();
+        stlName.textContent = "未找到 STL 与运动范围边界的近似交线。";
+        return;
+      }
+      stlIntersectionLines = new THREE.LineSegments(geometry, stlIntersectionMaterial);
+      stlIntersectionLines.renderOrder = 30;
+      scene.add(stlIntersectionLines);
+      stlName.textContent = `已显示 ${count / 2} 段近似交线。仅作为参考显示，不参与判定。`;
+    }
+
+    function clearStlIntersection() {
+      if (!stlIntersectionLines) return;
+      scene.remove(stlIntersectionLines);
+      stlIntersectionLines.geometry.dispose();
+      stlIntersectionLines = null;
+    }
+
+    function makeStlIntersectionGeometry() {
+      const source = importedStlMesh.geometry.getAttribute("position");
+      importedStlMesh.updateMatrixWorld(true);
+      const matrix = importedStlMesh.matrixWorld;
+      const v = values();
+      const vertices = [];
+      const a = new THREE.Vector3();
+      const b = new THREE.Vector3();
+      const c = new THREE.Vector3();
+      const triangleCount = Math.floor(source.count / 3);
+      const step = Math.max(1, Math.ceil(triangleCount / 60000));
+      for (let i = 0; i < triangleCount; i += step) {
+        a.fromBufferAttribute(source, i * 3).applyMatrix4(matrix);
+        b.fromBufferAttribute(source, i * 3 + 1).applyMatrix4(matrix);
+        c.fromBufferAttribute(source, i * 3 + 2).applyMatrix4(matrix);
+        const crossings = [
+          edgeIntersectionPoint(a, b, v),
+          edgeIntersectionPoint(b, c, v),
+          edgeIntersectionPoint(c, a, v)
+        ].filter(Boolean);
+        if (crossings.length >= 2) {
+          vertices.push(crossings[0].x, crossings[0].y, crossings[0].z, crossings[1].x, crossings[1].y, crossings[1].z);
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+      return geometry;
+    }
+
+    function edgeIntersectionPoint(a, b, v) {
+      const aInside = pointCheck(a, v).inside;
+      const bInside = pointCheck(b, v).inside;
+      if (aInside === bInside) return null;
+      let lo = a.clone();
+      let hi = b.clone();
+      let loInside = aInside;
+      for (let i = 0; i < 10; i += 1) {
+        const mid = lo.clone().lerp(hi, 0.5);
+        const midInside = pointCheck(mid, v).inside;
+        if (midInside === loInside) {
+          lo = mid;
+          loInside = midInside;
+        } else {
+          hi = mid;
+        }
+      }
+      return lo.clone().lerp(hi, 0.5);
     }
 
     function withTimeout(promise, timeoutMs, message) {
@@ -1623,10 +1959,12 @@
       boxMesh.position.set(v.boxX, (yBounds.min + yBounds.max) / 2, v.baseZ + v.boxH / 2);
       boxEdges.position.copy(boxMesh.position);
       boxMesh.material = isBoxInside(v).inside ? boxMaterial : boxBadMaterial;
+      applyBoxVisibility();
     }
 
     function drawDimensions(v) {
       dimensionGroup.clear();
+      dimensionGroup.visible = boxVisible;
       const x0 = v.boxX - v.boxL / 2;
       const x1 = v.boxX + v.boxL / 2;
       const yBounds = boxYBounds(v);
@@ -1663,6 +2001,12 @@
       const label = makeLabel(text, { scaleX: 3136, scaleY: 882, fontSize: 120, background: 0, sizeAttenuation: true });
       label.position.copy(mid);
       dimensionGroup.add(label);
+    }
+
+    function applyBoxVisibility() {
+      if (boxMesh) boxMesh.visible = boxVisible;
+      if (boxEdges) boxEdges.visible = boxVisible;
+      dimensionGroup.visible = boxVisible;
     }
 
     function makeLabel(text, options = {}) {
