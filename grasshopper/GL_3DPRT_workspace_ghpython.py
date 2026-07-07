@@ -422,17 +422,29 @@ def edge_crossing(model, a, b, yaw_deg):
     return rg.Point3d((lo.X + hi.X) * 0.5, (lo.Y + hi.Y) * 0.5, (lo.Z + hi.Z) * 0.5)
 
 
-def stl_intersection_curves(model, mesh, yaw_deg, max_faces=3000):
+def stl_intersection_curves(model, mesh, yaw_deg, max_faces=12000, max_curves=3000):
     curves = []
+    stats = {
+        "face_count": 0,
+        "step": 0,
+        "sampled_faces": 0,
+        "inside_vertices": 0,
+        "outside_vertices": 0,
+        "crossing_faces": 0,
+        "truncated": False,
+    }
     mesh = first_value(mesh)
     if mesh is None or not hasattr(mesh, "Faces"):
-        return curves
+        return curves, stats
     face_count = mesh.Faces.Count
+    stats["face_count"] = face_count
     if face_count <= 0:
-        return curves
+        return curves, stats
     step = max(1, int(math.ceil(float(face_count) / float(max_faces))))
+    stats["step"] = step
     for i in range(0, face_count, step):
         face = mesh.Faces[i]
+        stats["sampled_faces"] += 1
         tris = []
         if face.IsTriangle:
             tris.append((face.A, face.B, face.C))
@@ -443,6 +455,12 @@ def stl_intersection_curves(model, mesh, yaw_deg, max_faces=3000):
             a = mesh_point(mesh, tri[0])
             b = mesh_point(mesh, tri[1])
             c = mesh_point(mesh, tri[2])
+            flags = [model.point_inside(a, yaw_deg), model.point_inside(b, yaw_deg), model.point_inside(c, yaw_deg)]
+            stats["inside_vertices"] += len([flag for flag in flags if flag])
+            stats["outside_vertices"] += len([flag for flag in flags if not flag])
+            if flags[0] == flags[1] == flags[2]:
+                continue
+            stats["crossing_faces"] += 1
             pts = []
             for pair in ((a, b), (b, c), (c, a)):
                 p = edge_crossing(model, pair[0], pair[1], yaw_deg)
@@ -450,7 +468,10 @@ def stl_intersection_curves(model, mesh, yaw_deg, max_faces=3000):
                     pts.append(p)
             if len(pts) >= 2:
                 curves.append(rg.LineCurve(pts[0], pts[1]))
-    return curves
+                if len(curves) >= max_curves:
+                    stats["truncated"] = True
+                    return curves, stats
+    return curves, stats
 
 
 if rg is None:
@@ -460,6 +481,7 @@ if rg is None:
     boxBrep = None
     intersectionCurves = []
     invalidPoints = []
+    stlStats = {}
     debug = message
 else:
     key = device_key(gh_value("device", "SP-M"))
@@ -478,9 +500,24 @@ else:
     inside, message, invalidPoints = check_box(model, x_value, y_value, z_value, l_value, w_value, h_value, yaw_value)
     workspaceMesh = make_workspace_mesh(model, yaw_value) if make_ws else None
     boxBrep = make_box_brep(x_value, y_value, z_value, l_value, w_value, h_value)
-    intersectionCurves = stl_intersection_curves(model, mesh_input, yaw_value) if show_x and mesh_input is not None else []
-    debug = "{0}: {1}, invalid points: {2}, intersection segments: {3}".format(
-        key, message, len(invalidPoints), len(intersectionCurves)
+    if show_x and mesh_input is not None:
+        intersectionCurves, stlStats = stl_intersection_curves(model, mesh_input, yaw_value)
+    else:
+        intersectionCurves = []
+        stlStats = {}
+    stl_debug = ""
+    if stlStats:
+        stl_debug = ", STL faces: {0}, sampled: {1}, step: {2}, crossing faces: {3}, inside verts: {4}, outside verts: {5}{6}".format(
+            stlStats.get("face_count", 0),
+            stlStats.get("sampled_faces", 0),
+            stlStats.get("step", 0),
+            stlStats.get("crossing_faces", 0),
+            stlStats.get("inside_vertices", 0),
+            stlStats.get("outside_vertices", 0),
+            ", truncated" if stlStats.get("truncated", False) else ""
+        )
+    debug = "{0}: {1}, invalid points: {2}, intersection segments: {3}{4}".format(
+        key, message, len(invalidPoints), len(intersectionCurves), stl_debug
     )
 
 # Compatibility for the default Grasshopper Python component outputs.
