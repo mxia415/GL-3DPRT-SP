@@ -11,9 +11,11 @@ grasshopper/GL_3DPRT_workspace_ghpython.py
 1. 在 Rhino 里打开 Grasshopper。
 2. 新建一个 `GhPython` 组件。
 3. 把 `GL_3DPRT_workspace_ghpython.py` 的全部代码粘贴进去。
-4. 运行一次脚本，组件会自动添加下面的建议输入和建议输出端口。
+4. 用 Rhino 8 Script Editor / GhPython 组件自己的输入输出管理，添加下面的建议输入和建议输出端口。
 
-如果组件原来有默认输入 `u`，脚本会把它改名为 `yaw`。默认输出 `out` 和 `a` 会保留，便于兼容旧组件。
+不要用普通 Grasshopper 参数对象替代这些脚本端口。Rhino 8 的 Python 组件需要自己的 `ScriptVariableParam` 端口类型；如果端口被旧脚本自动创建成 `Param_GenericObject`，会出现 cast exception。遇到这种情况，建议新建一个干净的 Python 3 组件，再按下面名字添加端口。
+
+默认输出 `out` 和 `a` 会保留，便于兼容旧组件。
 
 ## 建议输入
 

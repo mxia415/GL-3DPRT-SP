@@ -24,13 +24,13 @@ except Exception:
 
 
 def ensure_ghpython_ports():
-    """Add the recommended Grasshopper inputs/outputs when running in a GhPython component."""
+    """Keep existing RhinoCode/GhPython ports optional without creating incompatible ports.
+
+    Rhino 8's Script Editor component uses RhinoCode-specific ScriptVariableParam
+    objects. Registering normal Grasshopper Param_GenericObject inputs/outputs can
+    make the component throw a cast exception before the script can run.
+    """
     if "ghenv" not in globals():
-        return
-    try:
-        import Grasshopper.Kernel as ghk
-        import Grasshopper.Kernel.Parameters as ghp
-    except Exception:
         return
 
     comp = ghenv.Component
@@ -41,65 +41,14 @@ def ensure_ghpython_ports():
 
     optional_inputs = set(["X", "Z", "yaw", "makeWorkspace", "stlMesh", "showIntersection"])
 
-    input_descriptions = {
-        "device": "SP-M or SP-S",
-        "L": "Box length in X, mm",
-        "W": "Box width in Y, mm",
-        "H": "Box height in Z, mm",
-        "Y": "Inner-side Y position, mm",
-        "X": "Optional X position, default 0",
-        "Z": "Optional base Z, default 0",
-        "yaw": "Optional yaw coverage in degrees, default 360",
-        "makeWorkspace": "Optional bool: output workspace mesh",
-        "stlMesh": "Optional Rhino Mesh for approximate intersection",
-        "showIntersection": "Optional bool: output STL/workspace intersection curves",
-    }
-    output_descriptions = {
-        "inside": "Whether the box is fully inside the workspace",
-        "message": "Chinese status message",
-        "workspaceMesh": "Reachable workspace mesh",
-        "boxBrep": "Current box Brep",
-        "intersectionCurves": "Approximate STL/workspace intersection curves",
-        "invalidPoints": "Sample points outside the workspace",
-        "debug": "Debug summary",
-    }
-
     for p in comp.Params.Input:
         if str(p.NickName) == "u" and "yaw" not in names(comp.Params.Input):
             p.Name = "yaw"
             p.NickName = "yaw"
-            p.Description = input_descriptions["yaw"]
             changed = True
         if str(p.NickName) in optional_inputs and not p.Optional:
             p.Optional = True
             changed = True
-
-    existing_inputs = names(comp.Params.Input)
-    for name in ["device", "L", "W", "H", "Y", "X", "Z", "yaw", "makeWorkspace", "stlMesh", "showIntersection"]:
-        if name in existing_inputs:
-            continue
-        param = ghp.Param_GenericObject()
-        param.Name = name
-        param.NickName = name
-        param.Description = input_descriptions[name]
-        param.Access = ghk.GH_ParamAccess.item
-        param.Optional = name in optional_inputs
-        comp.Params.RegisterInputParam(param)
-        existing_inputs.append(name)
-        changed = True
-
-    existing_outputs = names(comp.Params.Output)
-    for name in ["inside", "message", "workspaceMesh", "boxBrep", "intersectionCurves", "invalidPoints", "debug"]:
-        if name in existing_outputs:
-            continue
-        param = ghp.Param_GenericObject()
-        param.Name = name
-        param.NickName = name
-        param.Description = output_descriptions[name]
-        param.Access = ghk.GH_ParamAccess.item
-        comp.Params.RegisterOutputParam(param)
-        existing_outputs.append(name)
-        changed = True
 
     if changed:
         comp.Params.OnParametersChanged()

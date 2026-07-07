@@ -6,6 +6,15 @@
 
 在 Grasshopper 里，新建或使用已经放好的 `GhPython` 组件，把 `GL_3DPRT_workspace_ghpython.py` 全部粘贴进去并保存。
 
+如果出现类似下面的红色错误：
+
+```text
+Unable to cast object of type 'Grasshopper.Kernel.Parameters.Param_GenericObject'
+to type 'RhinoCodePluginGH.Parameters.ScriptVariableParam'
+```
+
+说明这个组件的端口类型已经被旧版自动建端口脚本污染了。删除这个 Python 组件，重新放一个干净的 Python 3 组件，然后用组件自己的输入/输出管理添加端口，不要复用这个报错组件。
+
 给组件输入端口连接这些值：
 
 ```text
