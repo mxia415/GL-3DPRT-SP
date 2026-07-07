@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>GL-3DPRT-SP-S运动范围判定 v1.15</title>
+  <title>SP-S运动范围判定 v1.16</title>
   <script>document.documentElement.dataset.theme = localStorage.getItem("gl3dprt-theme") || "dark";</script>
   <style>
     :root {
@@ -621,8 +621,17 @@
     }
 
     header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 8px 14px;
       padding: 2px 0 4px;
       border-bottom: 1px solid var(--line);
+    }
+
+    header h1,
+    header .subtitle {
+      grid-column: 1;
     }
 
     h1 {
@@ -990,10 +999,13 @@
 
 
     .theme-toggle {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      justify-self: end;
       display: inline-flex;
       align-items: center;
       gap: 3px;
-      margin-top: 10px;
+      margin-top: 0;
       padding: 3px;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -1186,6 +1198,13 @@
         overflow: visible;
       }
 
+      .theme-toggle {
+        grid-column: 1;
+        grid-row: auto;
+        justify-self: start;
+        margin-top: 8px;
+      }
+
       .field,
       .field.fit-field {
         grid-template-columns: 1fr 112px;
@@ -1203,9 +1222,9 @@
   <div class="app">
     <aside>
       <header>
-        <h1>GL-3DPRT-SP-S运动范围判定</h1>
+        <h1>SP-S运动范围判定</h1>
         <p class="subtitle">用实测X-Y平面范围和R-Z垂直截面生成3D可达空间</p>
-        <p class="subtitle">版本：v1.15 ｜ 日期：2026-07-07</p>
+        <p class="subtitle">版本：v1.16 ｜ 日期：2026-07-07</p>
         <div class="theme-toggle" aria-label="主题切换">
           <button type="button" data-theme-choice="dark">深色</button>
           <button type="button" data-theme-choice="light">亮色</button>
