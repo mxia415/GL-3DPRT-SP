@@ -68,7 +68,8 @@ invalidPoints  接 Point 参数
 2. 在 Grasshopper 里放一个 `Mesh` 参数。
 3. 右键 `Mesh` 参数，选择 `Set one Mesh`，点选导入的 STL。
 4. 把这个 `Mesh` 参数接到 `stlMesh`。
-5. 把 `showIntersection` 接一个 `Boolean Toggle: True`。
-6. 把 `intersectionCurves` 接到 `Curve` 参数或 `Custom Preview`。
+5. 先保持 `showIntersection = False`，确认基础判定和 `workspaceMesh` 能正常显示。
+6. 需要交线时，再把 `showIntersection` 改成 `True`。
+7. 把 `intersectionCurves` 接到 `Curve` 参数或 `Custom Preview`。
 
-注意：`intersectionCurves` 是 STL 网格和运动范围边界的近似交线，适合观察和判断，不是 Rhino Boolean 精确交线。
+注意：`intersectionCurves` 是 STL 网格和运动范围边界的近似交线，适合观察和判断，不是 Rhino Boolean 精确交线。脚本会对 STL 面进行抽样，避免大 STL 直接卡死 Grasshopper。
