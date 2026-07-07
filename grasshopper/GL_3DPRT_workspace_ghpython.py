@@ -160,7 +160,25 @@ def gh_value(name, default_value):
     return globals()[name] if name in globals() and globals()[name] is not None else default_value
 
 
+def first_value(value):
+    if value is None:
+        return None
+    if isinstance(value, (list, tuple)):
+        if len(value) == 0:
+            return None
+        return first_value(value[0])
+    return value
+
+
+def as_float(value, default_value):
+    value = first_value(value)
+    if value is None:
+        return float(default_value)
+    return float(value)
+
+
 def as_bool(value, default_value):
+    value = first_value(value)
     if value is None:
         return default_value
     return bool(value)
@@ -488,13 +506,13 @@ if rg is None:
 else:
     key = device_key(gh_value("device", "SP-M"))
     model = WorkspaceModel(key)
-    x_value = float(gh_value("X", 0.0))
-    y_value = float(gh_value("Y", model.data["defaultY"]))
-    z_value = float(gh_value("Z", 0.0))
-    l_value = float(gh_value("L", model.data["defaultL"]))
-    w_value = float(gh_value("W", model.data["defaultW"]))
-    h_value = float(gh_value("H", model.data["defaultH"]))
-    yaw_value = float(gh_value("yaw", 360.0))
+    x_value = as_float(gh_value("X", 0.0), 0.0)
+    y_value = as_float(gh_value("Y", model.data["defaultY"]), model.data["defaultY"])
+    z_value = as_float(gh_value("Z", 0.0), 0.0)
+    l_value = as_float(gh_value("L", model.data["defaultL"]), model.data["defaultL"])
+    w_value = as_float(gh_value("W", model.data["defaultW"]), model.data["defaultW"])
+    h_value = as_float(gh_value("H", model.data["defaultH"]), model.data["defaultH"])
+    yaw_value = as_float(gh_value("yaw", 360.0), 360.0)
     make_ws = as_bool(gh_value("makeWorkspace", True), True)
     show_x = as_bool(gh_value("showIntersection", False), False)
     mesh_input = gh_value("stlMesh", None)
