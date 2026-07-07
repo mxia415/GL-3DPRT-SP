@@ -109,14 +109,102 @@ def gh_value(name, default_value):
     return globals()[name] if name in globals() and globals()[name] is not None else default_value
 
 
+def type_name(value):
+    if value is None:
+        return "None"
+    return "{0}.{1}".format(value.__class__.__module__, value.__class__.__name__)
+
+
+def unwrap_gh_value(value, depth=0):
+    if value is None or depth > 8:
+        return value
+    for attr in ("Value", "ScriptVariable"):
+        if hasattr(value, attr):
+            try:
+                inner = getattr(value, attr)
+                if callable(inner):
+                    inner = inner()
+                if inner is not value:
+                    return unwrap_gh_value(inner, depth + 1)
+            except Exception:
+                pass
+    return value
+
+
 def first_value(value):
+    value = unwrap_gh_value(value)
     if value is None:
         return None
     if isinstance(value, (list, tuple)):
         if len(value) == 0:
             return None
         return first_value(value[0])
+    if not isinstance(value, str) and hasattr(value, "Branches"):
+        try:
+            if value.Branches.Count == 0 or value.Branches[0].Count == 0:
+                return None
+            return first_value(value.Branches[0][0])
+        except Exception:
+            pass
+    if not isinstance(value, str) and not hasattr(value, "Faces") and hasattr(value, "__iter__"):
+        try:
+            for item in value:
+                return first_value(item)
+        except Exception:
+            pass
     return value
+
+
+def mesh_from_geometry(geometry):
+    geometry = unwrap_gh_value(geometry)
+    if geometry is None:
+        return None
+    if hasattr(geometry, "Vertices") and hasattr(geometry, "Faces") and hasattr(geometry.Faces, "Count"):
+        return geometry
+    if rg is None:
+        return None
+    try:
+        if isinstance(geometry, rg.Brep):
+            pieces = rg.Mesh.CreateFromBrep(geometry, rg.MeshingParameters.Default)
+            if pieces is None or len(pieces) == 0:
+                return None
+            mesh = rg.Mesh()
+            for piece in pieces:
+                mesh.Append(piece)
+            mesh.Compact()
+            return mesh
+    except Exception:
+        pass
+    try:
+        if isinstance(geometry, rg.Extrusion):
+            return mesh_from_geometry(geometry.ToBrep())
+    except Exception:
+        pass
+    return None
+
+
+def resolve_mesh(value):
+    raw = first_value(value)
+    raw_type = type_name(raw)
+    mesh = mesh_from_geometry(raw)
+    if mesh is not None:
+        return mesh, raw_type
+    try:
+        import System
+        import Rhino
+        if isinstance(raw, System.Guid) and Rhino.RhinoDoc.ActiveDoc is not None:
+            obj = Rhino.RhinoDoc.ActiveDoc.Objects.FindId(raw)
+            if obj is not None:
+                return mesh_from_geometry(obj.Geometry), "Guid->{0}".format(type_name(obj.Geometry))
+    except Exception:
+        pass
+    try:
+        if hasattr(raw, "Geometry"):
+            geom = raw.Geometry
+            return mesh_from_geometry(geom), "{0}->Geometry:{1}".format(raw_type, type_name(geom))
+    except Exception:
+        pass
+    return None, raw_type
 
 
 def as_float(value, default_value):
@@ -425,6 +513,7 @@ def edge_crossing(model, a, b, yaw_deg):
 def stl_intersection_curves(model, mesh, yaw_deg, max_faces=12000, max_curves=3000):
     curves = []
     stats = {
+        "input_type": type_name(first_value(mesh)),
         "face_count": 0,
         "step": 0,
         "sampled_faces": 0,
@@ -433,7 +522,8 @@ def stl_intersection_curves(model, mesh, yaw_deg, max_faces=12000, max_curves=30
         "crossing_faces": 0,
         "truncated": False,
     }
-    mesh = first_value(mesh)
+    mesh, input_type = resolve_mesh(mesh)
+    stats["input_type"] = input_type
     if mesh is None or not hasattr(mesh, "Faces"):
         return curves, stats
     face_count = mesh.Faces.Count
@@ -495,7 +585,7 @@ else:
     yaw_value = as_float(gh_value("yaw", 360.0), 360.0)
     make_ws = as_bool(gh_value("makeWorkspace", True), True)
     show_x = as_bool(gh_value("showIntersection", False), False)
-    mesh_input = first_value(gh_value("stlMesh", None))
+    mesh_input = gh_value("stlMesh", None)
 
     inside, message, invalidPoints = check_box(model, x_value, y_value, z_value, l_value, w_value, h_value, yaw_value)
     workspaceMesh = make_workspace_mesh(model, yaw_value) if make_ws else None
@@ -507,7 +597,8 @@ else:
         stlStats = {}
     stl_debug = ""
     if stlStats:
-        stl_debug = ", STL faces: {0}, sampled: {1}, step: {2}, crossing faces: {3}, inside verts: {4}, outside verts: {5}{6}".format(
+        stl_debug = ", mesh input type: {0}, STL faces: {1}, sampled: {2}, step: {3}, crossing faces: {4}, inside verts: {5}, outside verts: {6}{7}".format(
+            stlStats.get("input_type", "None"),
             stlStats.get("face_count", 0),
             stlStats.get("sampled_faces", 0),
             stlStats.get("step", 0),
