@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-S运动范围判定 V1.8 · 2026-07-16 · ©Ming Xia</title>
+  <title>SP-S运动范围判定 V1.9 · 2026-07-16 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = "camada";</script>
   <style>
     :root {
@@ -1663,7 +1663,7 @@
     <aside>
       <header>
         <h1>SP-S运动范围判定</h1>
-        <p class="subtitle">V1.8 · 2026-07-16 · ©Ming Xia</p>
+        <p class="subtitle">V1.9 · 2026-07-16 · ©Ming Xia</p>
       </header>
 
       <section class="section" hidden>
@@ -1773,11 +1773,11 @@
       </div>
       <div class="hud">
         <div class="chip"><strong>拖拽旋转，滚轮缩放</strong>透明体表示机械臂实测截面运动包络。</div>
-        <div id="status" class="status">
+        <div id="status" class="status box-hud">
           <i class="dot"></i>
           <span>长方体完全位于可达空间内。</span>
         </div>
-        <div class="chip size-chip">
+        <div class="chip size-chip box-hud">
           <strong>尺寸</strong>
           <div class="metrics">
             <div class="metric"><b id="mL">280</b><span>长度 mm</span></div>
@@ -1785,7 +1785,7 @@
             <div class="metric"><b id="mH">260</b><span>高度 mm</span></div>
           </div>
         </div>
-        <div class="chip"><strong id="volumeLabel">体积 26.2 L</strong><span id="cornerLabel">8 个角点均在范围内</span></div>
+        <div class="chip box-hud"><strong id="volumeLabel">体积 26.2 L</strong><span id="cornerLabel">8 个角点均在范围内</span></div>
       </div>
       <div class="scene-copyright">©Ming Xia</div>
     </main>
@@ -1809,6 +1809,7 @@
     const canvas = document.getElementById("scene");
     const status = document.getElementById("status");
     const statusText = status.querySelector("span");
+    const boxHudItems = [...document.querySelectorAll(".box-hud")];
     const metrics = { l: document.getElementById("mL"), w: document.getElementById("mW"), h: document.getElementById("mH") };
     const volumeLabel = document.getElementById("volumeLabel");
     const cornerLabel = document.getElementById("cornerLabel");
@@ -2740,6 +2741,7 @@
       if (boxMesh) boxMesh.visible = boxVisible;
       if (boxEdges) boxEdges.visible = boxVisible;
       dimensionGroup.visible = boxVisible;
+      boxHudItems.forEach((item) => { item.hidden = !boxVisible; });
     }
 
     function makeLabel(text, options = {}) {
