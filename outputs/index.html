@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>GL-3DPRT运动范围判定工具 V1.3 · 2026-07-16 · ©Ming Xia</title>
+  <title>GL-3DPRT运动范围判定工具 V1.4 · 2026-07-16 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = localStorage.getItem("gl3dprt-theme") || "dark";</script>
   <style>
     :root {
@@ -114,6 +114,20 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.09), 0 1px 2px -1px rgba(0,0,0,0.09);
     }
 
+    .home-sidebar {
+      display: none;
+    }
+
+    .home-content {
+      display: contents;
+    }
+
+    .nav-group,
+    .nav-link,
+    .account-card {
+      display: none;
+    }
+
     html[data-theme="camada"] h1,
     html[data-theme="camada"] strong,
     html[data-theme="camada"] span,
@@ -135,6 +149,162 @@
       border-color: var(--accent);
       background: var(--accent);
       color: var(--button-ink);
+    }
+
+    html[data-theme="camada"] body {
+      display: block;
+      background: #f4f4f4;
+    }
+
+    html[data-theme="camada"] main {
+      width: 100%;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 272px minmax(0, 1fr);
+      border: 0;
+      padding: 0;
+      background: #fff;
+      box-shadow: none;
+    }
+
+    html[data-theme="camada"] .home-sidebar {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      border-right: 1px solid var(--line);
+      padding: 28px 24px;
+      background: #f7f7f7;
+      color: var(--white);
+    }
+
+    html[data-theme="camada"] .home-content {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(64px, 8vw, 112px);
+      background: #fff;
+    }
+
+    html[data-theme="camada"] .account-card {
+      display: grid;
+      gap: 4px;
+    }
+
+    html[data-theme="camada"] .account-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 8px;
+      background: #383838;
+      color: #f5f5f5;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    html[data-theme="camada"] .account-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #383838;
+    }
+
+    html[data-theme="camada"] .account-meta {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    html[data-theme="camada"] .nav-group {
+      display: grid;
+      gap: 10px;
+    }
+
+    html[data-theme="camada"] .nav-title {
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    html[data-theme="camada"] .nav-link {
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #383838;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    html[data-theme="camada"] .nav-dot {
+      width: 15px;
+      color: #383838;
+      text-align: center;
+    }
+
+    html[data-theme="camada"] .theme-toggle {
+      top: 28px;
+      right: 28px;
+    }
+
+    html[data-theme="camada"] .eyebrow {
+      margin-bottom: 20px;
+      color: #767676;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    html[data-theme="camada"] h1 {
+      max-width: 940px;
+      font-size: clamp(34px, 4.1vw, 56px);
+      line-height: 1.08;
+      color: #383838;
+    }
+
+    html[data-theme="camada"] p {
+      max-width: 620px;
+      margin-top: 24px;
+      font-size: clamp(16px, 1.45vw, 20px);
+      line-height: 1.55;
+    }
+
+    html[data-theme="camada"] .device-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(220px, 320px));
+      gap: 16px;
+      margin-top: 46px;
+    }
+
+    html[data-theme="camada"] a {
+      min-height: 156px;
+      align-items: flex-start;
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.09), 0 1px 2px -1px rgba(0,0,0,0.09);
+    }
+
+    html[data-theme="camada"] strong {
+      font-size: 34px;
+      color: inherit;
+    }
+
+    html[data-theme="camada"] span {
+      color: inherit;
+      font-size: 12px;
+    }
+
+    html[data-theme="camada"] .meta {
+      margin-top: 26px;
+      font-size: 12px;
+    }
+
+    html[data-theme="camada"] footer {
+      position: absolute;
+      left: auto;
+      right: 72px;
+      bottom: 28px;
+      text-align: right;
     }
 
     .eyebrow {
@@ -276,37 +446,88 @@
         position: static;
         margin-top: 44px;
       }
+
+      html[data-theme="camada"] main {
+        display: block;
+      }
+
+      html[data-theme="camada"] .home-sidebar {
+        min-height: auto;
+        gap: 18px;
+        padding: 22px 24px;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      html[data-theme="camada"] .home-content {
+        min-height: auto;
+        padding: 32px 24px 46px;
+      }
+
+      html[data-theme="camada"] .theme-toggle {
+        position: static;
+        margin-bottom: 34px;
+      }
+
+      html[data-theme="camada"] .device-actions {
+        grid-template-columns: 1fr;
+      }
+
+      html[data-theme="camada"] footer {
+        position: static;
+        text-align: left;
+      }
     }
   </style>
 </head>
 <body>
   <main>
-    <div class="theme-toggle" aria-label="主题切换">
-      <button type="button" data-theme-choice="dark">深色</button>
-      <button type="button" data-theme-choice="light">亮色</button>
-      <button type="button" data-theme-choice="camada">Camada</button>
-    </div>
-    <div class="eyebrow">Motion Range Workspace</div>
-    <h1>GL-3DPRT运动范围判定工具</h1>
-    <p>选择设备型号，进入对应的打印范围判定工具。</p>
+    <aside class="home-sidebar" aria-label="Camada 风格导航">
+      <div class="account-card">
+        <div class="account-mark">SP</div>
+        <div class="account-name">SP-M / SP-S</div>
+        <div class="account-meta">motion workspace</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">Essentials</div>
+        <div class="nav-link"><span class="nav-dot">□</span>Library</div>
+        <div class="nav-link"><span class="nav-dot">◫</span>Range Checker</div>
+        <div class="nav-link"><span class="nav-dot">▦</span>Docs</div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-title">Devices</div>
+        <div class="nav-link"><span class="nav-dot">01</span>SP-M</div>
+        <div class="nav-link"><span class="nav-dot">02</span>SP-S</div>
+      </div>
+    </aside>
+    <section class="home-content">
+      <div class="theme-toggle" aria-label="主题切换">
+        <button type="button" data-theme-choice="dark">深色</button>
+        <button type="button" data-theme-choice="light">亮色</button>
+        <button type="button" data-theme-choice="camada">Camada</button>
+      </div>
+      <div class="eyebrow">Motion Range Workspace</div>
+      <h1>GL-3DPRT运动范围判定工具</h1>
+      <p>选择设备型号，进入对应的打印范围判定工具。</p>
 
-    <nav class="device-actions" aria-label="设备选择">
-      <a href="GL-3DPRT-SP-M.html">
-        <strong>SP-M</strong>
-        <span>GL-3DPRT-SP-M</span>
-      </a>
-      <a href="GL-3DPRT-SP-S.html">
-        <strong>SP-S</strong>
-        <span>GL-3DPRT-SP-S</span>
-      </a>
-    </nav>
+      <nav class="device-actions" aria-label="设备选择">
+        <a href="GL-3DPRT-SP-M.html">
+          <strong>SP-M</strong>
+          <span>GL-3DPRT-SP-M</span>
+        </a>
+        <a href="GL-3DPRT-SP-S.html">
+          <strong>SP-S</strong>
+          <span>GL-3DPRT-SP-S</span>
+        </a>
+      </nav>
 
-    <div class="meta">
-      <span>V1.3 · 2026-07-16 · ©Ming Xia</span>
-      <span>SP-M / SP-S</span>
-    </div>
+      <div class="meta">
+        <span>V1.4 · 2026-07-16 · ©Ming Xia</span>
+        <span>SP-M / SP-S</span>
+      </div>
 
-    <footer>©Ming Xia</footer>
+      <footer>©Ming Xia</footer>
+    </section>
   </main>
   <script>
     const themeButtons = [...document.querySelectorAll("[data-theme-choice]")];
