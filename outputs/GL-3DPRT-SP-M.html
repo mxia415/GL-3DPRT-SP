@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-M运动范围判定 V1.2 · 2026-07-03 · ©Ming Xia</title>
+  <title>SP-M运动范围判定 V1.3 · 2026-07-16 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = localStorage.getItem("gl3dprt-theme") || "dark";</script>
   <style>
     :root {
@@ -1170,6 +1170,146 @@
       color: rgba(33,25,34,0.64);
     }
 
+    html[data-theme="camada"] {
+      color-scheme: light;
+      --bg: #f4f4f4;
+      --panel: #ffffff;
+      --panel-2: #ffffff;
+      --panel-3: #f8f8f8;
+      --ink: #383838;
+      --muted: #767676;
+      --body: #4b4b4b;
+      --body-strong: #262626;
+      --line: #e5e5e5;
+      --accent: #383838;
+      --accent-2: #202020;
+      --blue: #383838;
+      --warn: #6f6f6f;
+      --bad: #8a2f2f;
+      --shadow: 0 1px 3px rgba(0,0,0,0.09), 0 1px 2px -1px rgba(0,0,0,0.09);
+    }
+
+    html[data-theme="camada"] body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    html[data-theme="camada"] .app {
+      background: #ffffff;
+    }
+
+    html[data-theme="camada"] aside {
+      border-right-color: var(--line);
+      background: #f7f7f7;
+    }
+
+    html[data-theme="camada"] header {
+      border-bottom-color: var(--line);
+    }
+
+    html[data-theme="camada"] h1,
+    html[data-theme="camada"] .section-title,
+    html[data-theme="camada"] label,
+    html[data-theme="camada"] .metric b,
+    html[data-theme="camada"] .status,
+    html[data-theme="camada"] .chip strong,
+    html[data-theme="camada"] .view-title {
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    html[data-theme="camada"] .subtitle,
+    html[data-theme="camada"] label span,
+    html[data-theme="camada"] .metric span,
+    html[data-theme="camada"] .stl-name,
+    html[data-theme="camada"] .chip,
+    html[data-theme="camada"] .stl-control {
+      color: var(--muted);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    html[data-theme="camada"] .section,
+    html[data-theme="camada"] .status,
+    html[data-theme="camada"] .view-controls,
+    html[data-theme="camada"] .chip {
+      border-color: var(--line);
+      border-radius: 0;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    html[data-theme="camada"] input[type="number"],
+    html[data-theme="camada"] select,
+    html[data-theme="camada"] .value-pill,
+    html[data-theme="camada"] .metric,
+    html[data-theme="camada"] .inline-fit,
+    html[data-theme="camada"] .view-buttons,
+    html[data-theme="camada"] .theme-toggle {
+      border-color: var(--line);
+      border-radius: 0;
+      background: var(--panel-2);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    html[data-theme="camada"] button,
+    html[data-theme="camada"] .file-button {
+      border-color: var(--line);
+      border-radius: 0;
+      background: var(--panel-2);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    html[data-theme="camada"] button.primary,
+    html[data-theme="camada"] .inline-fit.active,
+    html[data-theme="camada"] .theme-toggle button.is-active,
+    html[data-theme="camada"] .fit-actions #toggleModel,
+    html[data-theme="camada"] .fit-actions #toggleBox {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #f5f5f5;
+    }
+
+    html[data-theme="camada"] button:hover,
+    html[data-theme="camada"] .file-button:hover {
+      background: #eeeeee;
+      color: var(--ink);
+    }
+
+    html[data-theme="camada"] main {
+      background: #ffffff;
+    }
+
+    html[data-theme="camada"] input[type="range"] {
+      accent-color: var(--accent);
+    }
+
+    html[data-theme="camada"] input[type="range"]::-webkit-slider-runnable-track {
+      background: #e5e5e5;
+    }
+
+    html[data-theme="camada"] input[type="range"]::-webkit-slider-thumb {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    html[data-theme="camada"] .dot {
+      background: var(--accent);
+    }
+
+    html[data-theme="camada"] .scene-copyright {
+      color: rgba(56,56,56,0.58);
+    }
+
     @media (max-width: 1060px) {
       .app {
         grid-template-columns: minmax(360px, 420px) minmax(0, 1fr);
@@ -1223,10 +1363,11 @@
     <aside>
       <header>
         <h1>SP-M运动范围判定</h1>
-        <p class="subtitle">V1.2 · 2026-07-03 · ©Ming Xia</p>
+        <p class="subtitle">V1.3 · 2026-07-16 · ©Ming Xia</p>
         <div class="theme-toggle" aria-label="主题切换">
           <button type="button" data-theme-choice="dark">深色</button>
           <button type="button" data-theme-choice="light">亮色</button>
+          <button type="button" data-theme-choice="camada">Camada</button>
         </div>
       </header>
 
@@ -1415,6 +1556,20 @@
         dimension: 0x211922,
         reference: 0x617bff,
         intersection: 0xe60023
+      },
+      camada: {
+        scene: 0xffffff,
+        gridCenter: 0xb8dfae,
+        gridLine: 0xe3f3de,
+        hemiGround: 0xffffff,
+        workspace: 0xc4d8d4,
+        workspaceEdge: 0x8fb0aa,
+        box: 0xff1616,
+        boxBad: 0x8a2f2f,
+        boxEdge: 0x383838,
+        dimension: 0x383838,
+        reference: 0xd8d8d8,
+        intersection: 0xff1616
       }
     };
 
@@ -1429,7 +1584,7 @@
     }
 
     function applyTheme(theme, persist = false) {
-      const safeTheme = theme === "light" ? "light" : "dark";
+      const safeTheme = ["dark", "light", "camada"].includes(theme) ? theme : "dark";
       document.documentElement.dataset.theme = safeTheme;
       if (persist) localStorage.setItem("gl3dprt-theme", safeTheme);
       themeButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.themeChoice === safeTheme));
