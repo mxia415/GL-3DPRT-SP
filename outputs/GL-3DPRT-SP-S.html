@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-S运动范围判定 V1.6 · 2026-07-16 · ©Ming Xia</title>
+  <title>SP-S运动范围判定 V1.7 · 2026-07-16 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = "camada";</script>
   <style>
     :root {
@@ -1279,6 +1279,13 @@
       padding: 10px;
     }
 
+    html[data-theme="camada"] .box-section {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
     html[data-theme="camada"] .section-title {
       margin-bottom: 8px;
       font-size: 14px;
@@ -1393,7 +1400,8 @@
 
     html[data-theme="camada"] .fit-actions {
       gap: 5px;
-      margin-top: 6px;
+      margin-top: auto;
+      padding-top: 10px;
     }
 
     html[data-theme="camada"] .fit-actions button {
@@ -1417,7 +1425,7 @@
       bottom: 44px;
       left: auto;
       transform: none;
-      width: 118px;
+      width: 134px;
       height: 112px;
       padding: 0;
       border: 0;
@@ -1475,7 +1483,7 @@
     }
 
     html[data-theme="camada"] .view-controls button[data-view="right"] {
-      left: 98px;
+      left: 94px;
       bottom: 30px;
     }
 
@@ -1491,7 +1499,7 @@
     html[data-theme="camada"] .view-buttons::before {
       left: 73px;
       bottom: 42px;
-      width: 38px;
+      width: 34px;
       height: 3px;
     }
 
@@ -1655,7 +1663,7 @@
     <aside>
       <header>
         <h1>SP-S运动范围判定</h1>
-        <p class="subtitle">V1.6 · 2026-07-16 · ©Ming Xia</p>
+        <p class="subtitle">V1.7 · 2026-07-16 · ©Ming Xia</p>
       </header>
 
       <section class="section" hidden>
@@ -1708,7 +1716,7 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section box-section">
         <div class="section-title">内接长方体</div>
         <div class="field">
           <label>X 向位置 <span>固定在 X=0 对称放置</span></label>
