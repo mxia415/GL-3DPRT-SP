@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="camada">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-S运动范围判定 V1.4 · 2026-07-16 · ©Ming Xia</title>
-  <script>document.documentElement.dataset.theme = localStorage.getItem("gl3dprt-theme") || "dark";</script>
+  <title>SP-S运动范围判定 V1.5 · 2026-07-16 · ©Ming Xia</title>
+  <script>document.documentElement.dataset.theme = "camada";</script>
   <style>
     :root {
       color-scheme: dark;
@@ -25,6 +25,8 @@
     }
 
     * { box-sizing: border-box; }
+
+    [hidden] { display: none !important; }
 
     body {
       margin: 0;
@@ -1197,32 +1199,33 @@
     }
 
     html[data-theme="camada"] .app {
-      grid-template-columns: 336px minmax(0, 1fr);
+      grid-template-columns: 292px minmax(0, 1fr);
       background: #ffffff;
     }
 
     html[data-theme="camada"] aside {
-      gap: 10px;
-      padding: 22px 18px;
+      gap: 7px;
+      overflow: hidden;
+      padding: 14px 12px;
       border-right-color: var(--line);
       background: #f7f7f7;
     }
 
     html[data-theme="camada"] header {
       display: block;
-      padding-bottom: 18px;
+      padding-bottom: 12px;
       border-bottom-color: var(--line);
     }
 
     html[data-theme="camada"] h1 {
-      font-size: 24px;
+      font-size: 22px;
       line-height: 1.15;
       white-space: normal;
     }
 
     html[data-theme="camada"] .subtitle {
-      margin-top: 8px;
-      font-size: 12px;
+      margin-top: 6px;
+      font-size: 11px;
     }
 
     html[data-theme="camada"] .theme-toggle {
@@ -1273,32 +1276,32 @@
     }
 
     html[data-theme="camada"] .section {
-      padding: 14px;
+      padding: 10px;
     }
 
     html[data-theme="camada"] .section-title {
-      margin-bottom: 12px;
-      font-size: 16px;
+      margin-bottom: 8px;
+      font-size: 14px;
     }
 
     html[data-theme="camada"] .field {
-      grid-template-columns: minmax(0, 1fr) 96px;
-      gap: 6px 8px;
-      margin: 5px 0 8px;
+      grid-template-columns: minmax(0, 1fr) 84px;
+      gap: 5px 8px;
+      margin: 3px 0 5px;
     }
 
     html[data-theme="camada"] .field.fit-field {
-      grid-template-columns: minmax(0, 1fr) 104px;
-      row-gap: 8px;
+      grid-template-columns: minmax(0, 1fr) 92px;
+      row-gap: 5px;
     }
 
     html[data-theme="camada"] label {
-      font-size: 12px;
+      font-size: 11.5px;
       line-height: 1.2;
     }
 
     html[data-theme="camada"] label span {
-      font-size: 11px;
+      font-size: 10px;
     }
 
     html[data-theme="camada"] input[type="number"],
@@ -1319,14 +1322,14 @@
     html[data-theme="camada"] input[type="number"],
     html[data-theme="camada"] select,
     html[data-theme="camada"] .value-pill {
-      width: 96px;
-      height: 32px;
-      font-size: 14px;
+      width: 84px;
+      height: 27px;
+      font-size: 13px;
     }
 
     html[data-theme="camada"] .field.fit-field input[type="number"] {
-      width: 104px;
-      font-size: 16px;
+      width: 92px;
+      font-size: 14px;
     }
 
     html[data-theme="camada"] button,
@@ -1338,6 +1341,8 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       letter-spacing: 0;
       text-transform: none;
+      min-height: 30px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
     }
 
     html[data-theme="camada"] button.primary,
@@ -1348,6 +1353,52 @@
       border-color: var(--accent);
       background: var(--accent);
       color: #f5f5f5;
+    }
+
+    html[data-theme="camada"] .stl-actions {
+      gap: 5px;
+    }
+
+    html[data-theme="camada"] .stl-actions .file-button,
+    html[data-theme="camada"] .stl-actions #toggleStlIntersection {
+      min-height: 32px;
+    }
+
+    html[data-theme="camada"] .stl-name {
+      margin-top: 5px;
+      font-size: 10.5px;
+      line-height: 1.2;
+    }
+
+    html[data-theme="camada"] .stl-controls {
+      gap: 5px;
+      margin-top: 6px;
+    }
+
+    html[data-theme="camada"] .stl-control {
+      gap: 3px;
+      font-size: 10px;
+    }
+
+    html[data-theme="camada"] .stl-control input[type="number"] {
+      height: 26px;
+      font-size: 12px;
+    }
+
+    html[data-theme="camada"] .inline-fit {
+      min-height: 28px;
+      padding: 0 8px;
+      font-size: 10.5px;
+    }
+
+    html[data-theme="camada"] .fit-actions {
+      gap: 5px;
+      margin-top: 6px;
+    }
+
+    html[data-theme="camada"] .fit-actions button {
+      min-height: 30px;
+      font-size: 11px;
     }
 
     html[data-theme="camada"] button:hover,
@@ -1362,30 +1413,92 @@
 
     html[data-theme="camada"] .view-controls {
       top: auto;
-      right: auto;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      gap: 14px;
-      padding: 8px 12px;
+      right: 24px;
+      bottom: 44px;
+      left: auto;
+      transform: none;
+      width: 112px;
+      height: 92px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     html[data-theme="camada"] .view-title {
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: none;
-      letter-spacing: 0;
+      display: none;
     }
 
     html[data-theme="camada"] .view-buttons {
-      border-radius: 0;
-      background: #fff;
+      position: absolute;
+      inset: 0;
+      border: 0;
+      background: transparent;
     }
 
     html[data-theme="camada"] .view-controls button,
     html[data-theme="camada"] .view-controls button:first-child,
     html[data-theme="camada"] .view-controls button:last-child {
-      border-radius: 0;
+      position: absolute;
+      width: 28px;
+      min-width: 28px;
+      height: 28px;
+      min-height: 28px;
+      border: 0;
+      border-radius: 50%;
+      padding: 0;
+      background: #111;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 28px;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.16);
+    }
+
+    html[data-theme="camada"] .view-controls button[data-view="default"] {
+      left: 14px;
+      bottom: 6px;
+      background: #777;
+      color: transparent;
+    }
+
+    html[data-theme="camada"] .view-controls button[data-view="front"] {
+      left: 58px;
+      bottom: 6px;
+    }
+
+    html[data-theme="camada"] .view-controls button[data-view="top"] {
+      left: 58px;
+      bottom: 46px;
+    }
+
+    html[data-theme="camada"] .view-controls button[data-view="right"] {
+      right: 0;
+      bottom: 6px;
+    }
+
+    html[data-theme="camada"] .view-buttons::before,
+    html[data-theme="camada"] .view-buttons::after {
+      position: absolute;
+      display: block;
+      background: #111;
+      content: "";
+      transform-origin: center;
+    }
+
+    html[data-theme="camada"] .view-buttons::before {
+      left: 71px;
+      bottom: 18px;
+      width: 42px;
+      height: 3px;
+    }
+
+    html[data-theme="camada"] .view-buttons::after {
+      left: 70px;
+      bottom: 18px;
+      width: 3px;
+      height: 56px;
     }
 
     html[data-theme="camada"] .hud {
@@ -1400,6 +1513,37 @@
     html[data-theme="camada"] .chip {
       max-width: 330px;
       background: rgba(255,255,255,0.94);
+    }
+
+    html[data-theme="camada"] .hud .status {
+      min-height: 0;
+      max-width: 330px;
+      padding: 9px 10px;
+      background: rgba(255,255,255,0.94);
+    }
+
+    html[data-theme="camada"] .size-chip {
+      min-width: 260px;
+    }
+
+    html[data-theme="camada"] .size-chip .metrics {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    html[data-theme="camada"] .size-chip .metric {
+      border: 0;
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    html[data-theme="camada"] .size-chip .metric b {
+      display: block;
+      color: #383838;
+      font-size: 18px;
+      line-height: 1.1;
     }
 
     html[data-theme="camada"] input[type="range"] {
@@ -1420,6 +1564,10 @@
     }
 
     html[data-theme="camada"] .scene-copyright {
+      left: auto;
+      right: 24px;
+      bottom: 18px;
+      transform: none;
       color: rgba(56,56,56,0.58);
     }
 
@@ -1473,9 +1621,10 @@
       }
 
       html[data-theme="camada"] .view-controls {
-        width: calc(100vw - 24px);
-        max-width: 360px;
-        bottom: 12px;
+        width: 104px;
+        height: 88px;
+        right: 12px;
+        bottom: 40px;
       }
 
       .field,
@@ -1496,12 +1645,7 @@
     <aside>
       <header>
         <h1>SP-S运动范围判定</h1>
-        <p class="subtitle">V1.4 · 2026-07-16 · ©Ming Xia</p>
-        <div class="theme-toggle" aria-label="主题切换">
-          <button type="button" data-theme-choice="dark">深色</button>
-          <button type="button" data-theme-choice="light">亮色</button>
-          <button type="button" data-theme-choice="camada">Camada</button>
-        </div>
+        <p class="subtitle">V1.5 · 2026-07-16 · ©Ming Xia</p>
       </header>
 
       <section class="section" hidden>
@@ -1596,19 +1740,6 @@
         </div>
       </section>
 
-      <section class="section">
-        <div class="section-title">尺寸</div>
-        <div class="metrics">
-          <div class="metric"><b id="mL">280</b><span>长度 mm</span></div>
-          <div class="metric"><b id="mW">360</b><span>宽度 mm</span></div>
-          <div class="metric"><b id="mH">260</b><span>高度 mm</span></div>
-        </div>
-      </section>
-
-      <div id="status" class="status">
-        <i class="dot"></i>
-        <span>长方体完全位于可达空间内。</span>
-      </div>
     </aside>
 
     <main>
@@ -1616,14 +1747,26 @@
       <div class="view-controls" aria-label="视角控制">
         <div class="view-title">视图</div>
         <div class="view-buttons">
-          <button data-view="default">默认</button>
-          <button data-view="front">前</button>
-          <button data-view="top">上</button>
-          <button data-view="right">右</button>
+          <button data-view="default" title="默认视角">·</button>
+          <button data-view="front" title="前视图">Y</button>
+          <button data-view="top" title="上视图">Z</button>
+          <button data-view="right" title="右视图">X</button>
         </div>
       </div>
       <div class="hud">
         <div class="chip"><strong>拖拽旋转，滚轮缩放</strong>透明体表示机械臂实测截面运动包络。</div>
+        <div id="status" class="status">
+          <i class="dot"></i>
+          <span>长方体完全位于可达空间内。</span>
+        </div>
+        <div class="chip size-chip">
+          <strong>尺寸</strong>
+          <div class="metrics">
+            <div class="metric"><b id="mL">280</b><span>长度 mm</span></div>
+            <div class="metric"><b id="mW">360</b><span>宽度 mm</span></div>
+            <div class="metric"><b id="mH">260</b><span>高度 mm</span></div>
+          </div>
+        </div>
         <div class="chip"><strong id="volumeLabel">体积 26.2 L</strong><span id="cornerLabel">8 个角点均在范围内</span></div>
       </div>
       <div class="scene-copyright">©Ming Xia</div>
@@ -1660,7 +1803,6 @@
     const stlInputs = Object.fromEntries([...document.querySelectorAll("[data-stl]")].map((el) => [el.dataset.stl, el]));
 
 
-    const themeButtons = [...document.querySelectorAll("[data-theme-choice]")];
     const themePalettes = {
       dark: {
         scene: 0x000000,
@@ -1716,11 +1858,9 @@
       material.needsUpdate = true;
     }
 
-    function applyTheme(theme, persist = false) {
+    function applyTheme(theme) {
       const safeTheme = ["dark", "light", "camada"].includes(theme) ? theme : "dark";
       document.documentElement.dataset.theme = safeTheme;
-      if (persist) localStorage.setItem("gl3dprt-theme", safeTheme);
-      themeButtons.forEach((button) => button.classList.toggle("is-active", button.dataset.themeChoice === safeTheme));
       const palette = themePalettes[safeTheme];
       scene.background = new THREE.Color(palette.scene);
       setMaterialColor(grid.material, palette.gridLine);
@@ -1735,10 +1875,6 @@
       referenceModelMaterial.color.setHex(palette.reference);
       stlIntersectionMaterial.color.setHex(palette.intersection);
     }
-
-    themeButtons.forEach((button) => {
-      button.addEventListener("click", () => applyTheme(button.dataset.themeChoice, true));
-    });
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -2516,6 +2652,7 @@
     function drawDimensions(v) {
       dimensionGroup.clear();
       dimensionGroup.visible = boxVisible;
+      const isCamadaTheme = document.documentElement.dataset.theme === "camada";
       const x0 = v.boxX - v.boxL / 2;
       const x1 = v.boxX + v.boxL / 2;
       const yBounds = boxYBounds(v);
@@ -2523,33 +2660,60 @@
       const y1 = yBounds.max;
       const z0 = v.baseZ;
       const z1 = v.baseZ + v.boxH;
-      const pad = 44;
+      const pad = isCamadaTheme ? Math.max(180, Math.min(v.boxL, v.boxW, v.boxH) * 0.16) : 44;
+      const lLabelOffset = isCamadaTheme ? new THREE.Vector3(0, -780, 0) : new THREE.Vector3(0, -360, 0);
+      const wLabelOffset = isCamadaTheme ? new THREE.Vector3(820, 0, 0) : new THREE.Vector3(360, 0, 0);
+      const hLabelOffset = isCamadaTheme ? new THREE.Vector3(980, 860, 0) : new THREE.Vector3(420, 420, 0);
 
       addDimensionLine(
         new THREE.Vector3(x0, y0 - pad, z0),
         new THREE.Vector3(x1, y0 - pad, z0),
-        `L ${fmt(v.boxL)} mm`,
-        new THREE.Vector3(0, -360, 0)
+        isCamadaTheme ? `${fmt(v.boxL)} mm` : `L ${fmt(v.boxL)} mm`,
+        lLabelOffset
       );
       addDimensionLine(
         new THREE.Vector3(x1 + pad, y0, z0),
         new THREE.Vector3(x1 + pad, y1, z0),
-        `W ${fmt(v.boxW)} mm`,
-        new THREE.Vector3(360, 0, 0)
+        isCamadaTheme ? `${fmt(v.boxW)} mm` : `W ${fmt(v.boxW)} mm`,
+        wLabelOffset
       );
       addDimensionLine(
         new THREE.Vector3(x1 + pad, y1 + pad, z0),
         new THREE.Vector3(x1 + pad, y1 + pad, z1),
-        `H ${fmt(v.boxH)} mm`,
-        new THREE.Vector3(420, 420, 0)
+        isCamadaTheme ? `${fmt(v.boxH)} mm` : `H ${fmt(v.boxH)} mm`,
+        hLabelOffset
       );
     }
 
     function addDimensionLine(a, b, text, labelOffset = new THREE.Vector3()) {
-      dimensionGroup.add(cylinderBetween(a, b, 18, new THREE.MeshBasicMaterial({ color: 0xf7f5f0 })));
+      const isCamadaTheme = document.documentElement.dataset.theme === "camada";
+      const color = isCamadaTheme ? 0x383838 : 0xf7f5f0;
+      const radius = isCamadaTheme ? 5 : 18;
+      const material = new THREE.MeshBasicMaterial({ color });
+      dimensionGroup.add(cylinderBetween(a, b, radius, material));
+      if (isCamadaTheme) {
+        const delta = b.clone().sub(a);
+        const tickDir = Math.abs(delta.z) > Math.max(Math.abs(delta.x), Math.abs(delta.y))
+          ? new THREE.Vector3(1, 0, 0)
+          : new THREE.Vector3(0, 0, 1);
+        const tick = 190;
+        [a, b].forEach((point) => {
+          const t0 = point.clone().addScaledVector(tickDir, -tick / 2);
+          const t1 = point.clone().addScaledVector(tickDir, tick / 2);
+          dimensionGroup.add(cylinderBetween(t0, t1, 4, material));
+        });
+      }
 
       const mid = a.clone().add(b).multiplyScalar(0.5).add(labelOffset);
-      const label = makeLabel(text, { scaleX: 3136, scaleY: 882, fontSize: 120, background: 0, sizeAttenuation: true });
+      const label = makeLabel(text, {
+        scaleX: isCamadaTheme ? 0.22 : 3136,
+        scaleY: isCamadaTheme ? 0.055 : 882,
+        fontSize: isCamadaTheme ? 142 : 120,
+        background: 0,
+        textColor: isCamadaTheme ? "#000000" : "#f7f5f0",
+        fontWeight: isCamadaTheme ? 500 : 850,
+        sizeAttenuation: !isCamadaTheme
+      });
       label.position.copy(mid);
       dimensionGroup.add(label);
     }
@@ -2575,8 +2739,8 @@
         ctx.lineWidth = 5;
         ctx.stroke();
       }
-      ctx.fillStyle = "#f7f5f0";
-      ctx.font = `850 ${fontSize}px system-ui, sans-serif`;
+      ctx.fillStyle = options.textColor || "#f7f5f0";
+      ctx.font = `${options.fontWeight || 850} ${fontSize}px system-ui, sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(text, 512, 128);
