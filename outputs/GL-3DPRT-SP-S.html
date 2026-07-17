@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-S运动范围判定 V1.9 · 2026-07-16 · ©Ming Xia</title>
+  <title>SP-S运动范围判定 V2.0 · 2026-07-17 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = "camada";</script>
   <style>
     :root {
@@ -1214,7 +1214,22 @@
     html[data-theme="camada"] header {
       display: block;
       padding-bottom: 12px;
+      padding-right: 48px;
+      position: relative;
       border-bottom-color: var(--line);
+    }
+
+    html[data-theme="camada"] .language-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      min-width: 44px;
+      min-height: 28px;
+      padding: 0 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      font-size: 11px;
     }
 
     html[data-theme="camada"] h1 {
@@ -1309,6 +1324,14 @@
 
     html[data-theme="camada"] label span {
       font-size: 10px;
+    }
+
+    html[data-theme="camada"] label .label-main,
+    html[data-theme="camada"] .stl-control > span {
+      color: var(--ink);
+      font-size: inherit;
+      font-weight: inherit;
+      line-height: inherit;
     }
 
     html[data-theme="camada"] input[type="number"],
@@ -1662,12 +1685,13 @@
   <div class="app">
     <aside>
       <header>
-        <h1>SP-S运动范围判定</h1>
-        <p class="subtitle">V1.9 · 2026-07-16 · ©Ming Xia</p>
+        <h1 data-i18n="deviceTitle">SP-S运动范围判定</h1>
+        <p class="subtitle" data-i18n="version">V2.0 · 2026-07-17 · ©Ming Xia</p>
+        <button id="languageToggle" class="language-toggle" type="button" aria-label="切换语言">EN</button>
       </header>
 
       <section class="section" hidden>
-        <div class="section-title">实测范围</div>
+        <div class="section-title" data-i18n="measuredRange">实测范围</div>
         <div class="field">
           <label>空间模型 <span>外圆内、偏置内圆外 + R-Z 垂直截面</span></label>
           <div class="value-pill">实测截面</div>
@@ -1695,64 +1719,64 @@
       </section>
 
       <section class="section">
-        <div class="section-title">STL参考模型</div>
+        <div class="section-title" data-i18n="stlReference">STL参考模型</div>
         <div class="stl-actions">
-          <label class="file-button" for="stlFile">导入 STL 模型</label>
+          <label class="file-button" for="stlFile" data-i18n="importStl">导入 STL 模型</label>
           <input id="stlFile" type="file" accept=".stl,model/stl">
-          <button id="resetStl" type="button" disabled>重置参数</button>
-          <button id="clearStl" type="button" disabled>清除 STL</button>
-          <button id="toggleStlIntersection" type="button" disabled>显示交线</button>
+          <button id="resetStl" type="button" disabled data-i18n="resetParams">重置参数</button>
+          <button id="clearStl" type="button" disabled data-i18n="clearStl">清除 STL</button>
+          <button id="toggleStlIntersection" type="button" disabled data-i18n="showIntersections">显示交线</button>
         </div>
         <div id="stlName" class="stl-name">未导入 STL。仅作为参考显示，不参与判定。</div>
         <div id="stlControls" class="stl-controls" hidden>
-          <label class="stl-control">X位置<input data-stl="positionX" type="number" step="10" value="0"></label>
-          <label class="stl-control">Y位置<input data-stl="positionY" type="number" step="10" value="0"></label>
-          <label class="stl-control">Z位置<input data-stl="positionZ" type="number" step="10" value="0"></label>
-          <label class="stl-control">缩放<input data-stl="scale" type="number" min="0.001" step="0.1" value="1"></label>
-          <label class="stl-control">旋转X<input data-stl="rotationX" type="number" step="1" value="0"></label>
-          <label class="stl-control">旋转Y<input data-stl="rotationY" type="number" step="1" value="0"></label>
-          <label class="stl-control">旋转Z<input data-stl="rotationZ" type="number" step="1" value="0"></label>
-          <label class="stl-control">透明度<input data-stl="opacity" type="number" min="0.05" max="1" step="0.05" value="0.35"></label>
+          <label class="stl-control"><span data-i18n="xPosition">X位置</span><input data-stl="positionX" type="number" step="10" value="0"></label>
+          <label class="stl-control"><span data-i18n="yPosition">Y位置</span><input data-stl="positionY" type="number" step="10" value="0"></label>
+          <label class="stl-control"><span data-i18n="zPosition">Z位置</span><input data-stl="positionZ" type="number" step="10" value="0"></label>
+          <label class="stl-control"><span data-i18n="scale">缩放</span><input data-stl="scale" type="number" min="0.001" step="0.1" value="1"></label>
+          <label class="stl-control"><span data-i18n="rotationX">旋转X</span><input data-stl="rotationX" type="number" step="1" value="0"></label>
+          <label class="stl-control"><span data-i18n="rotationY">旋转Y</span><input data-stl="rotationY" type="number" step="1" value="0"></label>
+          <label class="stl-control"><span data-i18n="rotationZ">旋转Z</span><input data-stl="rotationZ" type="number" step="1" value="0"></label>
+          <label class="stl-control"><span data-i18n="opacity">透明度</span><input data-stl="opacity" type="number" min="0.05" max="1" step="0.05" value="0.35"></label>
         </div>
       </section>
 
       <section class="section box-section">
-        <div class="section-title">内接长方体</div>
+        <div class="section-title" data-i18n="boxTitle">内接长方体</div>
         <div class="field">
-          <label>X 向位置 <span>固定在 X=0 对称放置</span></label>
+          <label><span class="label-main" data-i18n="xLocation">X 向位置</span> <span data-i18n="xLocationHelp">固定在 X=0 对称放置</span></label>
           <input id="boxX" type="number" min="0" max="0" step="10" value="0" disabled>
           <input data-for="boxX" type="range" min="0" max="0" step="10" value="0" disabled>
         </div>
         <div class="field">
-          <label>Y 向内侧边位置 <span>正值向 +Y 展开，负值向 -Y 展开</span></label>
+          <label><span class="label-main" data-i18n="yLocation">Y 向内侧边位置</span> <span data-i18n="yLocationHelp">正值向 +Y 展开，负值向 -Y 展开</span></label>
           <input id="boxY" type="number" min="-10000" max="10000" step="10" value="3600">
           <input data-for="boxY" type="range" min="-10000" max="10000" step="10" value="3600">
         </div>
         <div class="field">
-          <label>底面高度 Z <span>固定为地面 Z=0，向上展开</span></label>
+          <label><span class="label-main" data-i18n="zLocation">底面高度 Z</span> <span data-i18n="zLocationHelp">固定为地面 Z=0，向上展开</span></label>
           <input id="boxZ" type="number" value="0" disabled>
         </div>
         <div class="field fit-field">
-          <label>长度 L <span>X 方向尺寸</span></label>
+          <label><span class="label-main" data-i18n="length">长度 L</span> <span data-i18n="lengthHelp">X 方向尺寸</span></label>
           <input id="boxL" type="number" min="10" max="12000" step="10" value="1200">
           <input data-for="boxL" type="range" min="10" max="12000" step="10" value="1200">
-          <button type="button" data-fit-mode="L" class="inline-fit active">固定L最大贴合</button>
+          <button type="button" data-fit-mode="L" class="inline-fit active" data-i18n="fitLength">固定L最大贴合</button>
         </div>
         <div class="field fit-field">
-          <label>宽度 W <span>Y 方向尺寸</span></label>
+          <label><span class="label-main" data-i18n="width">宽度 W</span> <span data-i18n="widthHelp">Y 方向尺寸</span></label>
           <input id="boxW" type="number" min="10" max="6000" step="10" value="1200">
           <input data-for="boxW" type="range" min="10" max="6000" step="10" value="1200">
-          <button type="button" data-fit-mode="W" class="inline-fit">固定W最大贴合</button>
+          <button type="button" data-fit-mode="W" class="inline-fit" data-i18n="fitWidth">固定W最大贴合</button>
         </div>
         <div class="field fit-field">
-          <label>高度 H <span>Z 方向尺寸</span></label>
+          <label><span class="label-main" data-i18n="height">高度 H</span> <span data-i18n="heightHelp">Z 方向尺寸</span></label>
           <input id="boxH" type="number" min="10" max="7400" step="10" value="1200">
           <input data-for="boxH" type="range" min="10" max="7400" step="10" value="1200">
-          <button type="button" data-fit-mode="H" class="inline-fit">固定H最大贴合</button>
+          <button type="button" data-fit-mode="H" class="inline-fit" data-i18n="fitHeight">固定H最大贴合</button>
         </div>
         <div class="fit-actions">
-          <button id="resetSize">重置尺寸</button>
-          <button id="reset">重置视图</button>
+          <button id="resetSize" data-i18n="resetSize">重置尺寸</button>
+          <button id="reset" data-i18n="resetView">重置视图</button>
           <button id="toggleBox">隐藏长方体</button>
           <button id="toggleModel">显示设备模型</button>
         </div>
@@ -1762,27 +1786,27 @@
 
     <main>
       <canvas id="scene"></canvas>
-      <div class="view-controls" aria-label="视角控制">
-        <div class="view-title">视图</div>
+      <div class="view-controls" data-i18n-aria-label="viewControls" aria-label="视角控制">
+        <div class="view-title" data-i18n="view">视图</div>
         <div class="view-buttons">
-          <button data-view="default" title="默认视角">·</button>
-          <button data-view="front" title="前视图">Y</button>
-          <button data-view="top" title="上视图">Z</button>
-          <button data-view="right" title="右视图">X</button>
+          <button data-view="default" data-i18n-title="defaultView" title="默认视角">·</button>
+          <button data-view="front" data-i18n-title="frontView" title="前视图">Y</button>
+          <button data-view="top" data-i18n-title="topView" title="上视图">Z</button>
+          <button data-view="right" data-i18n-title="rightView" title="右视图">X</button>
         </div>
       </div>
       <div class="hud">
-        <div class="chip"><strong>拖拽旋转，滚轮缩放</strong>透明体表示机械臂实测截面运动包络。</div>
+        <div class="chip"><strong data-i18n="interactionHelp">拖拽旋转，滚轮缩放</strong><span data-i18n="envelopeHelp">透明体表示机械臂实测截面运动包络。</span></div>
         <div id="status" class="status box-hud">
           <i class="dot"></i>
           <span>长方体完全位于可达空间内。</span>
         </div>
         <div class="chip size-chip box-hud">
-          <strong>尺寸</strong>
+          <strong data-i18n="size">尺寸</strong>
           <div class="metrics">
-            <div class="metric"><b id="mL">280</b><span>长度 mm</span></div>
-            <div class="metric"><b id="mW">360</b><span>宽度 mm</span></div>
-            <div class="metric"><b id="mH">260</b><span>高度 mm</span></div>
+            <div class="metric"><b id="mL">280</b><span data-i18n="lengthMm">长度 mm</span></div>
+            <div class="metric"><b id="mW">360</b><span data-i18n="widthMm">宽度 mm</span></div>
+            <div class="metric"><b id="mH">260</b><span data-i18n="heightMm">高度 mm</span></div>
           </div>
         </div>
         <div class="chip box-hud"><strong id="volumeLabel">体积 26.2 L</strong><span id="cornerLabel">8 个角点均在范围内</span></div>
@@ -1819,7 +1843,200 @@
     const resetStlButton = document.getElementById("resetStl");
     const clearStlButton = document.getElementById("clearStl");
     const toggleStlIntersectionButton = document.getElementById("toggleStlIntersection");
+    const languageToggle = document.getElementById("languageToggle");
+    const toggleBoxButton = document.getElementById("toggleBox");
+    const toggleModelButton = document.getElementById("toggleModel");
     const stlInputs = Object.fromEntries([...document.querySelectorAll("[data-stl]")].map((el) => [el.dataset.stl, el]));
+
+    const translations = {
+      zh: {
+        deviceTitle: "SP-S运动范围判定",
+        version: "V2.0 · 2026-07-17 · ©Ming Xia",
+        documentTitle: "SP-S运动范围判定 V2.0 · 2026-07-17 · ©Ming Xia",
+        measuredRange: "实测范围",
+        stlReference: "STL参考模型",
+        importStl: "导入 STL 模型",
+        resetParams: "重置参数",
+        clearStl: "清除 STL",
+        showIntersections: "显示交线",
+        hideIntersections: "隐藏交线",
+        stlEmpty: "未导入 STL。仅作为参考显示，不参与判定。",
+        stlSelect: "请选择 .stl 文件。",
+        stlImported: ({ name }) => `${name} 已导入。仅作为参考显示，不参与判定。`,
+        stlFailed: "STL 模型导入失败，请检查文件格式。",
+        stlNoIntersection: "未找到 STL 与运动范围边界的近似交线。",
+        stlIntersection: ({ count }) => `已显示 ${count} 段近似交线。仅作为参考显示，不参与判定。`,
+        xPosition: "X位置",
+        yPosition: "Y位置",
+        zPosition: "Z位置",
+        scale: "缩放",
+        rotationX: "旋转X",
+        rotationY: "旋转Y",
+        rotationZ: "旋转Z",
+        opacity: "透明度",
+        boxTitle: "内接长方体",
+        xLocation: "X 向位置",
+        xLocationHelp: "固定在 X=0 对称放置",
+        yLocation: "Y 向内侧边位置",
+        yLocationHelp: "正值向 +Y 展开，负值向 -Y 展开",
+        zLocation: "底面高度 Z",
+        zLocationHelp: "固定为地面 Z=0，向上展开",
+        length: "长度 L",
+        lengthHelp: "X 方向尺寸",
+        width: "宽度 W",
+        widthHelp: "Y 方向尺寸",
+        height: "高度 H",
+        heightHelp: "Z 方向尺寸",
+        fitLength: "固定L最大贴合",
+        fitWidth: "固定W最大贴合",
+        fitHeight: "固定H最大贴合",
+        resetSize: "重置尺寸",
+        resetView: "重置视图",
+        hideCuboid: "隐藏长方体",
+        showCuboid: "显示长方体",
+        showDeviceModel: "显示设备模型",
+        hideDeviceModel: "隐藏设备模型",
+        modelLoading: "设备模型加载中...",
+        modelLoadFailed: "设备模型加载失败，请稍后重试。",
+        viewControls: "视角控制",
+        view: "视图",
+        defaultView: "默认视角",
+        frontView: "前视图",
+        topView: "上视图",
+        rightView: "右视图",
+        interactionHelp: "拖拽旋转，滚轮缩放",
+        envelopeHelp: "透明体表示机械臂实测截面运动包络。",
+        size: "尺寸",
+        lengthMm: "长度 mm",
+        widthMm: "宽度 mm",
+        heightMm: "高度 mm",
+        statusInside: "长方体在范围内。",
+        statusForbidden: "长方体与内圆不可达区域相交。",
+        statusOutside: "长方体超出 R-Z 截面或 X-Y 可达区域。",
+        statusCorners: ({ count }) => `有 ${count} 个角点超出可达空间。`,
+        volume: ({ value }) => `体积 ${value} L`,
+        corners: ({ valid }) => `${valid} / 8 个角点在范围内`,
+        switchLanguage: "切换语言"
+      },
+      en: {
+        deviceTitle: "SP-S Motion Range Checker",
+        version: "V2.0 · 2026-07-17 · ©Ming Xia",
+        documentTitle: "SP-S Motion Range Checker V2.0 · 2026-07-17 · ©Ming Xia",
+        measuredRange: "Measured Range",
+        stlReference: "STL Reference Model",
+        importStl: "Import STL Model",
+        resetParams: "Reset Parameters",
+        clearStl: "Clear STL",
+        showIntersections: "Show Intersections",
+        hideIntersections: "Hide Intersections",
+        stlEmpty: "No STL imported. Reference display only; not used for checking.",
+        stlSelect: "Please choose an .stl file.",
+        stlImported: ({ name }) => `${name} imported. Reference display only; not used for checking.`,
+        stlFailed: "STL import failed. Please check the file format.",
+        stlNoIntersection: "No approximate intersection was found between the STL and the motion-range boundary.",
+        stlIntersection: ({ count }) => `${count} approximate intersection segments shown. Reference display only; not used for checking.`,
+        xPosition: "X Position",
+        yPosition: "Y Position",
+        zPosition: "Z Position",
+        scale: "Scale",
+        rotationX: "Rotate X",
+        rotationY: "Rotate Y",
+        rotationZ: "Rotate Z",
+        opacity: "Opacity",
+        boxTitle: "Inscribed Cuboid",
+        xLocation: "X Position",
+        xLocationHelp: "Fixed at X=0, centered symmetrically",
+        yLocation: "Y Inner Edge Position",
+        yLocationHelp: "Positive expands toward +Y; negative toward -Y",
+        zLocation: "Base Height Z",
+        zLocationHelp: "Fixed at ground Z=0, expands upward",
+        length: "Length L",
+        lengthHelp: "X direction size",
+        width: "Width W",
+        widthHelp: "Y direction size",
+        height: "Height H",
+        heightHelp: "Z direction size",
+        fitLength: "Fit Max with L Fixed",
+        fitWidth: "Fit Max with W Fixed",
+        fitHeight: "Fit Max with H Fixed",
+        resetSize: "Reset Size",
+        resetView: "Reset View",
+        hideCuboid: "Hide Cuboid",
+        showCuboid: "Show Cuboid",
+        showDeviceModel: "Show Device Model",
+        hideDeviceModel: "Hide Device Model",
+        modelLoading: "Loading Device Model...",
+        modelLoadFailed: "Device model failed to load. Please try again.",
+        viewControls: "View controls",
+        view: "View",
+        defaultView: "Default view",
+        frontView: "Front view",
+        topView: "Top view",
+        rightView: "Right view",
+        interactionHelp: "Drag to rotate; scroll to zoom",
+        envelopeHelp: "The translucent volume shows the measured mechanical-arm motion envelope.",
+        size: "Size",
+        lengthMm: "Length mm",
+        widthMm: "Width mm",
+        heightMm: "Height mm",
+        statusInside: "Cuboid is within range.",
+        statusForbidden: "Cuboid intersects the unreachable inner region.",
+        statusOutside: "Cuboid exceeds the R-Z section or X-Y reachable area.",
+        statusCorners: ({ count }) => `${count} corner${count === 1 ? "" : "s"} exceed the reachable space.`,
+        volume: ({ value }) => `Volume ${value} L`,
+        corners: ({ valid }) => `${valid} / 8 corners within range`,
+        switchLanguage: "Switch language"
+      }
+    };
+
+    let language = "zh";
+    try {
+      language = localStorage.getItem("gl3dprt-lang") === "en" ? "en" : "zh";
+    } catch (error) {
+      language = "zh";
+    }
+
+    function t(key, values = {}) {
+      const value = translations[language][key];
+      return typeof value === "function" ? value(values) : value;
+    }
+
+    function setStlStatus(key, values = {}) {
+      stlStatusKey = key;
+      stlStatusValues = values;
+      stlName.textContent = t(key, values);
+    }
+
+    function applyDeviceActionLabels() {
+      toggleBoxButton.textContent = boxVisible ? t("hideCuboid") : t("showCuboid");
+      toggleModelButton.textContent = referenceModelLoading
+        ? t("modelLoading")
+        : referenceModelVisible ? t("hideDeviceModel") : t("showDeviceModel");
+      toggleStlIntersectionButton.textContent = stlIntersectionVisible ? t("hideIntersections") : t("showIntersections");
+    }
+
+    function applyDeviceLanguage() {
+      document.documentElement.lang = language === "en" ? "en" : "zh-CN";
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        element.textContent = t(element.dataset.i18n);
+      });
+      document.querySelectorAll("[data-i18n-title]").forEach((element) => {
+        element.title = t(element.dataset.i18nTitle);
+      });
+      document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+        element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+      });
+      languageToggle.textContent = language === "en" ? "中文" : "EN";
+      languageToggle.setAttribute("aria-label", t("switchLanguage"));
+      document.title = t("documentTitle");
+      applyDeviceActionLabels();
+      setStlStatus(stlStatusKey, stlStatusValues);
+      updateLabels(values());
+      if (statusOverrideKey) {
+        statusText.textContent = t(statusOverrideKey, statusOverrideValues);
+        status.classList.add("invalid");
+      }
+    }
 
 
     const themePalettes = {
@@ -1980,6 +2197,10 @@
     let referenceModelLoading = false;
     applyTheme(document.documentElement.dataset.theme);
     let boxVisible = true;
+    let stlStatusKey = "stlEmpty";
+    let stlStatusValues = {};
+    let statusOverrideKey = null;
+    let statusOverrideValues = {};
     let dimensionGroup = new THREE.Group();
     let fitMode = "L";
     scene.add(dimensionGroup);
@@ -2054,7 +2275,18 @@
 
     bindInputs();
     update();
+    applyDeviceLanguage();
     animate();
+
+    languageToggle.addEventListener("click", () => {
+      language = language === "en" ? "zh" : "en";
+      try {
+        localStorage.setItem("gl3dprt-lang", language);
+      } catch (error) {
+        // Keep the current page switchable when storage is unavailable.
+      }
+      applyDeviceLanguage();
+    });
 
     document.querySelectorAll("[data-fit-mode]").forEach((button) => {
       button.addEventListener("click", () => {
@@ -2085,26 +2317,36 @@
     });
 
     document.getElementById("toggleModel").addEventListener("click", async () => {
-      const button = document.getElementById("toggleModel");
-      referenceModelVisible = !referenceModelVisible;
-      button.textContent = referenceModelVisible ? "隐藏设备模型" : "显示设备模型";
-      if (referenceModelMesh) {
-        referenceModelMesh.visible = referenceModelVisible;
-      } else if (referenceModelVisible) {
-        button.textContent = "设备模型加载中...";
+      if (!referenceModelMesh && !referenceModelLoading) {
+        referenceModelVisible = true;
+        referenceModelLoading = true;
+        applyDeviceActionLabels();
         const loaded = await loadReferenceModel();
-        button.textContent = loaded ? "隐藏设备模型" : "显示设备模型";
+        referenceModelLoading = false;
+        referenceModelVisible = loaded;
+        applyDeviceActionLabels();
         if (!loaded) {
-          referenceModelVisible = false;
+          statusOverrideKey = "modelLoadFailed";
+          statusOverrideValues = {};
           status.classList.add("invalid");
-          statusText.textContent = "设备模型加载失败，请稍后重试。";
+          statusText.textContent = t(statusOverrideKey, statusOverrideValues);
+        } else {
+          statusOverrideKey = null;
+          statusOverrideValues = {};
         }
+        return;
       }
+      if (referenceModelLoading) return;
+      referenceModelVisible = !referenceModelVisible;
+      statusOverrideKey = null;
+      statusOverrideValues = {};
+      applyDeviceActionLabels();
+      if (referenceModelMesh) referenceModelMesh.visible = referenceModelVisible;
     });
 
     document.getElementById("toggleBox").addEventListener("click", () => {
       boxVisible = !boxVisible;
-      document.getElementById("toggleBox").textContent = boxVisible ? "隐藏长方体" : "显示长方体";
+      applyDeviceActionLabels();
       applyBoxVisibility();
     });
 
@@ -2127,7 +2369,7 @@
 
     toggleStlIntersectionButton.addEventListener("click", () => {
       stlIntersectionVisible = !stlIntersectionVisible;
-      toggleStlIntersectionButton.textContent = stlIntersectionVisible ? "隐藏交线" : "显示交线";
+      applyDeviceActionLabels();
       updateStlIntersection();
     });
 
@@ -2246,7 +2488,7 @@
 
     async function loadStlModel(file) {
       if (!file.name.toLowerCase().endsWith(".stl")) {
-        stlName.textContent = "请选择 .stl 文件。";
+        setStlStatus("stlSelect");
         return;
       }
       try {
@@ -2272,10 +2514,10 @@
         resetStlInputs();
         applyStlTransform();
         setStlControlsEnabled(true);
-        stlName.textContent = `${file.name} 已导入。仅作为参考显示，不参与判定。`;
+        setStlStatus("stlImported", { name: file.name });
       } catch (error) {
         console.error("STL 模型导入失败", error);
-        stlName.textContent = "STL 模型导入失败，请检查文件格式。";
+        setStlStatus("stlFailed");
       }
     }
 
@@ -2312,10 +2554,10 @@
       }
       clearStlIntersection();
       stlIntersectionVisible = false;
-      toggleStlIntersectionButton.textContent = "显示交线";
+      applyDeviceActionLabels();
       setStlControlsEnabled(false);
       resetStlInputs();
-      stlName.textContent = "未导入 STL。仅作为参考显示，不参与判定。";
+      setStlStatus("stlEmpty");
     }
 
     function setStlControlsEnabled(enabled) {
@@ -2337,13 +2579,13 @@
       const count = geometry.getAttribute("position").count;
       if (count < 2) {
         geometry.dispose();
-        stlName.textContent = "未找到 STL 与运动范围边界的近似交线。";
+        setStlStatus("stlNoIntersection");
         return;
       }
       stlIntersectionLines = new THREE.LineSegments(geometry, stlIntersectionMaterial);
       stlIntersectionLines.renderOrder = 30;
       scene.add(stlIntersectionLines);
-      stlName.textContent = `已显示 ${count / 2} 段近似交线。仅作为参考显示，不参与判定。`;
+      setStlStatus("stlIntersection", { count: count / 2 });
     }
 
     function clearStlIntersection() {
@@ -2822,19 +3064,19 @@
       status.classList.toggle("invalid", !result.inside);
       status.classList.remove("warning");
       if (result.inside) {
-        statusText.textContent = "长方体在范围内。";
+        statusText.textContent = t("statusInside");
       } else if (result.reason === "forbiddenCylinder") {
-        statusText.textContent = "长方体与内圆不可达区域相交。";
+        statusText.textContent = t("statusForbidden");
       } else if (result.invalidSamples > 0) {
-        statusText.textContent = "长方体超出 R-Z 截面或 X-Y 可达区域。";
+        statusText.textContent = t("statusOutside");
       } else {
-        statusText.textContent = `有 ${8 - result.validCorners} 个角点超出可达空间。`;
+        statusText.textContent = t("statusCorners", { count: 8 - result.validCorners });
       }
       metrics.l.textContent = fmt(v.boxL);
       metrics.w.textContent = fmt(v.boxW);
       metrics.h.textContent = fmt(v.boxH);
-      volumeLabel.textContent = `体积 ${fmt((v.boxL * v.boxW * v.boxH) / 1000000)} L`;
-      cornerLabel.textContent = `${result.validCorners} / 8 个角点在范围内`;
+      volumeLabel.textContent = t("volume", { value: fmt((v.boxL * v.boxW * v.boxH) / 1000000) });
+      cornerLabel.textContent = t("corners", { valid: result.validCorners });
     }
 
     function isBoxInside(v) {
