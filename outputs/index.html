@@ -43,6 +43,27 @@
       background: #fff;
     }
 
+    .language-toggle {
+      position: absolute;
+      top: 32px;
+      right: 32px;
+      min-width: 64px;
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid #d8d8d8;
+      border-radius: 0;
+      background: #fff;
+      color: #383838;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .language-toggle:hover {
+      border-color: #383838;
+    }
+
     .eyebrow {
       margin-bottom: 20px;
       color: #767676;
@@ -151,6 +172,11 @@
         padding: 32px 24px 46px;
       }
 
+      .language-toggle {
+        top: 20px;
+        right: 24px;
+      }
+
       .device-actions {
         grid-template-columns: 1fr;
         margin-top: 40px;
@@ -171,11 +197,12 @@
 <body>
   <main>
     <section class="home-content">
-      <div class="eyebrow">Motion Range Workspace</div>
-      <h1>GL-3DPRT运动范围判定工具</h1>
-      <p>选择设备型号，进入对应的打印范围判定工具。</p>
+      <button id="languageToggle" class="language-toggle" type="button" aria-label="切换语言">EN</button>
+      <div class="eyebrow" data-i18n="eyebrow">Motion Range Workspace</div>
+      <h1 data-i18n="heading">GL-3DPRT运动范围判定工具</h1>
+      <p data-i18n="description">选择设备型号，进入对应的打印范围判定工具。</p>
 
-      <nav class="device-actions" aria-label="设备选择">
+      <nav class="device-actions" data-i18n-aria-label="deviceSelection" aria-label="设备选择">
         <a href="GL-3DPRT-SP-M.html">
           <strong>SP-M</strong>
           <span>GL-3DPRT-SP-M</span>
@@ -187,11 +214,72 @@
       </nav>
 
       <div class="meta">
-        <span>V1.9 · 2026-07-16 · ©Ming Xia</span>
+        <span data-i18n="version">V1.9 · 2026-07-16 · ©Ming Xia</span>
       </div>
 
-      <footer>©Ming Xia</footer>
+      <footer data-i18n="footer">©Ming Xia</footer>
     </section>
   </main>
+  <script>
+    const homeTranslations = {
+      zh: {
+        eyebrow: "Motion Range Workspace",
+        heading: "GL-3DPRT运动范围判定工具",
+        description: "选择设备型号，进入对应的打印范围判定工具。",
+        deviceSelection: "设备选择",
+        version: "V1.9 · 2026-07-16 · ©Ming Xia",
+        footer: "©Ming Xia",
+        toggleLabel: "切换语言",
+        title: "GL-3DPRT运动范围判定工具 V1.9 · 2026-07-16 · ©Ming Xia"
+      },
+      en: {
+        eyebrow: "Motion Range Workspace",
+        heading: "GL-3DPRT Motion Range Checker",
+        description: "Choose a device model to open its print range checker.",
+        deviceSelection: "Device selection",
+        version: "V1.9 · 2026-07-16 · ©Ming Xia",
+        footer: "©Ming Xia",
+        toggleLabel: "Switch language",
+        title: "GL-3DPRT Motion Range Checker V1.9 · 2026-07-16 · ©Ming Xia"
+      }
+    };
+
+    const languageToggle = document.getElementById("languageToggle");
+    let homeLanguage = "zh";
+    try {
+      homeLanguage = localStorage.getItem("gl3dprt-lang") === "en" ? "en" : "zh";
+    } catch (error) {
+      homeLanguage = "zh";
+    }
+
+    function homeText(key) {
+      return homeTranslations[homeLanguage][key];
+    }
+
+    function applyHomeLanguage() {
+      document.documentElement.lang = homeLanguage === "en" ? "en" : "zh-CN";
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        element.textContent = homeText(element.dataset.i18n);
+      });
+      document.querySelectorAll("[data-i18n-aria-label]").forEach((element) => {
+        element.setAttribute("aria-label", homeText(element.dataset.i18nAriaLabel));
+      });
+      languageToggle.textContent = homeLanguage === "en" ? "中文" : "EN";
+      languageToggle.setAttribute("aria-label", homeText("toggleLabel"));
+      document.title = homeText("title");
+    }
+
+    languageToggle.addEventListener("click", () => {
+      homeLanguage = homeLanguage === "en" ? "zh" : "en";
+      try {
+        localStorage.setItem("gl3dprt-lang", homeLanguage);
+      } catch (error) {
+        // Keep the current page switchable when storage is unavailable.
+      }
+      applyHomeLanguage();
+    });
+
+    applyHomeLanguage();
+  </script>
 </body>
 </html>
