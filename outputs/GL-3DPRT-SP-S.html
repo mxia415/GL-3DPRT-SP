@@ -2394,7 +2394,7 @@
 
     async function loadReferenceModel() {
       if (!referenceModelGlbUrl) return;
-      if (referenceModelMesh || referenceModelLoading) return;
+      if (referenceModelMesh) return;
       referenceModelLoading = true;
       let GLTFLoader;
       let DRACOLoader;
