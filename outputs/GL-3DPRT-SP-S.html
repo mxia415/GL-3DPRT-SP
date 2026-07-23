@@ -2163,12 +2163,10 @@
     const boxBadMaterial = new THREE.MeshStandardMaterial({ color: 0xd95043, transparent: true, opacity: 0.58, roughness: 0.45 });
     const boxEdgeMaterial = new THREE.LineBasicMaterial({ color: 0x7b3d00 });
     const dimensionMaterial = new THREE.LineBasicMaterial({ color: 0x1c2a27 });
-    const referenceModelMaterial = new THREE.MeshStandardMaterial({
+    const referenceModelMaterial = new THREE.MeshBasicMaterial({
       color: 0xffffea,
       transparent: true,
       opacity: 0.15,
-      roughness: 0.48,
-      metalness: 0.04,
       side: THREE.DoubleSide,
       depthWrite: false
     });
