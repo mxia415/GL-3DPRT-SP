@@ -2189,6 +2189,7 @@
     const referenceModelKey = "GL-3DPRT-SP-S";
     const referenceModelGlbUrl = new URL("assets/GL-3DPRT-SP-S.glb", window.location.href).href;
     const referenceModelFallbackScriptUrl = new URL("assets/GL-3DPRT-SP-S-model.js", window.location.href).href;
+    const dracoDecoderPath = new URL("assets/draco/", window.location.href).href;
     const modelLoadTimeoutMs = 120000;
     let workspaceMesh = null;
     let workspaceEdges = null;
@@ -2409,7 +2410,7 @@
       }
       const loader = new GLTFLoader();
       const dracoLoader = new DRACOLoader();
-      dracoLoader.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/libs/draco/");
+      dracoLoader.setDecoderPath(dracoDecoderPath);
       loader.setDRACOLoader(dracoLoader);
       let modelBuffer;
       try {
