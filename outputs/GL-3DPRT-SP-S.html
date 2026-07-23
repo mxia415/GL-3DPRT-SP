@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-S运动范围判定 V2.1 · 2026-07-18 · ©Ming Xia</title>
+  <title>SP-S运动范围判定 V2.2 · 2026-07-23 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = "camada";</script>
   <style>
     :root {
@@ -1772,8 +1772,8 @@
         </div>
         <div class="field fit-field">
           <label><span class="label-main" data-i18n="height">高度 H</span> <span data-i18n="heightHelp">Z 方向尺寸</span></label>
-          <input id="boxH" type="number" min="10" max="7400" step="10" value="1200">
-          <input data-for="boxH" type="range" min="10" max="7400" step="10" value="1200">
+          <input id="boxH" type="number" min="10" max="7800" step="10" value="1200">
+          <input data-for="boxH" type="range" min="10" max="7800" step="10" value="1200">
           <button type="button" data-fit-mode="H" class="inline-fit" data-i18n="fitHeight">固定H最大贴合</button>
         </div>
         <div class="fit-actions">
@@ -1853,8 +1853,8 @@
     const translations = {
       zh: {
         deviceTitle: "SP-S运动范围判定",
-        version: "V2.1 · 2026-07-18 · ©Ming Xia",
-        documentTitle: "SP-S运动范围判定 V2.1 · 2026-07-18 · ©Ming Xia",
+        version: "V2.2 · 2026-07-23 · ©Ming Xia",
+        documentTitle: "SP-S运动范围判定 V2.2 · 2026-07-23 · ©Ming Xia",
         measuredRange: "实测范围",
         stlReference: "STL参考模型",
         importStl: "导入 STL 模型",
@@ -1922,8 +1922,8 @@
       },
       en: {
         deviceTitle: "SP-S Motion Range Checker",
-        version: "V2.1 · 2026-07-18 · ©Ming Xia",
-        documentTitle: "SP-S Motion Range Checker V2.1 · 2026-07-18 · ©Ming Xia",
+        version: "V2.2 · 2026-07-23 · ©Ming Xia",
+        documentTitle: "SP-S Motion Range Checker V2.2 · 2026-07-23 · ©Ming Xia",
         measuredRange: "Measured Range",
         stlReference: "STL Reference Model",
         importStl: "Import STL Model",
@@ -2208,68 +2208,71 @@
     scene.add(dimensionGroup);
 
     const measuredRzProfile = [
-      { r: 1771, z: 0 },
-      { r: 1771, z: 4728 },
-      { r: 1820, z: 4778 },
-      { r: 2029, z: 4868 },
-      { r: 2203, z: 4999 },
-      { r: 2326, z: 5109 },
-      { r: 2487, z: 5274 },
-      { r: 2607, z: 5412 },
-      { r: 2722, z: 5559 },
-      { r: 2824, z: 5703 },
-      { r: 2934, z: 5877 },
-      { r: 3032, z: 6054 },
-      { r: 3106, z: 6203 },
-      { r: 3174, z: 6357 },
-      { r: 3229, z: 6496 },
-      { r: 3275, z: 6627 },
-      { r: 3332, z: 6804 },
-      { r: 3387, z: 6993 },
-      { r: 3437, z: 7162 },
-      { r: 3504, z: 7342 },
-      { r: 3562, z: 7429 },
-      { r: 3629, z: 7469 },
-      { r: 3728, z: 7480 },
-      { r: 3832, z: 7401 },
-      { r: 3907, z: 7346 },
-      { r: 4005, z: 7264 },
-      { r: 4076, z: 7200 },
-      { r: 4153, z: 7119 },
-      { r: 4229, z: 7061 },
-      { r: 4333, z: 6964 },
-      { r: 4496, z: 6818 },
-      { r: 4638, z: 6694 },
-      { r: 4785, z: 6568 },
-      { r: 4937, z: 6438 },
-      { r: 5089, z: 6304 },
-      { r: 5229, z: 6173 },
-      { r: 5384, z: 6015 },
-      { r: 5504, z: 5884 },
-      { r: 5665, z: 5694 },
-      { r: 5808, z: 5510 },
-      { r: 5956, z: 5306 },
-      { r: 6083, z: 5118 },
-      { r: 6194, z: 4945 },
-      { r: 6304, z: 4763 },
-      { r: 6429, z: 4547 },
-      { r: 6533, z: 4353 },
-      { r: 6638, z: 4148 },
-      { r: 6751, z: 3907 },
-      { r: 6857, z: 3664 },
-      { r: 6945, z: 3442 },
-      { r: 7018, z: 3239 },
-      { r: 7101, z: 2983 },
-      { r: 7229, z: 2505 },
-      { r: 7308, z: 2108 },
-      { r: 7373, z: 1658 },
-      { r: 7410, z: 1273 },
-      { r: 7438, z: 444 },
-      { r: 7429, z: 0 }
+      { r: 7415, z: 0 },
+      { r: 7426.3, z: 100 },
+      { r: 7203, z: 2887 },
+      { r: 6491, z: 4682 },
+      { r: 6204, z: 5158 },
+      { r: 5974, z: 5502 },
+      { r: 5700, z: 5860 },
+      { r: 5600, z: 5980 },
+      { r: 5405, z: 6207 },
+      { r: 5200, z: 6408 },
+      { r: 5011, z: 6601 },
+      { r: 4809, z: 6786 },
+      { r: 4495, z: 7052 },
+      { r: 4299, z: 7207 },
+      { r: 4095, z: 7358 },
+      { r: 3992, z: 7427 },
+      { r: 3894, z: 7491 },
+      { r: 3807, z: 7546 },
+      { r: 3750, z: 7582 },
+      { r: 3664, z: 7634 },
+      { r: 3505, z: 7727 },
+      { r: 3400, z: 7803 },
+      { r: 3252, z: 7940 },
+      { r: 3200, z: 7992 },
+      { r: 3096, z: 8084 },
+      { r: 3005, z: 8163 },
+      { r: 2900, z: 8205 },
+      { r: 2832, z: 8303 },
+      { r: 2445, z: 5208 },
+      { r: 2042, z: 5002 },
+      { r: 1000, z: 4889.7 }
     ];
-    const maxReachZ = 7400;
-    const smoothRzProfile = makeSmoothClosedProfile(measuredRzProfile, 10)
-      .map((p) => ({ r: p.r, z: Math.min(p.z, maxReachZ) }));
+    const smoothingControls = [
+      ...measuredRzProfile.slice(0, 22),
+      { r: 3220, z: 7830 },
+      { r: 3020, z: 7730 },
+      { r: 2830, z: 7300 },
+      { r: 2445, z: 5208 },
+      { r: 2042, z: 5002 },
+      { r: 1000, z: 4889.7 }
+    ];
+
+    function chaikinOpenProfile(points, passes) {
+      let result = points.map((point) => ({ ...point }));
+      for (let pass = 0; pass < passes; pass += 1) {
+        const next = [result[0]];
+        for (let i = 0; i < result.length - 1; i += 1) {
+          const a = result[i];
+          const b = result[i + 1];
+          next.push(
+            { r: a.r * 0.75 + b.r * 0.25, z: a.z * 0.75 + b.z * 0.25 },
+            { r: a.r * 0.25 + b.r * 0.75, z: a.z * 0.25 + b.z * 0.75 }
+          );
+        }
+        next.push(result[result.length - 1]);
+        result = next;
+      }
+      return result;
+    }
+
+    const smoothRzProfile = [
+      ...chaikinOpenProfile(smoothingControls, 4),
+      { r: 1000, z: 0 },
+      { r: 7415, z: 0 }
+    ];
     const measuredMinR = Math.min(...smoothRzProfile.map((p) => p.r));
     const measuredMaxR = Math.max(...smoothRzProfile.map((p) => p.r));
     const measuredMinZ = Math.min(...smoothRzProfile.map((p) => p.z));
@@ -2858,37 +2861,6 @@
         if (!best || max - min > best.max - best.min) best = { min, max };
       }
       return best;
-    }
-
-    function makeSmoothClosedProfile(points, samplesPerSegment) {
-      const smooth = [];
-      for (let i = 0; i < points.length; i++) {
-        const p0 = points[(i - 1 + points.length) % points.length];
-        const a = points[i];
-        const b = points[(i + 1) % points.length];
-        const p3 = points[(i + 2) % points.length];
-        for (let j = 0; j < samplesPerSegment; j++) {
-          const t = j / samplesPerSegment;
-          const r = catmullRom(p0.r, a.r, b.r, p3.r, t);
-          const z = catmullRom(p0.z, a.z, b.z, p3.z, t);
-          smooth.push({
-            r: THREE.MathUtils.clamp(r, Math.min(a.r, b.r) - 120, Math.max(a.r, b.r) + 120),
-            z: THREE.MathUtils.clamp(z, Math.min(a.z, b.z) - 120, Math.max(a.z, b.z) + 120)
-          });
-        }
-      }
-      return smooth;
-    }
-
-    function catmullRom(p0, p1, p2, p3, t) {
-      const t2 = t * t;
-      const t3 = t2 * t;
-      return 0.5 * (
-        2 * p1
-        + (-p0 + p2) * t
-        + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2
-        + (-p0 + 3 * p1 - 3 * p2 + p3) * t3
-      );
     }
 
     function drawBox(v) {
