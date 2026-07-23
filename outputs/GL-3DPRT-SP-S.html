@@ -2195,7 +2195,7 @@
     let referenceModelMesh = null;
     let referenceModelVisible = false;
     let referenceModelLoading = false;
-    window.__gl3dprtModelStage = "idle";
+    document.body.dataset.modelStage = "idle";
     applyTheme(document.documentElement.dataset.theme);
     let boxVisible = true;
     let stlStatusKey = "stlEmpty";
@@ -2394,9 +2394,9 @@
       if (!referenceModelBinaryUrl || referenceModelMesh) return Boolean(referenceModelMesh);
       referenceModelLoading = true;
       try {
-        window.__gl3dprtModelStage = "buffer-start";
+        document.body.dataset.modelStage = "buffer-start";
         const modelBuffer = await loadReferenceModelBuffer();
-        window.__gl3dprtModelStage = `buffer-ready:${modelBuffer.byteLength}`;
+        document.body.dataset.modelStage = `buffer-ready:${modelBuffer.byteLength}`;
         const view = new DataView(modelBuffer);
         const vertexCount = view.getUint32(0, true);
         const indexCount = view.getUint32(4, true);
@@ -2430,10 +2430,10 @@
         referenceModelMesh.frustumCulled = false;
         referenceModelMesh.renderOrder = 8;
         scene.add(referenceModelMesh);
-        window.__gl3dprtModelStage = "ready";
+        document.body.dataset.modelStage = "ready";
         return true;
       } catch (error) {
-        window.__gl3dprtModelStage = `error:${String(error?.message || error)}`;
+        document.body.dataset.modelStage = `error:${String(error?.message || error)}`;
         console.error("设备模型加载失败", error);
         return false;
       } finally {
@@ -2449,10 +2449,10 @@
         return base64ToArrayBuffer(base64);
       }
       const response = await withTimeout(fetch(referenceModelBinaryUrl), modelLoadTimeoutMs, "设备模型下载超时");
-      window.__gl3dprtModelStage = `response:${response.status}`;
+      document.body.dataset.modelStage = `response:${response.status}`;
       if (!response.ok) throw new Error(`设备模型请求失败：${response.status}`);
       const buffer = await withTimeout(response.arrayBuffer(), modelLoadTimeoutMs, "设备模型读取超时");
-      window.__gl3dprtModelStage = `array-buffer:${buffer.byteLength}`;
+      document.body.dataset.modelStage = `array-buffer:${buffer.byteLength}`;
       return buffer;
     }
 
