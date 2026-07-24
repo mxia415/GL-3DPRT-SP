@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-M运动范围判定 V2.2 · 2026-07-24 · ©Ming Xia</title>
+  <title>SP-M运动范围判定 V2.3 · 2026-07-24 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = "camada";</script>
   <style>
     :root {
@@ -51,8 +51,9 @@
       padding: 8px 14px;
       border-right: 1px solid var(--line);
       background: #2b2622;
+      min-height: 0;
       overflow-x: hidden;
-      overflow-y: auto;
+      overflow-y: hidden;
     }
 
     main {
@@ -323,6 +324,28 @@
     .status.invalid .dot { background: var(--bad); }
     .status.warning .dot { background: var(--warn); }
 
+    .stl-range-warning {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 440px;
+      border: 2px solid #ff3b30;
+      border-radius: 3px;
+      padding: 11px 13px;
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 2px 8px rgba(255,59,48,0.16);
+      color: #c6281f;
+      font-size: 12px;
+      line-height: 1.35;
+      pointer-events: none;
+    }
+
+    .stl-range-warning strong {
+      color: #ff3b30;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
     .metrics {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -493,6 +516,7 @@
         max-height: 52vh;
         border-right: 0;
         border-bottom: 1px solid var(--line);
+        overflow-y: auto;
       }
 
       main { min-height: 560px; }
@@ -1207,7 +1231,7 @@
       gap: 7px;
       min-height: 0;
       overflow-x: hidden;
-      overflow-y: auto;
+      overflow-y: hidden;
       padding: 14px 12px;
       border-right-color: var(--line);
       background: #f7f7f7;
@@ -1564,6 +1588,12 @@
       background: rgba(255,255,255,0.94);
     }
 
+    html[data-theme="camada"] .hud .stl-range-warning {
+      max-width: 440px;
+      background: rgba(255,255,255,0.96);
+      color: #c6281f;
+    }
+
     html[data-theme="camada"] .size-chip {
       min-width: 260px;
     }
@@ -1678,6 +1708,113 @@
         bottom: 12px;
       }
     }
+
+    @media (min-width: 861px) and (max-height: 900px) {
+      html[data-theme="camada"] aside {
+        gap: 4px;
+        padding: 8px 10px;
+      }
+
+      html[data-theme="camada"] header {
+        padding-bottom: 7px;
+      }
+
+      html[data-theme="camada"] h1 {
+        font-size: 19px;
+      }
+
+      html[data-theme="camada"] .section {
+        padding: 6px 9px;
+      }
+
+      html[data-theme="camada"] .section-title {
+        margin-bottom: 4px;
+      }
+
+      html[data-theme="camada"] .stl-actions {
+        gap: 4px;
+      }
+
+      html[data-theme="camada"] .stl-name {
+        margin-top: 4px;
+        font-size: 10px;
+      }
+
+      html[data-theme="camada"] .stl-controls {
+        gap: 4px 6px;
+        margin-top: 5px;
+      }
+
+      html[data-theme="camada"] .stl-control {
+        gap: 2px;
+        font-size: 10px;
+      }
+
+      html[data-theme="camada"] .stl-control input[type="number"] {
+        height: 24px;
+        font-size: 12px;
+      }
+
+      html[data-theme="camada"] .field {
+        gap: 6px;
+        margin: 3px 0;
+      }
+
+      html[data-theme="camada"] .field.fit-field {
+        row-gap: 8px;
+        margin: 8px 0 10px;
+      }
+
+      html[data-theme="camada"] .fit-actions {
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+        margin-top: 5px;
+      }
+
+      html[data-theme="camada"] button,
+      html[data-theme="camada"] .file-button,
+      html[data-theme="camada"] .fit-actions button,
+      html[data-theme="camada"] .inline-fit {
+        min-height: 27px;
+      }
+
+      html[data-theme="camada"] .fit-actions button {
+        min-width: 0;
+        font-size: 10.5px;
+      }
+    }
+
+    @media (min-width: 861px) and (max-height: 760px) {
+      html[data-theme="camada"] .stl-controls {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      html[data-theme="camada"] .stl-control {
+        min-width: 0;
+        font-size: 9px;
+      }
+
+      html[data-theme="camada"] .stl-control input[type="number"] {
+        width: 100%;
+        padding: 0 4px;
+        font-size: 11px;
+      }
+
+      html[data-theme="camada"] .section {
+        padding: 4px 7px;
+      }
+
+      html[data-theme="camada"] .field.fit-field {
+        row-gap: 5px;
+        margin: 5px 0 7px;
+      }
+    }
+
+    @media (min-width: 861px) and (max-height: 950px) {
+      html[data-theme="camada"] aside {
+        zoom: 0.88;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1685,7 +1822,7 @@
     <aside>
       <header>
         <h1 data-i18n="deviceTitle">SP-M运动范围判定</h1>
-        <p class="subtitle" data-i18n="version">V2.2 · 2026-07-24 · ©Ming Xia</p>
+        <p class="subtitle" data-i18n="version">V2.3 · 2026-07-24 · ©Ming Xia</p>
         <button id="languageToggle" class="language-toggle" type="button" aria-label="切换语言">EN</button>
       </header>
 
@@ -1796,6 +1933,10 @@
       </div>
       <div class="hud">
         <div class="chip"><strong data-i18n="interactionHelp">拖拽旋转，滚轮缩放</strong><span data-i18n="envelopeHelp">透明体表示设备实测截面运动包络。</span></div>
+        <div id="stlRangeWarning" class="stl-range-warning" hidden role="status" aria-live="polite">
+          <strong data-i18n="stlOutOfRangeTitle">超出打印范围</strong>
+          <span id="stlRangeWarningText">导入模型的部分区域超出打印范围，已用红色显示。</span>
+        </div>
         <div id="status" class="status box-hud">
           <i class="dot"></i>
           <span>长方体完全位于可达空间内。</span>
@@ -1839,6 +1980,8 @@
     const stlFileInput = document.getElementById("stlFile");
     const stlName = document.getElementById("stlName");
     const stlControls = document.getElementById("stlControls");
+    const stlRangeWarning = document.getElementById("stlRangeWarning");
+    const stlRangeWarningText = document.getElementById("stlRangeWarningText");
     const resetStlButton = document.getElementById("resetStl");
     const clearStlButton = document.getElementById("clearStl");
     const toggleStlIntersectionButton = document.getElementById("toggleStlIntersection");
@@ -1850,8 +1993,8 @@
     const translations = {
       zh: {
         deviceTitle: "SP-M运动范围判定",
-        version: "V2.2 · 2026-07-24 · ©Ming Xia",
-        documentTitle: "SP-M运动范围判定 V2.2 · 2026-07-24 · ©Ming Xia",
+        version: "V2.3 · 2026-07-24 · ©Ming Xia",
+        documentTitle: "SP-M运动范围判定 V2.3 · 2026-07-24 · ©Ming Xia",
         measuredRange: "实测范围",
         stlReference: "STL参考模型",
         importStl: "导入 STL 模型",
@@ -1865,6 +2008,8 @@
         stlFailed: "STL 模型导入失败，请检查文件格式。",
         stlNoIntersection: "未找到 STL 与运动范围边界的近似交线。",
         stlIntersection: ({ count }) => `已显示 ${count} 段近似交线。仅作为参考显示，不参与判定。`,
+        stlOutOfRangeTitle: "超出打印范围",
+        stlOutOfRange: ({ count }) => `检测到 ${count} 个三角面超出打印范围，已用红色显示。`,
         xPosition: "X位置",
         yPosition: "Y位置",
         zPosition: "Z位置",
@@ -1919,8 +2064,8 @@
       },
       en: {
         deviceTitle: "SP-M Motion Range Checker",
-        version: "V2.2 · 2026-07-24 · ©Ming Xia",
-        documentTitle: "SP-M Motion Range Checker V2.2 · 2026-07-24 · ©Ming Xia",
+        version: "V2.3 · 2026-07-24 · ©Ming Xia",
+        documentTitle: "SP-M Motion Range Checker V2.3 · 2026-07-24 · ©Ming Xia",
         measuredRange: "Measured Range",
         stlReference: "STL Reference Model",
         importStl: "Import STL Model",
@@ -1934,6 +2079,8 @@
         stlFailed: "STL import failed. Please check the file format.",
         stlNoIntersection: "No approximate intersection was found between the STL and the motion-range boundary.",
         stlIntersection: ({ count }) => `${count} approximate intersection segments shown. Reference display only; not used for checking.`,
+        stlOutOfRangeTitle: "Out of Print Range",
+        stlOutOfRange: ({ count }) => `${count} triangle${count === 1 ? "" : "s"} exceed the print range and are shown in red.`,
         xPosition: "X Position",
         yPosition: "Y Position",
         zPosition: "Z Position",
@@ -2030,6 +2177,7 @@
       document.title = t("documentTitle");
       applyDeviceActionLabels();
       setStlStatus(stlStatusKey, stlStatusValues);
+      updateStlRangeWarning(stlOutOfRangeFaceCount);
       updateLabels(values());
       if (statusOverrideKey) {
         statusText.textContent = t(statusOverrideKey, statusOverrideValues);
@@ -2182,6 +2330,9 @@
     let importedStlMesh = null;
     let stlIntersectionLines = null;
     let stlIntersectionVisible = false;
+    let stlOutOfRangeFaceCount = 0;
+    const stlValidColor = new THREE.Color(0x8fc7ff);
+    const stlOutOfRangeColor = new THREE.Color(0xff3b30);
     const stlIntersectionMaterial = new THREE.LineBasicMaterial({ color: 0xff3b30, transparent: true, opacity: 0.98, depthTest: false });
     const referenceModelKey = "GL-3DPRT-SP-M";
     const referenceModelGlbUrl = new URL("assets/GL-3DPRT-SP-M.glb", window.location.href).href;
@@ -2444,7 +2595,8 @@
         geometry.computeBoundingBox();
         clearStlModel();
         const material = new THREE.MeshStandardMaterial({
-          color: 0x8fc7ff,
+          color: 0xffffff,
+          vertexColors: true,
           transparent: true,
           opacity: importedStlDefaults.opacity,
           roughness: 0.52,
@@ -2488,6 +2640,7 @@
       importedStlMesh.scale.setScalar(Math.max(0.001, numberValue(stlInputs.scale, importedStlDefaults.scale)));
       importedStlMesh.material.opacity = THREE.MathUtils.clamp(numberValue(stlInputs.opacity, importedStlDefaults.opacity), 0.05, 1);
       importedStlMesh.material.needsUpdate = true;
+      updateStlRangeVisualization();
       if (stlIntersectionVisible) updateStlIntersection();
     }
 
@@ -2499,6 +2652,8 @@
         importedStlMesh = null;
       }
       clearStlIntersection();
+      stlOutOfRangeFaceCount = 0;
+      updateStlRangeWarning(0);
       stlIntersectionVisible = false;
       applyDeviceActionLabels();
       setStlControlsEnabled(false);
@@ -2516,6 +2671,56 @@
     function numberValue(el, fallback) {
       const value = Number(el.value);
       return Number.isFinite(value) ? value : fallback;
+    }
+
+    function updateStlRangeWarning(count) {
+      const outOfRange = Boolean(importedStlMesh && count > 0);
+      stlRangeWarning.hidden = !outOfRange;
+      if (outOfRange) stlRangeWarningText.textContent = t("stlOutOfRange", { count });
+    }
+
+    function updateStlRangeVisualization() {
+      if (!importedStlMesh) {
+        stlOutOfRangeFaceCount = 0;
+        updateStlRangeWarning(0);
+        return;
+      }
+
+      importedStlMesh.updateMatrixWorld(true);
+      const source = importedStlMesh.geometry.getAttribute("position");
+      if (!source) return;
+      let colors = importedStlMesh.geometry.getAttribute("color");
+      if (!colors || colors.count !== source.count) {
+        colors = new THREE.BufferAttribute(new Float32Array(source.count * 3), 3);
+        importedStlMesh.geometry.setAttribute("color", colors);
+      }
+
+      const matrix = importedStlMesh.matrixWorld;
+      const v = values();
+      const a = new THREE.Vector3();
+      const b = new THREE.Vector3();
+      const c = new THREE.Vector3();
+      const centroid = new THREE.Vector3();
+      const triangleCount = Math.floor(source.count / 3);
+      let outOfRangeFaces = 0;
+      for (let i = 0; i < triangleCount; i += 1) {
+        a.fromBufferAttribute(source, i * 3).applyMatrix4(matrix);
+        b.fromBufferAttribute(source, i * 3 + 1).applyMatrix4(matrix);
+        c.fromBufferAttribute(source, i * 3 + 2).applyMatrix4(matrix);
+        centroid.copy(a).add(b).add(c).multiplyScalar(1 / 3);
+        const faceInside = pointCheck(a, v).inside
+          && pointCheck(b, v).inside
+          && pointCheck(c, v).inside
+          && pointCheck(centroid, v).inside;
+        const color = faceInside ? stlValidColor : stlOutOfRangeColor;
+        for (let vertex = 0; vertex < 3; vertex += 1) {
+          colors.setXYZ(i * 3 + vertex, color.r, color.g, color.b);
+        }
+        if (!faceInside) outOfRangeFaces += 1;
+      }
+      colors.needsUpdate = true;
+      stlOutOfRangeFaceCount = outOfRangeFaces;
+      updateStlRangeWarning(outOfRangeFaces);
     }
 
     function updateStlIntersection() {
