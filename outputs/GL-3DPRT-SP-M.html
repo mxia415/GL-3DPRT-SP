@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:," />
-  <title>SP-M运动范围判定 V2.3 · 2026-07-24 · ©Ming Xia</title>
+  <title>SP-M运动范围判定 V2.4 · 2026-07-24 · ©Ming Xia</title>
   <script>document.documentElement.dataset.theme = "camada";</script>
   <style>
     :root {
@@ -297,6 +297,12 @@
       width: 100%;
       height: 28px;
       font-size: 13px;
+    }
+
+    .stl-control input[type="range"] {
+      width: 100%;
+      height: 12px;
+      margin: 0;
     }
 
     .status {
@@ -1755,6 +1761,10 @@
         font-size: 12px;
       }
 
+      html[data-theme="camada"] .stl-control input[type="range"] {
+        height: 10px;
+      }
+
       html[data-theme="camada"] .field {
         gap: 6px;
         margin: 3px 0;
@@ -1800,6 +1810,10 @@
         font-size: 11px;
       }
 
+      html[data-theme="camada"] .stl-control input[type="range"] {
+        height: 9px;
+      }
+
       html[data-theme="camada"] .section {
         padding: 4px 7px;
       }
@@ -1822,7 +1836,7 @@
     <aside>
       <header>
         <h1 data-i18n="deviceTitle">SP-M运动范围判定</h1>
-        <p class="subtitle" data-i18n="version">V2.3 · 2026-07-24 · ©Ming Xia</p>
+        <p class="subtitle" data-i18n="version">V2.4 · 2026-07-24 · ©Ming Xia</p>
         <button id="languageToggle" class="language-toggle" type="button" aria-label="切换语言">EN</button>
       </header>
 
@@ -1865,9 +1879,9 @@
         </div>
         <div id="stlName" class="stl-name">未导入 STL。仅作为参考显示，不参与判定。</div>
         <div id="stlControls" class="stl-controls" hidden>
-          <label class="stl-control"><span data-i18n="xPosition">X位置</span><input data-stl="positionX" type="number" step="10" value="0"></label>
-          <label class="stl-control"><span data-i18n="yPosition">Y位置</span><input data-stl="positionY" type="number" step="10" value="0"></label>
-          <label class="stl-control"><span data-i18n="zPosition">Z位置</span><input data-stl="positionZ" type="number" step="10" value="0"></label>
+          <label class="stl-control"><span data-i18n="xPosition">X位置</span><input data-stl="positionX" type="number" step="10" value="0"><input data-stl-range="positionX" type="range" min="-20000" max="20000" step="10" value="0" data-i18n-aria-label="xPosition" aria-label="X位置"></label>
+          <label class="stl-control"><span data-i18n="yPosition">Y位置</span><input data-stl="positionY" type="number" step="10" value="0"><input data-stl-range="positionY" type="range" min="-20000" max="20000" step="10" value="0" data-i18n-aria-label="yPosition" aria-label="Y位置"></label>
+          <label class="stl-control"><span data-i18n="zPosition">Z位置</span><input data-stl="positionZ" type="number" step="10" value="0"><input data-stl-range="positionZ" type="range" min="-10000" max="10000" step="10" value="0" data-i18n-aria-label="zPosition" aria-label="Z位置"></label>
           <label class="stl-control"><span data-i18n="scale">缩放</span><input data-stl="scale" type="number" min="0.001" step="0.1" value="1"></label>
           <label class="stl-control"><span data-i18n="rotationX">旋转X</span><input data-stl="rotationX" type="number" step="1" value="0"></label>
           <label class="stl-control"><span data-i18n="rotationY">旋转Y</span><input data-stl="rotationY" type="number" step="1" value="0"></label>
@@ -1989,12 +2003,13 @@
     const toggleBoxButton = document.getElementById("toggleBox");
     const toggleModelButton = document.getElementById("toggleModel");
     const stlInputs = Object.fromEntries([...document.querySelectorAll("[data-stl]")].map((el) => [el.dataset.stl, el]));
+    const stlPositionRanges = Object.fromEntries([...document.querySelectorAll("[data-stl-range]")].map((el) => [el.dataset.stlRange, el]));
 
     const translations = {
       zh: {
         deviceTitle: "SP-M运动范围判定",
-        version: "V2.3 · 2026-07-24 · ©Ming Xia",
-        documentTitle: "SP-M运动范围判定 V2.3 · 2026-07-24 · ©Ming Xia",
+        version: "V2.4 · 2026-07-24 · ©Ming Xia",
+        documentTitle: "SP-M运动范围判定 V2.4 · 2026-07-24 · ©Ming Xia",
         measuredRange: "实测范围",
         stlReference: "STL参考模型",
         importStl: "导入 STL 模型",
@@ -2064,8 +2079,8 @@
       },
       en: {
         deviceTitle: "SP-M Motion Range Checker",
-        version: "V2.3 · 2026-07-24 · ©Ming Xia",
-        documentTitle: "SP-M Motion Range Checker V2.3 · 2026-07-24 · ©Ming Xia",
+        version: "V2.4 · 2026-07-24 · ©Ming Xia",
+        documentTitle: "SP-M Motion Range Checker V2.4 · 2026-07-24 · ©Ming Xia",
         measuredRange: "Measured Range",
         stlReference: "STL Reference Model",
         importStl: "Import STL Model",
@@ -2468,7 +2483,17 @@
     });
 
     Object.values(stlInputs).forEach((el) => {
-      el.addEventListener("input", applyStlTransform);
+      el.addEventListener("input", () => {
+        if (stlPositionRanges[el.dataset.stl]) syncStlPositionRanges();
+        applyStlTransform();
+      });
+    });
+
+    Object.entries(stlPositionRanges).forEach(([key, range]) => {
+      range.addEventListener("input", () => {
+        stlInputs[key].value = range.value;
+        applyStlTransform();
+      });
     });
 
     resetStlButton.addEventListener("click", () => {
@@ -2622,6 +2647,16 @@
     function resetStlInputs() {
       Object.entries(importedStlDefaults).forEach(([key, value]) => {
         stlInputs[key].value = value;
+      });
+      syncStlPositionRanges();
+    }
+
+    function syncStlPositionRanges() {
+      Object.entries(stlPositionRanges).forEach(([key, range]) => {
+        const input = stlInputs[key];
+        if (!input) return;
+        const value = numberValue(input, 0);
+        range.value = THREE.MathUtils.clamp(value, Number(range.min), Number(range.max));
       });
     }
 
@@ -2844,7 +2879,7 @@
         });
       });
 
-      document.querySelectorAll("input[type='range']").forEach((el) => {
+      document.querySelectorAll("input[type='range'][data-for]").forEach((el) => {
         el.addEventListener("input", () => {
           const target = document.getElementById(el.dataset.for);
           target.value = el.value;
@@ -3706,7 +3741,7 @@
     }
 
     function syncRanges() {
-      document.querySelectorAll("input[type='range']").forEach((range) => {
+      document.querySelectorAll("input[type='range'][data-for]").forEach((range) => {
         range.value = document.getElementById(range.dataset.for).value;
       });
     }
