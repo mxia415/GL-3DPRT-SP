@@ -1,8 +1,8 @@
 # GL-3DPRT 运动范围判定工具
 
-版本：v1.14
+版本：v1.15
 
-日期：2026-07-07
+日期：2026-07-24
 
 这是一个用于 GL-3DPRT 蜘蛛式建筑 3D 打印机的浏览器端运动范围判定项目。工具根据实测的 X-Y 平面范围和 R-Z 垂直截面，生成三维可达空间，并判断输入的长方体是否完整落在设备运动范围内。
 
@@ -34,7 +34,8 @@ outputs/GL-3DPRT-SP-S.html            SP-S 运动范围判定工具
 outputs/GL-3DPRT-SP-M说明.md          SP-M 使用说明
 outputs/GL-3DPRT-SP-S说明.md          SP-S 使用说明
 outputs/assets/GL-3DPRT-SP-M.glb      SP-M 设备模型，供 HTTP / GitHub Pages 使用
-outputs/assets/GL-3DPRT-SP-S.glb      SP-S 设备模型，供 HTTP / GitHub Pages 使用
+outputs/assets/GL-3DPRT-SP-S.glb      SP-S 高精度设备模型，供 HTTP / GitHub Pages 使用
+outputs/assets/GL-3DPRT-SP-S-model.js  SP-S 高精度设备模型的 file:// 备用包
 outputs/assets/*-model.js             本地 file:// 打开时使用的备用模型包
 outputs/glb-compressor.html           维护用 GLB 压缩工具
 outputs/preview.html                  维护用界面预览文件
